@@ -1,34 +1,56 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+# Schema reference:
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
 
-trigger:
-- master
-
-pool:
-  vmImage: 'windows-latest'
+# name: $(Rev:r)_$(SourceBranchName)_$(Build.SourceVersion)_$(Build.SourceVersionMessage)
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  buildDockerfile: './Dockerfile'
 
-steps:
-- task: NuGetToolInstaller@1
+pool:
+  vmImage: ubuntu-latest
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+# Run on every push
+# trigger:
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+# Run on every pull request
+# pr:
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+stages:
+  - stage: DEV_CI
+    displayName: DEV CI
+    jobs:
+    - job: UseDotnet5Job
+      displayName: Install .NET 5
+      steps:
+        - task: UseDotNet@2
+          displayName: Install .NET 5
+          inputs:
+            packageType: sdk
+            version: 5.0.x
+    - job: BuildJob
+      displayName: Build solution
+      steps:
+      - task: DotNetCoreCLI@2
+        displayName: dotnet build
+        inputs:
+          command: build
+          arguments: --configuration Release
+    - job: TestJob
+      displayName: Test solution
+      steps:
+        - task: DotNetCoreCLI@2
+          displayName: dotnet test
+          inputs:
+            command: test
+            arguments: --configuration Release
+
+  # - stage: Build
+  #   displayName: Build stage
+  #   jobs:
+  #   - job: BuildDockerImageJob
+  #     steps:
+  #     - task: Docker@2
+  #       displayName: Build project as Docker image
+  #       inputs:
+  #         command: 'build'
+  #         Dockerfile: $(buildDockerfile)
