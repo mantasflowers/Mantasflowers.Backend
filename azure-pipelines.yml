@@ -35,6 +35,7 @@ stages:
         inputs:
           command: build
           arguments: --configuration Release
+      dependsOn: UseDotnet5Job
     - job: TestJob
       displayName: Test solution
       steps:
@@ -43,6 +44,7 @@ stages:
           inputs:
             command: test
             arguments: --configuration Release
+      dependsOn: BuildJob
 
   # - stage: Build
   #   displayName: Build stage
