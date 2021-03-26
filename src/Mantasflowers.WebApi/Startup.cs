@@ -1,4 +1,7 @@
 using Autofac;
+using Mantasflowers.WebApi.Extensions;
+using Mantasflowers.WebApi.Setup.Database;
+using Mantasflowers.WebApi.Setup.DI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,22 +29,29 @@ namespace Mantasflowers.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mantasflowers.WebApi", Version = "v1" });
             });
+
+            services.SetupDbContext(Configuration);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            
+            builder.RegisterModule(new RepositoriesModule());
+            builder.RegisterModule(new ServiceAgentsModule());
+            builder.RegisterModule(new ServicesModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.EnsureDatabaseState();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mantasflowers.WebApi v1"));
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mantasflowers.WebApi v1"));
 
             app.UseHttpsRedirection();
 
