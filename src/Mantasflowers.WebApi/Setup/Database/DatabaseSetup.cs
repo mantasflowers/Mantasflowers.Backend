@@ -15,6 +15,8 @@ namespace Mantasflowers.WebApi.Setup.Database
             var secret = configuration.GetSection<Secret>("Sql");
             var sqlConfig = new SqlConfiguration(connectionString, databaseConfiguration, secret);
 
+            services.AddSingleton(sqlConfig);
+
             if (sqlConfig.DatabaseConfiguration.IsInMemory)
             {
                 services.AddDbContext<DatabaseContext>(options =>

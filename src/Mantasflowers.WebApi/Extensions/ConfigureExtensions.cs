@@ -1,4 +1,5 @@
 using Mantasflowers.Persistence;
+using Mantasflowers.WebApi.Setup.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,9 +14,17 @@ namespace Mantasflowers.WebApi.Extensions
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var sqlConfig = serviceScope.ServiceProvider.GetRequiredService<SqlConfiguration>();
+
                 dbContext.Database.EnsureCreated();
                 
                 // TODO: replace any Console.WriteLine's with logger
+                if (sqlConfig.DatabaseConfiguration.IsInMemory)
+                {
+                    System.Console.WriteLine("Using IN MEMORY DB, migrations won't be applied.");
+                    return app;
+                }
+
                 var migrationNames = dbContext.Database.GetPendingMigrations().ToList();
                 if (migrationNames.Count == 0)
                 {
