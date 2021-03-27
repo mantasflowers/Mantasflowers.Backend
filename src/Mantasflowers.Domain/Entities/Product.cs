@@ -20,5 +20,7 @@ namespace Mantasflowers.Domain.Entities
         public string PictureName { get; set; } // TODO: assuming pictures are stored in FE
 
         public int LeftInStock { get; set; } // TODO: this may come from somewhere else if "Supplier" is introduced
+
+        public virtual IEnumerable<ProductReview> Reviews { get; set; }
     }
 }

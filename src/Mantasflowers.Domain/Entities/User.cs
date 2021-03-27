@@ -18,7 +18,9 @@ namespace Mantasflowers.Domain.Entities
         public Guid? ContactsId { get; set; }
         public virtual UserContactInfo Contacts { get; set; }
 
-        public virtual IEnumerable<Order> UserOrders { get; set; } // TODO: test if this works. Naming convention might be wrong
+        public virtual IEnumerable<Order> Orders { get; set; }
+
+        public virtual IEnumerable<ProductReview> ProductReviews { get; set; }
     
         // TODO: Roles? Separate table?
     }

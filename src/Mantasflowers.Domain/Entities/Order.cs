@@ -17,6 +17,6 @@ namespace Mantasflowers.Domain.Entities
         public Guid? PaymentId { get; set; }
         public virtual Payment Payment { get; set; }
 
-        public virtual IEnumerable<OrderItem> OrderItems { get; set; } // TODO: check if this works without explicit Fluent API FK registration
+        public virtual IEnumerable<OrderItem> OrderItems { get; set; }
     }
 }
