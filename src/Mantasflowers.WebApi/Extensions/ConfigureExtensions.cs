@@ -18,7 +18,6 @@ namespace Mantasflowers.WebApi.Extensions
                 var sqlConfig = serviceScope.ServiceProvider.GetRequiredService<SqlConfiguration>();
                 var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger>();
 
-                dbContext.Database.EnsureDeleted();
                 dbContext.Database.EnsureCreated();
                 
                 if (sqlConfig.DatabaseConfiguration.IsInMemory)
