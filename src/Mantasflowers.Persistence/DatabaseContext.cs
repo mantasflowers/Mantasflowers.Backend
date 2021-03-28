@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Mantasflowers.Domain.Entities;
+using Mantasflowers.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -7,8 +9,6 @@ namespace Mantasflowers.Persistence
 {
     public sealed class DatabaseContext : DbContext
     {
-        // public DatabaseContext() { } // TODO: might not be needed (dotnet-ef dbcontext info)
-
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
@@ -40,7 +40,117 @@ namespace Mantasflowers.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Describe entity constraints here
+            modelBuilder.Entity<Product>(
+                e =>
+                {
+                    e.Property(p => p.Name)
+                        .HasMaxLength(100)
+                        .IsRequired();
+                    e.Property(p => p.Price)
+                        .HasColumnType("decimal(18,4)")
+                        .IsRequired();
+                    e.Property(p => p.Category)
+                        .HasMaxLength(50)
+                        .HasConversion(
+                            EnumModelToStringProvider<ProductCategory>(),
+                            StringProviderToEnumModel<ProductCategory>()
+                        );
+                    e.Property(p => p.Description)
+                        .HasMaxLength(300);
+                    e.Property(p => p.Status)
+                        .HasMaxLength(50)
+                        .HasConversion(
+                            EnumModelToStringProvider<ProductStatus>(),
+                            StringProviderToEnumModel<ProductStatus>()
+                        );
+                    e.Property(p => p.PictureName)
+                        .HasMaxLength(260);
+                }
+            );
+
+            modelBuilder.Entity<ProductReview>(
+                e =>
+                {
+                    e.HasIndex(p => new { p.ProductId, p.UserId })
+                        .IsUnique();
+                }
+            );
+
+            modelBuilder.Entity<User>(
+                e =>
+                {
+                    e.Property(p => p.FirstName)
+                        .HasMaxLength(200)
+                        .IsRequired();
+                    e.Property(p => p.LastName)
+                    
+                        .HasMaxLength(200)
+                        .IsRequired();
+                }
+            );
+
+            modelBuilder.Entity<UserAddress>(
+                e =>
+                {
+                    e.Property(p => p.Country)
+                        .HasMaxLength(100)
+                        .IsRequired();
+                    e.Property(p => p.City)
+                        .HasMaxLength(100)
+                        .IsRequired();
+                    e.Property(p => p.Street)
+                        .HasMaxLength(100)
+                        .IsRequired();
+                    e.Property(p => p.Zipcode)
+                        .HasMaxLength(20)
+                        .IsRequired();
+                }
+            );
+
+            modelBuilder.Entity<UserContactInfo>(
+                e =>
+                {
+                    e.Property(p => p.Email)
+                        .HasMaxLength(320)
+                        .IsRequired();
+                    e.Property(p => p.Phone)
+                        .HasMaxLength(20)
+                        .IsRequired();
+                }
+            );
+
+            modelBuilder.Entity<Order>(
+                e =>
+                {
+                    // TODO: is it possible to enforce Order(user_id, status: Draft) here ?
+                    // i.e. enforce that one user has <= 1 Order of type Draft at any given time
+
+                    e.Property(p => p.Status)
+                        .HasMaxLength(50)
+                        .HasConversion(
+                            EnumModelToStringProvider<OrderStatus>(),
+                            StringProviderToEnumModel<OrderStatus>()
+                        );
+                    e.Property(p => p.Type)
+                        .HasMaxLength(50)
+                        .HasConversion(
+                            EnumModelToStringProvider<OrderType>(),
+                            StringProviderToEnumModel<OrderType>()
+                        );
+                    e.Property(p => p.TemporaryPasswordHash)
+                        .HasMaxLength(300)
+                        .IsRequired();
+                }
+            );
+
+            modelBuilder.Entity<OrderItem>(
+                e =>
+                {
+                    e.HasIndex(p => new { p.OrderId, p.ProductId })
+                        .IsUnique();
+                }
+            );
+
 
             // TODO: remove data seed when no longer needed
             Seed(modelBuilder);
@@ -64,6 +174,18 @@ namespace Mantasflowers.Persistence
             }
         }
 
+        private static Expression<Func<TEnumModel, string>> EnumModelToStringProvider<TEnumModel>()
+            where TEnumModel : struct, IConvertible
+        {
+            return (TEnumModel x) => x.ToString();
+        }
+
+        private static Expression<Func<string, TEnumModel>> StringProviderToEnumModel<TEnumModel>()
+            where TEnumModel : struct, IConvertible
+        {
+            return (string x) => Enum.Parse<TEnumModel>(x);
+        }
+
         private static void Seed(ModelBuilder modelBuilder)
         {
             var productId1 = Guid.NewGuid();
@@ -80,9 +202,9 @@ namespace Mantasflowers.Persistence
                     Id = productId1,
                     Name = "my rose",
                     Price = 1.99m,
-                    Category = Domain.Enums.ProductCategory.FLOWER,
+                    Category = ProductCategory.FLOWER,
                     Description = "veri priti flauver",
-                    Status = Domain.Enums.ProductStatus.AVAILABLE,
+                    Status = ProductStatus.AVAILABLE,
                     LeftInStock = 1000
                 }
             );
@@ -140,9 +262,11 @@ namespace Mantasflowers.Persistence
                 {
                     Id = orderId1,
                     UserId = userId1,
-                    Status = Domain.Enums.OrderStatus.DRAFT,
+                    Status = OrderStatus.DRAFT,
                     ShipmentId = shipmentId1,
                     PaymentId = paymentId1,
+                    Type = OrderType.REGULAR,
+                    TemporaryPasswordHash = "eyy123"
                 }
             );
             modelBuilder.Entity<OrderItem>().HasData(

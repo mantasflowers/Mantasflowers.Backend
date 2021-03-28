@@ -17,6 +17,10 @@ namespace Mantasflowers.Domain.Entities
         public Guid? PaymentId { get; set; }
         public virtual Payment Payment { get; set; }
 
+        public OrderType Type { get; set; }
+
+        public string TemporaryPasswordHash { get; set; } // TODO: this might change. Just a placeholder
+
         public virtual IEnumerable<OrderItem> OrderItems { get; set; }
     }
 }
