@@ -8,7 +8,7 @@ namespace Mantasflowers.WebApi.Setup.Database
 {
     public static class DatabaseSetup
     {
-        public static IServiceCollection SetupDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static void SetupDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("Database");
             var databaseConfiguration = configuration.GetSection<DatabaseConfiguration>("Database");
@@ -39,8 +39,6 @@ namespace Mantasflowers.WebApi.Setup.Database
                 });
                 // TODO: are Scoped lifetimes ok?
             }
-
-            return services;
         }
     }
 }

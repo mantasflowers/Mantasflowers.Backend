@@ -2,12 +2,14 @@ using Autofac;
 using Mantasflowers.WebApi.Extensions;
 using Mantasflowers.WebApi.Setup.Database;
 using Mantasflowers.WebApi.Setup.DI;
+using Mantasflowers.WebApi.Setup.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace Mantasflowers.WebApi
 {
@@ -23,6 +25,7 @@ namespace Mantasflowers.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.SetupLogging();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -35,6 +38,7 @@ namespace Mantasflowers.WebApi
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterModule(new LoggingModule());
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServiceAgentsModule());
             builder.RegisterModule(new ServicesModule());
@@ -54,6 +58,8 @@ namespace Mantasflowers.WebApi
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mantasflowers.WebApi v1"));
 
             app.UseHttpsRedirection();
+
+            // app.UseSerilogRequestLogging(); // TODO: need to figure this out (log not only response, but also request)
 
             app.UseRouting();
 
