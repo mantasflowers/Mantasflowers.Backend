@@ -59,7 +59,7 @@ namespace Mantasflowers.WebApi
 
             app.UseHttpsRedirection();
 
-            // app.UseSerilogRequestLogging(); // TODO: need to figure this out (log not only response, but also request)
+            app.UseSerilogRequestLogging(); // TODO: need to figure this out (log not only response, but also request)
 
             app.UseRouting();
 
