@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Mantasflowers.Domain.Enums;
 
 namespace Mantasflowers.Domain.Entities
 {
@@ -10,15 +9,13 @@ namespace Mantasflowers.Domain.Entities
 
         public string LastName { get; set; }
 
-        public bool IsRegistered { get; set; }
-
         public Guid? AddressId { get; set; }
         public virtual UserAddress Address { get; set; }
 
-        public Guid? ContactsId { get; set; }
-        public virtual UserContactInfo Contacts { get; set; }
+        public Guid? UserContactInfoId { get; set; }
+        public virtual UserContactInfo UserContactInfo { get; set; }
 
-        public virtual IEnumerable<Order> Orders { get; set; }
+        public virtual IEnumerable<UserOrder> UserOrders { get; set; }
 
         public virtual IEnumerable<ProductReview> ProductReviews { get; set; }
     
