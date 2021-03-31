@@ -74,7 +74,8 @@ namespace Mantasflowers.Persistence
                 {
                     e.Property(p => p.Price)
                         .HasColumnType("decimal(18,4)");
-                    e.Property(p => p.DiscountPercent);
+                    e.Property(p => p.DiscountPercent)
+                        .HasColumnType("decimal(18,4)");
                 }
             );
 

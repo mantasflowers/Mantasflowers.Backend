@@ -6,6 +6,6 @@ namespace Mantasflowers.Domain.Entities
 
         public int LeftInStock { get; set; } // TODO: still unknown where we will get this from
 
-        public int? DiscountPercent { get; set; }
+        public decimal? DiscountPercent { get; set; }
     }
 }
