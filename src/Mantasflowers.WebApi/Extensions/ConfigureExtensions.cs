@@ -18,8 +18,6 @@ namespace Mantasflowers.WebApi.Extensions
                 var sqlConfig = serviceScope.ServiceProvider.GetRequiredService<SqlConfiguration>();
                 var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger>();
 
-                dbContext.Database.EnsureCreated();
-                
                 if (sqlConfig.DatabaseConfiguration.IsInMemory)
                 {
                     logger.Information("Using IN MEMORY DB, migrations won't be applied.");
