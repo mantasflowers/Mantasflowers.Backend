@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -15,6 +18,7 @@ namespace Mantasflowers.WebApi.Setup.Swagger
                     Title = "Mantasflowers API",
                     Version = configuration["Githash"] ?? "GITHASH NOT FOUND",
                 });
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
             });
             services.AddSwaggerGenNewtonsoftSupport();
         }

@@ -27,12 +27,17 @@ namespace Mantasflowers.WebApi.Controllers
             _config = config;
         }
 
-        [HttpGet("alive")]
-        public IActionResult Alive()
+        /// <summary>
+        /// This endpoint is documented.
+        /// </summary>
+        /// <param name="number">number to echo back</param>
+        [HttpGet("swaggerdocumented")]
+        [ProducesResponseType(typeof(int), Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        public IActionResult SwaggerDocumented([FromQuery] int? number)
         {
             return Ok(
                 new {
-                    Meme = "Funny"
+                    number = number ?? 666
                 }
             );
         }
