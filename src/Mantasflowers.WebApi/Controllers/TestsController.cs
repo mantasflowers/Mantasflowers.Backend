@@ -52,7 +52,7 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpGet("githash")]
         public IActionResult Githash()
         {
-            string githash = _config["GitHash"] ?? "NOT FOUND";
+            string githash = _config["Githash"] ?? "NOT FOUND";
             
             return Ok(
                 new {
