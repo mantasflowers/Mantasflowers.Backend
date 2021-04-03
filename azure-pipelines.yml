@@ -5,9 +5,12 @@
 
 variables:
   buildDockerfile: './Dockerfile'
+  isMasterBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  publishArtifactName: 'mantasflowers-backend'
+  __Githash: $(Build.SourceVersion)
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: ubuntu-18.04
 
 # Run on every push
 # trigger:
@@ -16,17 +19,9 @@ pool:
 # pr:
 
 stages:
-  - stage: DEV_CI
-    displayName: DEV CI
+  - stage: CI
+    displayName: CI
     jobs:
-    - job: UseDotnet5Job
-      displayName: Install .NET 5
-      steps:
-        - task: UseDotNet@2
-          displayName: Install .NET 5
-          inputs:
-            packageType: sdk
-            version: 5.0.x
     - job: BuildJob
       displayName: Build solution
       steps:
@@ -35,7 +30,6 @@ stages:
         inputs:
           command: build
           arguments: --configuration Release
-      dependsOn: UseDotnet5Job
     - job: TestJob
       displayName: Test solution
       steps:
@@ -45,6 +39,41 @@ stages:
             command: test
             arguments: --configuration Release
       dependsOn: BuildJob
+  - stage: PUBLISH
+    displayName: PUBLISH
+    dependsOn: CI
+    condition: and(succeeded(), eq(variables.isMasterBranch, true))
+    jobs:
+      - job: PublishJob
+        displayName: Publish solution
+        steps:
+          - task: replacetokens@3
+            displayName: replace tokens plugin
+            inputs:
+              targetFiles: '**/appsettings.json'
+              encoding: 'utf-8'
+              writeBOM: true
+              verbosity: 'detailed'
+              escapeType: 'json'
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: false
+          - task: DotNetCoreCLI@2
+            displayName: dotnet publish
+            inputs:
+              command: publish
+              publishWebProjects: True
+              arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+              zipAfterPublish: True
+          - task: PublishBuildArtifacts@1
+            displayName: azure artifacts publish
+            inputs:
+              pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+              artifactName: $(publishArtifactName)
 
   # - stage: Build
   #   displayName: Build stage
