@@ -18,6 +18,8 @@ namespace Mantasflowers.Persistence
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<ProductInfo> ProductInfo { get; set; }
+
         public DbSet<User> Users { get; set; }
 
         public DbSet<UserAddress> UserAddresses { get; set; }
@@ -269,7 +271,9 @@ namespace Mantasflowers.Persistence
         private static void Seed(ModelBuilder modelBuilder)
         {
             var productInfoId1 = Guid.NewGuid();
+            var productInfoId2 = Guid.NewGuid();
             var productId1 = Guid.NewGuid();
+            var productId2 = Guid.NewGuid();
             var userId1 = Guid.NewGuid();
             var userAddress1 = Guid.NewGuid();
             var userContactInfo1 = Guid.NewGuid();
@@ -288,9 +292,14 @@ namespace Mantasflowers.Persistence
                     Id = productInfoId1,
                     Description = "yes, a veri pritti flauever. plis buy",
                     PictureUrl = "https://aodaisjdoasjdioas.com"
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId2,
+                    Description = "best flower in the ninja village",
+                    PictureUrl = "https://ioashfiausfa.com"
                 }
             );
-
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
@@ -303,6 +312,18 @@ namespace Mantasflowers.Persistence
                     LeftInStock = 1000,
                     DiscountPercent = null,
                     ProductInfoId = productInfoId1
+                },
+                new Product
+                {
+                    Id = productId2,
+                    Name = "konoha leaf",
+                    Category = ProductCategory.FLOWER,
+                    ShortDescription = "its a real flower",
+                    ThumbnailPictureUrl = "https://oiashdiasdias.com",
+                    Price = 2.99m,
+                    LeftInStock = 123,
+                    DiscountPercent = 0.2m,
+                    ProductInfoId = productInfoId2,
                 }
             );
             modelBuilder.Entity<UserAddress>().HasData(
