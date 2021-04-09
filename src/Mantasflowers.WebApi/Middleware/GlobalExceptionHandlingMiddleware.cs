@@ -35,6 +35,7 @@ namespace Mantasflowers.WebApi.Middleware
             catch (Exception e)
             {
                 await HandleGlobalException(e, context);
+                LogException(e.GetBaseException());
             }
         }
 
@@ -42,13 +43,15 @@ namespace Mantasflowers.WebApi.Middleware
         {
             context.Response.ContentType = "application/json";
 
+            e = e.GetBaseException();
+
             var statusCode = HttpStatusCode.InternalServerError;
             string message = _environment.IsProduction() ? "Internal server error" : e.Message;
             string stackTrace = _environment.IsProduction() ? null : e.StackTrace;
 
             switch (e)
             {
-                case ValidationException:
+                case ValidationException _:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
                 default:
@@ -64,6 +67,15 @@ namespace Mantasflowers.WebApi.Middleware
                     StackTrace = stackTrace
                 }
             ));
+        }
+
+        private void LogException<T>(T e)
+            where T : Exception
+        {
+            _logger.Error(
+                "Exception {exceptioName} was caught by error middleware with message: {message}",
+                e.GetType().Name,
+                e.Message);
         }
     }
 }

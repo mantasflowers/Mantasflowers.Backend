@@ -48,8 +48,7 @@ namespace Mantasflowers.WebApi
             })
             .AddFluentValidation(o =>
             {
-                // Since validators are registered as singleton, DONT USE ANY SCOPED/TRANSIENT SERVICES WITHIN THEM!
-                o.RegisterValidatorsFromAssemblyContaining<Startup>(lifetime: ServiceLifetime.Singleton);
+                o.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
 
             services.Configure<ApiBehaviorOptions>(options =>

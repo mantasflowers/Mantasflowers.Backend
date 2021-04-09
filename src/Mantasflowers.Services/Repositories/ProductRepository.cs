@@ -13,9 +13,7 @@ namespace Mantasflowers.Services.Repositories
     public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
         public ProductRepository(DatabaseContext dbContext)
-            : base(dbContext)
-        {
-        }
+            : base(dbContext) {}
 
         public async Task<PagedModel<Product>> GetPaginatedFilteredListAsync(int page, int limit,
             Expression<Func<Product, bool>> filter)
