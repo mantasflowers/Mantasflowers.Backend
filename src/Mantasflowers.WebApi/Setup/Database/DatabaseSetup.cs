@@ -26,8 +26,9 @@ namespace Mantasflowers.WebApi.Setup.Database
                             x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                         .ConfigureWarnings(x => 
                             x.Throw(RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning));
-                });
-                // TODO: test if lifetime scopes don't need to be changed for in memory db (maybe singleton?)
+                },
+                ServiceLifetime.Transient,
+                ServiceLifetime.Singleton);
             }
             else
             {
@@ -36,8 +37,9 @@ namespace Mantasflowers.WebApi.Setup.Database
                     options.UseSqlServer(sqlConfig.ConnectionString, x => x.EnableRetryOnFailure())
                         .ConfigureWarnings(x =>
                             x.Throw(RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning));
-                });
-                // TODO: are Scoped lifetimes ok?
+                },
+                ServiceLifetime.Transient,
+                ServiceLifetime.Singleton);
             }
         }
     }

@@ -35,6 +35,7 @@ namespace Mantasflowers.WebApi
             services.AddControllers(options =>
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
+                options.Filters.Add(new ConsumesAttribute("application/json"));
             })
             .AddNewtonsoftJson(options =>
             {

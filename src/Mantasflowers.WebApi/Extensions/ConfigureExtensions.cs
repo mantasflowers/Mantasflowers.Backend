@@ -21,6 +21,7 @@ namespace Mantasflowers.WebApi.Extensions
                 if (sqlConfig.DatabaseConfiguration.IsInMemory)
                 {
                     logger.Information("Using IN MEMORY DB, migrations won't be applied.");
+                    dbContext.Database.EnsureCreated();
                     return;
                 }
 
