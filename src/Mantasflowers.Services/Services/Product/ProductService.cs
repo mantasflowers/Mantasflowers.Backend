@@ -24,7 +24,7 @@ namespace Mantasflowers.Services.Services.Product
             Expression<Func<Mantasflowers.Domain.Entities.Product, bool>> categoryFilter = 
                 (x => request.Categories.Contains(x.Category));
 
-            var paginatedProducts = await _productRepository.GetPaginatedLisFilteredAsync(request.Page,
+            var paginatedProducts = await _productRepository.GetPaginatedFilteredListAsync(request.Page,
                 request.PageSize,
                 categoryFilter);
 

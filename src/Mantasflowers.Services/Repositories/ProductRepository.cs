@@ -17,7 +17,7 @@ namespace Mantasflowers.Services.Repositories
         {
         }
 
-        public async Task<PagedModel<Product>> GetPaginatedLisFilteredAsync(int page, int limit,
+        public async Task<PagedModel<Product>> GetPaginatedFilteredListAsync(int page, int limit,
             Expression<Func<Product, bool>> filter)
         {
             var products = await _dbContext.Products
