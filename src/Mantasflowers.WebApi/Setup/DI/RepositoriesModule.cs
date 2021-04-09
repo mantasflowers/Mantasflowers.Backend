@@ -1,4 +1,5 @@
 using Autofac;
+using Mantasflowers.Services.Repositories;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -6,7 +7,9 @@ namespace Mantasflowers.WebApi.Setup.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
-            // TODO: register repositories
+            builder.RegisterType<ProductRepository>()
+                .As<IProductRepository>()
+                .InstancePerDependency();
 
             base.Load(builder);
         }

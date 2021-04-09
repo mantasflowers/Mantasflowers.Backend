@@ -62,9 +62,13 @@ namespace Mantasflowers.Persistence
                             EnumModelToStringProvider<ProductCategory>(),
                             StringProviderToEnumModel<ProductCategory>()
                         );
-                    e.Property(p => p.Description)
-                        .HasMaxLength(300);
-                    e.Property(p => p.PictureName)
+                    e.Property(p => p.Price)
+                        .HasColumnType("decimal(18,4)");
+                    e.Property(p => p.DiscountPercent)
+                        .HasColumnType("decimal(18,4)");
+                    e.Property(p => p.ShortDescription)
+                        .HasMaxLength(50);
+                    e.Property(p => p.ThumbnailPictureUrl)
                         .HasMaxLength(260);
                 }
             );
@@ -72,10 +76,10 @@ namespace Mantasflowers.Persistence
             modelBuilder.Entity<ProductInfo>(
                 e =>
                 {
-                    e.Property(p => p.Price)
-                        .HasColumnType("decimal(18,4)");
-                    e.Property(p => p.DiscountPercent)
-                        .HasColumnType("decimal(18,4)");
+                    e.Property(p => p.Description)
+                        .HasMaxLength(300);
+                    e.Property(p => p.PictureUrl)
+                        .HasMaxLength(260);
                 }
             );
 
@@ -282,9 +286,8 @@ namespace Mantasflowers.Persistence
                 new ProductInfo
                 {
                     Id = productInfoId1,
-                    Price = 1.99m,
-                    LeftInStock = 1000,
-                    DiscountPercent = null
+                    Description = "yes, a veri pritti flauever. plis buy",
+                    PictureUrl = "https://aodaisjdoasjdioas.com"
                 }
             );
 
@@ -294,7 +297,11 @@ namespace Mantasflowers.Persistence
                     Id = productId1,
                     Name = "my rose",
                     Category = ProductCategory.FLOWER,
-                    Description = "veri priti flauver",
+                    ShortDescription = "veri priti flauver",
+                    ThumbnailPictureUrl = "https://aodaisjdoasjdioas.com",
+                    Price = 1.99m,
+                    LeftInStock = 1000,
+                    DiscountPercent = null,
                     ProductInfoId = productInfoId1
                 }
             );

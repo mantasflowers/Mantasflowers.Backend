@@ -10,9 +10,15 @@ namespace Mantasflowers.Domain.Entities
 
         public ProductCategory Category { get; set; }
 
-        public string Description { get; set; }
+        public string ShortDescription { get; set; }
 
-        public string PictureName { get; set; } // TODO: assuming pictures are stored in FE
+        public decimal Price { get; set; }
+
+        public int LeftInStock { get; set; } // TODO: still unknown where we will get this from
+
+        public decimal? DiscountPercent { get; set; }
+
+        public string ThumbnailPictureUrl { get; set; }
 
         public Guid ProductInfoId { get; set; }
         public virtual ProductInfo ProductInfo { get; set; }
