@@ -2,8 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mantasflowers.WebApi.Setup.Newtonsoft
 {
@@ -20,7 +18,7 @@ namespace Mantasflowers.WebApi.Setup.Newtonsoft
 
             settings.Converters.Add(new StringEnumConverter { NamingStrategy = new SnakeCaseNamingStrategy() });
             // settings.NullValueHandling = NullValueHandling.Ignore;
-            settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
             settings.Formatting = Formatting.Indented;
             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
