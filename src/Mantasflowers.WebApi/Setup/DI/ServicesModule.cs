@@ -1,6 +1,6 @@
 using Autofac;
-using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Mantasflowers.Services.Services.Product;
+using Mantasflowers.WebApi.Setup.Mapping;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -8,7 +8,7 @@ namespace Mantasflowers.WebApi.Setup.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAutoMapper(typeof(Startup).Assembly);
+            builder.SetupMapping();
 
             builder.RegisterType<ProductService>()
                 .As<IProductService>()
