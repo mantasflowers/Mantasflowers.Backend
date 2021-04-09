@@ -8,7 +8,9 @@ namespace Mantasflowers.Services.Repositories
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
-        public Task<PagedModel<Product>> GetPaginatedFilteredListAsync(int page, int limit,
+        Task<PagedModel<Product>> GetPaginatedFilteredListAsync(int page, int limit,
         Expression<Func<Product, bool>> filter);
+
+        Task<Product> GetDetailedProductAsync(Guid id);
     }
 }

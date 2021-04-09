@@ -22,10 +22,19 @@ namespace Mantasflowers.Services.Repositories
         {
             var products = await _dbContext.Products
                 .AsNoTracking()
-                .Where(filter) // TODO: check the actual SQL query I get from this nonsense
+                .Where(filter)
                 .PaginateAsync(page, limit);
 
             return products;
+        }
+
+        public async Task<Product> GetDetailedProductAsync(Guid id)
+        {
+            var product = await _dbContext.Products
+                .Include(x => x.ProductInfo)
+                .SingleOrDefaultAsync(x => x.Id == id);
+
+            return product;
         }
     }
 }

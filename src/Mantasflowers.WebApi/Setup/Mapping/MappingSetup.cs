@@ -12,9 +12,12 @@ namespace Mantasflowers.WebApi.Setup.Mapping
         {
             var config = new MapperConfiguration(x =>
             {
-                // TODO: look this up a bit (documentation + elsewhere)
                 x.CreateMap<Product, GetProductResponse>();
                 x.CreateMap<PagedModel<Product>, GetProductsResponse>();
+
+                x.CreateMap<Product, GetDetailedProductResponse>()
+                    .ForMember(d => d.Description, opt => opt.MapFrom(s => s.ProductInfo.Description))
+                    .ForMember(d => d.PictureUrl, opt => opt.MapFrom(s => s.ProductInfo.PictureUrl));
             });
 
             var mapper = config.CreateMapper();

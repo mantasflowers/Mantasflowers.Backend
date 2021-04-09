@@ -32,5 +32,14 @@ namespace Mantasflowers.Services.Services.Product
 
             return paginatedProductsResponse;
         }
+
+        public async Task<GetDetailedProductResponse> GetDetailedProductInfoAsync(Guid id)
+        {
+            var product = await _productRepository.GetDetailedProductAsync(id);
+
+            var detailedProductResponse = _mapper.Map<GetDetailedProductResponse>(product);
+
+            return detailedProductResponse;
+        }
     }
 }

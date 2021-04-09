@@ -6,13 +6,13 @@ namespace Mantasflowers.Contracts.Product.Request
 {
     public class GetProductsRequest
     {
-        [FromQuery(Name = "page")] // TODO: add [Required] or see if I can configure this with fluent validations
+        [FromQuery(Name = "page")]
         public int Page { get; set; }
 
-        [FromQuery(Name = "pageSize")] // TODO: same here
+        [FromQuery(Name = "pageSize")]
         public int PageSize { get; set; }
 
         [FromQuery(Name = "categories")]
-        public IList<ProductCategory> Categories { get; set; } // TODO: same here
+        public IList<ProductCategory> Categories { get; set; }
     }
 }

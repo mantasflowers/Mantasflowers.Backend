@@ -3,7 +3,7 @@ using Mantasflowers.Domain.Enums;
 
 namespace Mantasflowers.Contracts.Product.Response
 {
-    public class GetProductResponse
+    public class GetDetailedProductResponse
     {
         public Guid Id { get; set; }
 
@@ -13,7 +13,11 @@ namespace Mantasflowers.Contracts.Product.Response
 
         public string ShortDescription { get; set; }
 
+        public string Description { get; set; }
+
         public string ThumbnailPictureUrl { get; set; }
+
+        public string PictureUrl { get; set; }
 
         public decimal Price { get; set; }
 
