@@ -18,7 +18,7 @@ ASP.NET Core driven backend for university project.
 ## How to use IN_MEMORY database
 
 1. In [appsettings.Development.json](src/Mantasflowers.WebApi/appsettings.Development.json) find
-```json
+```jsonc
 "Database": {
     // ...
     "IsInMemory": "False"
