@@ -35,7 +35,7 @@ namespace Mantasflowers.WebApi.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetDetailedProductResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProduct(Guid id)
         {
