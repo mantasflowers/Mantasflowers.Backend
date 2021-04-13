@@ -1,12 +1,15 @@
-﻿using FirebaseAdmin;
+﻿using FirebaseAdmin.Auth;
 using Mantasflowers.Persistence.Authentication;
+using Mantasflowers.WebApi.Extensions;
 using Mantasflowers.WebApi.Responses;
 using Mantasflowers.WebApi.Setup.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
@@ -43,6 +46,7 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpGet("get-token")]
         public async Task<IActionResult> GetTokenAsync(string email, string password)
         {
+            string responseData = string.Empty;
             try
             {
                 using var client = _clientFactory.CreateClient();
@@ -55,7 +59,7 @@ namespace Mantasflowers.WebApi.Controllers
                     )
                     .ConfigureAwait(false);
 
-                string responseData = await response.Content.ReadAsStringAsync()
+                responseData = await response.Content.ReadAsStringAsync()
                     .ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
 
@@ -63,12 +67,18 @@ namespace Mantasflowers.WebApi.Controllers
 
                 return Ok(tokenId);
             }
-            catch (FirebaseException ex)
+            catch (Exception ex)
             {
-                // TODO
-            }
+                if (ex is HttpRequestException && !string.IsNullOrEmpty(responseData))
+                {
+                    var errorData = new { error = new { code = 0, message = "errorid" } };
+                    errorData = JsonConvert.DeserializeAnonymousType(responseData, errorData);
 
-            return Ok(ResponseMsg.NotFound);
+                    return Unauthorized(errorData?.error?.message ?? ResponseMsg.NotFound);
+                }
+
+                return BadRequest(ResponseMsg.NotFound);
+            }
         }
 
         /// <summary>
@@ -79,15 +89,18 @@ namespace Mantasflowers.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "admin")]
         [HttpGet("custom-role")]
-        public async Task<IActionResult> SetCustomUserRoleAsync(string uid, string role)
+        public IActionResult SetCustomUserRole(string uid, string role)
         {
             var claims = new Dictionary<string, object>()
             {
                 { ClaimTypes.Role, role },
             };
 
-            await _fbContext.SetCustomUserClaimsAsync(uid, claims);
-            return Ok(ResponseMsg.CustomClaimSet);
+            return HandleException(async () =>
+            {
+                await _fbContext.SetCustomUserClaimsAsync(uid, claims);
+                return Ok(ResponseMsg.CustomClaimSet);
+            });
         }
 
         /// <summary>
@@ -97,16 +110,13 @@ namespace Mantasflowers.WebApi.Controllers
         /// <param name="password"></param>
         /// <returns></returns>
         [HttpGet("create-user")]
-        public async Task<IActionResult> CreateUserAsync(string email, string password)
+        public IActionResult CreateUser(string email, string password)
         {
-            var user = await _fbContext.CreateUserAsync(email, password);
-            
-            if (user == null)
+            return HandleException(async () =>
             {
-                return Ok(ResponseMsg.NotFound);
-            }
-
-            return Ok(user);
+                var user = await _fbContext.CreateUserAsync(email, password);
+                return Ok(user);
+            });
         }
 
         /// <summary>
@@ -116,16 +126,13 @@ namespace Mantasflowers.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "admin")]
         [HttpGet("get-user/by-uid")]
-        public async Task<IActionResult> GetUserByUidAsync(string uid)
+        public IActionResult GetUserByUid(string uid)
         {
-            var user = await _fbContext.GetUserByUidAsync(uid);
-
-            if (user == null)
+            return HandleException(async () =>
             {
-                return Ok(ResponseMsg.NotFound);
-            }
-
-            return Ok(user);
+                var user = await _fbContext.GetUserByUidAsync(uid);
+                return Ok(user);
+            });
         }
 
         /// <summary>
@@ -135,18 +142,15 @@ namespace Mantasflowers.WebApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = "admin")]
         [HttpGet("get-user/by-email")]
-        public async Task<IActionResult> GetUserByEmailAsync(string email)
+        public IActionResult GetUserByEmail(string email)
         {
-            var user = await _fbContext.GetUserByEmailAsync(email);
-
-            if (user == null)
+            return HandleException(async () =>
             {
-                return Ok(ResponseMsg.NotFound);
-            }
-
-            return Ok(user);
+                var user = await _fbContext.GetUserByEmailAsync(email);
+                return Ok(user);
+            });
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -155,16 +159,13 @@ namespace Mantasflowers.WebApi.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("update-user/email")]
-        public async Task<IActionResult> UpdateUserEmailAsync(string uid, string email)
+        public IActionResult UpdateUserEmail(string uid, string email)
         {
-            var user = await _fbContext.UpdateUserEmailAsync(uid, email);
-
-            if (user == null)
+            return HandleException(async () =>
             {
-                return Ok(ResponseMsg.NotFound);
-            }
-
-            return Ok(user);
+                var user = await _fbContext.UpdateUserEmailAsync(uid, email);
+                return Ok(user);
+            });
         }
 
         /// <summary>
@@ -175,16 +176,13 @@ namespace Mantasflowers.WebApi.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("update-user/password")]
-        public async Task<IActionResult> UpdateUserPaswordAsync(string uid, string password)
+        public IActionResult UpdateUserPassword(string uid, string password)
         {
-            var user = await _fbContext.UpdateUserPasswordAsync(uid, password);
-
-            if (user == null)
+            return HandleException(async () =>
             {
-                return Ok(ResponseMsg.NotFound);
-            }
-
-            return Ok(user);
+                var user = await _fbContext.UpdateUserPasswordAsync(uid, password);
+                return Ok(user);
+            });
         }
 
         /// <summary>
@@ -192,13 +190,37 @@ namespace Mantasflowers.WebApi.Controllers
         /// </summary>
         /// <param name="uid"></param>
         /// <returns></returns>
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("delete-user")]
-        public async Task<IActionResult> DeleteUserByUidAsync(string uid)
+        public IActionResult DeleteUserByUid(string uid)
         {
-            await _fbContext.DeleteUserByUidAsync(uid);
+            return HandleException(async () =>
+            {
+                await _fbContext.DeleteUserByUidAsync(uid);
+                return Ok(ResponseMsg.UserDeleted);
+            });
+        }
 
-            return Ok(ResponseMsg.UserDeleted);
+        private IActionResult HandleException(Func<Task<IActionResult>> tryBlock)
+        {
+            try
+            {
+                return tryBlock.Invoke().Result;
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException is FirebaseAuthException iex)
+                {
+                    if (iex.Message.ContainsEnclosing('(', ')'))
+                    {
+                        return BadRequest(iex.Message.SubstringWithin('(', ')'));
+                    }
+
+                    return BadRequest(Enum.GetName(typeof(AuthError), iex.AuthErrorCode));
+                }
+
+                return BadRequest(ResponseMsg.NotFound);
+            }
         }
     }
 }
