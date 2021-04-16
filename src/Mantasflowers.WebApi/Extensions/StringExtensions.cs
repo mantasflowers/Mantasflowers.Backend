@@ -2,7 +2,7 @@
 
 namespace Mantasflowers.WebApi.Extensions
 {
-    public static class ResponseExtensions
+    public static class StringExtensions
     {
         private static string _pattern => @"([^()]*)";
         /// <summary>

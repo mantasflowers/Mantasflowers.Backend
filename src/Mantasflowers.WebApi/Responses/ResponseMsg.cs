@@ -2,8 +2,9 @@
 {
     public static class ResponseMsg
     {
-        public static string NotFound => "NOT FOUND";
-        public static string UserDeleted => "USER DELETED";
-        public static string CustomClaimSet => "CUSTOM CLAIM SET";
+        public readonly static string NotFound = "NOT_FOUND";
+        public readonly static string UserDeleted = "USER_DELETED";
+        public readonly static string CustomClaimSet = "CUSTOM_CLAIM_SET";
+        public readonly static string RefreshTokenRevoked = "REFRESH_TOKEN_REVOKED";
     }
 }

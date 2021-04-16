@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mantasflowers.Persistence\Mantasflowers.Persistence.csproj" />
+    <ProjectReference Include="..\Mantasflowers.Services\Mantasflowers.Services.csproj" />
   </ItemGroup>
 
 </Project>

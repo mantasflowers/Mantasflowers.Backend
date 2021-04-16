@@ -1,11 +1,12 @@
 using Autofac;
+using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.WebApi.Extensions;
-using Mantasflowers.WebApi.Setup.Authentication;
 using Mantasflowers.WebApi.Setup.Database;
 using Mantasflowers.WebApi.Setup.DI;
 using Mantasflowers.WebApi.Setup.Logging;
 using Mantasflowers.WebApi.Setup.Newtonsoft;
 using Mantasflowers.WebApi.Setup.Swagger;
+using Mantasflowers.WebApi.Setup.UserManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -78,7 +79,7 @@ namespace Mantasflowers.WebApi
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServiceAgentsModule());
             builder.RegisterModule(new ServicesModule());
-            builder.RegisterModule(new AuthenticationModule());
+            builder.RegisterModule(new FirebaseModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

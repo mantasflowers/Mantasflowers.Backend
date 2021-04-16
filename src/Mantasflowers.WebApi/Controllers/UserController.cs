@@ -1,19 +1,15 @@
 ﻿using FirebaseAdmin.Auth;
-using Mantasflowers.Persistence.Authentication;
+using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.WebApi.Extensions;
 using Mantasflowers.WebApi.Responses;
-using Mantasflowers.WebApi.Setup.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.WebApi.Controllers
@@ -22,50 +18,58 @@ namespace Mantasflowers.WebApi.Controllers
     [Route("/firebase")]
     public class UserController : ControllerBase
     {
-        private readonly ILogger _logger = Log.ForContext<UserController>();
+        private readonly FirebaseService _fbService;
 
-        private readonly FirebaseContext _fbContext;
-
-        private readonly IHttpClientFactory _clientFactory;
-
-        private readonly string _requestUri;
-
-        public UserController(FirebaseContext fbContext, IHttpClientFactory clientFactory, IOptionsMonitor<WebApiKey> optionsAccessor)
+        public UserController(FirebaseService fbService)
         {
-            _fbContext = fbContext;
-            _clientFactory = clientFactory;
-            _requestUri = $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={optionsAccessor.CurrentValue.Value}";
+            _fbService = fbService;
+        }
+
+        /// <summary>
+        /// A sign-in endpoint.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpGet("get-tokens")]
+        [ProducesResponseType(typeof(GetTokensResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTokensAsync(string email, string password)
+        {
+            string responseData = string.Empty;
+            try
+            {
+                var response = await _fbService.GetTokensAsync(email, password);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                if (ex is HttpRequestException && !string.IsNullOrEmpty(ex.Message))
+                {
+                    var errorData = new { error = new { code = 0, message = "errorid" } };
+                    errorData = JsonConvert.DeserializeAnonymousType(ex.Message, errorData);
+
+                    return Unauthorized(errorData?.error?.message ?? ResponseMsg.NotFound);
+                }
+
+                return BadRequest(ResponseMsg.NotFound);
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="refreshToken"></param>
         /// <returns></returns>
-        [HttpGet("get-token")]
-        public async Task<IActionResult> GetTokenAsync(string email, string password)
+        [HttpGet("refresh-id-token")]
+        [ProducesResponseType(typeof(GetTokensResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> RefreshIdTokenAsync(string refreshToken)
         {
             string responseData = string.Empty;
             try
             {
-                using var client = _clientFactory.CreateClient();
+                var response = await _fbService.RefreshIdTokenAsync(refreshToken);
 
-                string content = $"{{\"email\":\"{email}\",\"password\":\"{password}\",\"returnSecureToken\":true}}";
-
-                var response = await client.PostAsync(
-                    _requestUri,
-                    new StringContent(content, Encoding.UTF8, "application/json")
-                    )
-                    .ConfigureAwait(false);
-
-                responseData = await response.Content.ReadAsStringAsync()
-                    .ConfigureAwait(false);
-                response.EnsureSuccessStatusCode();
-
-                string tokenId = JObject.Parse(responseData).SelectToken("idToken").ToString();
-
-                return Ok(tokenId);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -85,6 +89,22 @@ namespace Mantasflowers.WebApi.Controllers
         /// 
         /// </summary>
         /// <param name="uid"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "admin")]
+        [HttpGet("revoke-refresh-token")]
+        public IActionResult RevokeRefreshTokens(string uid)
+        {
+            return HandleException(async () =>
+            {
+                await _fbService.RevokeRefreshTokensAsync(uid);
+                return Ok(ResponseMsg.RefreshTokenRevoked);
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uid"></param>
         /// <param name="role"></param>
         /// <returns></returns>
         [Authorize(Roles = "admin")]
@@ -98,7 +118,7 @@ namespace Mantasflowers.WebApi.Controllers
 
             return HandleException(async () =>
             {
-                await _fbContext.SetCustomUserClaimsAsync(uid, claims);
+                await _fbService.SetCustomUserClaimsAsync(uid, claims);
                 return Ok(ResponseMsg.CustomClaimSet);
             });
         }
@@ -114,7 +134,7 @@ namespace Mantasflowers.WebApi.Controllers
         {
             return HandleException(async () =>
             {
-                var user = await _fbContext.CreateUserAsync(email, password);
+                var user = await _fbService.CreateUserAsync(email, password);
                 return Ok(user);
             });
         }
@@ -130,7 +150,7 @@ namespace Mantasflowers.WebApi.Controllers
         {
             return HandleException(async () =>
             {
-                var user = await _fbContext.GetUserByUidAsync(uid);
+                var user = await _fbService.GetUserByUidAsync(uid);
                 return Ok(user);
             });
         }
@@ -146,7 +166,7 @@ namespace Mantasflowers.WebApi.Controllers
         {
             return HandleException(async () =>
             {
-                var user = await _fbContext.GetUserByEmailAsync(email);
+                var user = await _fbService.GetUserByEmailAsync(email);
                 return Ok(user);
             });
         }
@@ -163,7 +183,7 @@ namespace Mantasflowers.WebApi.Controllers
         {
             return HandleException(async () =>
             {
-                var user = await _fbContext.UpdateUserEmailAsync(uid, email);
+                var user = await _fbService.UpdateUserEmailAsync(uid, email);
                 return Ok(user);
             });
         }
@@ -180,7 +200,7 @@ namespace Mantasflowers.WebApi.Controllers
         {
             return HandleException(async () =>
             {
-                var user = await _fbContext.UpdateUserPasswordAsync(uid, password);
+                var user = await _fbService.UpdateUserPasswordAsync(uid, password);
                 return Ok(user);
             });
         }
@@ -196,7 +216,7 @@ namespace Mantasflowers.WebApi.Controllers
         {
             return HandleException(async () =>
             {
-                await _fbContext.DeleteUserByUidAsync(uid);
+                await _fbService.DeleteUserByUidAsync(uid);
                 return Ok(ResponseMsg.UserDeleted);
             });
         }

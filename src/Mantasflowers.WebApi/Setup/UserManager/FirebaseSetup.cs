@@ -3,7 +3,7 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Mantasflowers.WebApi.Setup.Authentication
+namespace Mantasflowers.WebApi.Setup.UserManager
 {
     public static class FirebaseSetup
     {

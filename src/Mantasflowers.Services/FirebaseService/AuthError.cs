@@ -1,6 +1,6 @@
 ﻿using FirebaseAdmin.Auth;
 
-namespace Mantasflowers.Persistence.Authentication
+namespace Mantasflowers.Services.FirebaseService
 {
     public enum AuthError
     {

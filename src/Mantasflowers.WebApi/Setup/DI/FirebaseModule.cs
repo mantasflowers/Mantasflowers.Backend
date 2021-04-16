@@ -1,13 +1,16 @@
 ﻿using Autofac;
-using Mantasflowers.Persistence.Authentication;
+using Mantasflowers.Services.FirebaseService;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
-    public class AuthenticationModule : Module
+    public class FirebaseModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<FirebaseContext>()
+            builder.RegisterType<FirebaseService>()
+                .SingleInstance();
+
+            builder.RegisterType<FirebaseConfig>()
                 .SingleInstance();
 
             base.Load(builder);
