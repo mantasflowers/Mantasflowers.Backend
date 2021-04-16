@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace Mantasflowers.WebApi.Controllers
 {
     [ApiController]
-    [Route("/firebase")]
+    [Route("/userbase")]
     public class UserController : ControllerBase
     {
         private readonly FirebaseService _fbService;
