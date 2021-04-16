@@ -1,7 +1,8 @@
 ﻿using FirebaseAdmin.Auth;
+using Mantasflowers.Contracts.Firebase;
+using Mantasflowers.Contracts.Responses;
 using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.WebApi.Extensions;
-using Mantasflowers.WebApi.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-﻿namespace Mantasflowers.WebApi.Responses
+﻿namespace Mantasflowers.Contracts.Responses
 {
     public static class ResponseMsg
     {

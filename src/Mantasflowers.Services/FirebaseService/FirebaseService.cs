@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
+using Mantasflowers.Contracts.Firebase;
 
 namespace Mantasflowers.Services.FirebaseService
 {
