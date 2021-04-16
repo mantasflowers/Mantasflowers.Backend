@@ -1,5 +1,6 @@
 ﻿using FirebaseAdmin.Auth;
-using Mantasflowers.Contracts.Firebase;
+using Mantasflowers.Contracts.Firebase.Request;
+using Mantasflowers.Contracts.Firebase.Response;
 using Mantasflowers.Contracts.Responses;
 using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.WebApi.Extensions;
@@ -29,17 +30,15 @@ namespace Mantasflowers.WebApi.Controllers
         /// <summary>
         /// A sign-in endpoint.
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        [HttpGet("get-tokens")]
-        [ProducesResponseType(typeof(GetTokensResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetTokensAsync(string email, string password)
+        [HttpPost("tokens")]
+        [ProducesResponseType(typeof(PostTokensResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTokensAsync([FromBody] PostCredentialsRequest request)
         {
-            string responseData = string.Empty;
             try
             {
-                var response = await _fbService.GetTokensAsync(email, password);
+                var response = await _fbService.GetTokensAsync(request.Email, request.Password);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -56,86 +55,63 @@ namespace Mantasflowers.WebApi.Controllers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="refreshToken"></param>
-        /// <returns></returns>
-        [HttpGet("refresh-id-token")]
-        [ProducesResponseType(typeof(GetTokensResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> RefreshIdTokenAsync(string refreshToken)
+        [HttpPost("refresh-id-token")]
+        [ProducesResponseType(typeof(PostTokensResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> RefreshIdTokenAsync([FromBody] PostRefreshTokenRequest request)
         {
             string responseData = string.Empty;
             try
             {
-                var response = await _fbService.RefreshIdTokenAsync(refreshToken);
-
+                var response = await _fbService.RefreshIdTokenAsync(request.RefreshToken);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                if (ex is HttpRequestException && !string.IsNullOrEmpty(responseData))
+                if (ex is HttpRequestException && !string.IsNullOrEmpty(ex.Message))
                 {
                     var errorData = new { error = new { code = 0, message = "errorid" } };
-                    errorData = JsonConvert.DeserializeAnonymousType(responseData, errorData);
+                    errorData = JsonConvert.DeserializeAnonymousType(ex.Message, errorData);
 
-                    return Unauthorized(errorData?.error?.message ?? ResponseMsg.NotFound);
+                    return BadRequest(errorData?.error?.message ?? ResponseMsg.NotFound);
                 }
 
                 return BadRequest(ResponseMsg.NotFound);
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uid"></param>
-        /// <returns></returns>
         [Authorize(Roles = "admin")]
-        [HttpGet("revoke-refresh-token")]
-        public IActionResult RevokeRefreshTokens(string uid)
+        [HttpPost("revoke-refresh-token")]
+        public IActionResult RevokeRefreshTokens([FromBody] PostUidRequest request)
         {
             return HandleException(async () =>
             {
-                await _fbService.RevokeRefreshTokensAsync(uid);
+                await _fbService.RevokeRefreshTokensAsync(request.Uid);
                 return Ok(ResponseMsg.RefreshTokenRevoked);
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uid"></param>
-        /// <param name="role"></param>
-        /// <returns></returns>
         [Authorize(Roles = "admin")]
-        [HttpGet("custom-role")]
-        public IActionResult SetCustomUserRole(string uid, string role)
+        [HttpPost("custom-role")]
+        public IActionResult SetCustomUserRole([FromBody] PostRoleRequest request)
         {
             var claims = new Dictionary<string, object>()
             {
-                { ClaimTypes.Role, role },
+                { ClaimTypes.Role, request.Role.ToLower() },
             };
 
             return HandleException(async () =>
             {
-                await _fbService.SetCustomUserClaimsAsync(uid, claims);
+                await _fbService.SetCustomUserClaimsAsync(request.Uid, claims);
                 return Ok(ResponseMsg.CustomClaimSet);
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        [HttpGet("create-user")]
-        public IActionResult CreateUser(string email, string password)
+        [HttpPost("create-user")]
+        public IActionResult CreateUser([FromBody] PostCredentialsRequest request)
         {
             return HandleException(async () =>
             {
-                var user = await _fbService.CreateUserAsync(email, password);
+                var user = await _fbService.CreateUserAsync(request.Email, request.Password);
                 return Ok(user);
             });
         }
@@ -143,15 +119,15 @@ namespace Mantasflowers.WebApi.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="uid">For testing purposes: G46RSuLIvbUjaWJyokcCMDSCeVj1</param>
+        /// <param name="request">For testing purposes Uid: G46RSuLIvbUjaWJyokcCMDSCeVj1</param>
         /// <returns></returns>
         [Authorize(Roles = "admin")]
-        [HttpGet("get-user/by-uid")]
-        public IActionResult GetUserByUid(string uid)
+        [HttpPost("user/by-uid")]
+        public IActionResult GetUserByUid([FromBody] PostUidRequest request)
         {
             return HandleException(async () =>
             {
-                var user = await _fbService.GetUserByUidAsync(uid);
+                var user = await _fbService.GetUserByUidAsync(request.Uid);
                 return Ok(user);
             });
         }
@@ -162,7 +138,7 @@ namespace Mantasflowers.WebApi.Controllers
         /// <param name="email">For testing purposes: johnny@john.jo</param>
         /// <returns></returns>
         [Authorize(Roles = "admin")]
-        [HttpGet("get-user/by-email")]
+        [HttpGet("user/by-email")]
         public IActionResult GetUserByEmail(string email)
         {
             return HandleException(async () =>
@@ -172,52 +148,35 @@ namespace Mantasflowers.WebApi.Controllers
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uid"></param>
-        /// <param name="email"></param>
-        /// <returns></returns>
         [Authorize]
-        [HttpGet("update-user/email")]
-        public IActionResult UpdateUserEmail(string uid, string email)
+        [HttpPost("update-user/email")]
+        public IActionResult UpdateUserEmail([FromBody] PostUpdateEmailRequest request)
         {
             return HandleException(async () =>
             {
-                var user = await _fbService.UpdateUserEmailAsync(uid, email);
+                var user = await _fbService.UpdateUserEmailAsync(request.Uid, request.Email);
                 return Ok(user);
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uid"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
         [Authorize]
-        [HttpGet("update-user/password")]
-        public IActionResult UpdateUserPassword(string uid, string password)
+        [HttpPost("update-user/password")]
+        public IActionResult UpdateUserPassword([FromBody] PostUpdatePasswordRequest request)
         {
             return HandleException(async () =>
             {
-                var user = await _fbService.UpdateUserPasswordAsync(uid, password);
+                var user = await _fbService.UpdateUserPasswordAsync(request.Uid, request.Password);
                 return Ok(user);
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uid"></param>
-        /// <returns></returns>
         [Authorize(Roles = "admin")]
-        [HttpGet("delete-user")]
-        public IActionResult DeleteUserByUid(string uid)
+        [HttpPost("delete-user")]
+        public IActionResult DeleteUserByUid([FromBody] PostUidRequest request)
         {
             return HandleException(async () =>
             {
-                await _fbService.DeleteUserByUidAsync(uid);
+                await _fbService.DeleteUserByUidAsync(request.Uid);
                 return Ok(ResponseMsg.UserDeleted);
             });
         }
