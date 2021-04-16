@@ -20,7 +20,7 @@ namespace Mantasflowers.WebApi.Setup.Newtonsoft
 
             settings.Converters.Add(new StringEnumConverter { NamingStrategy = new SnakeCaseNamingStrategy() });
             // settings.NullValueHandling = NullValueHandling.Ignore;
-            settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
             settings.Formatting = Formatting.Indented;
             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
