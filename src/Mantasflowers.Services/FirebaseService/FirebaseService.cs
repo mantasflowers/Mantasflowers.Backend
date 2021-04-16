@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
-using Mantasflowers.Contracts.Firebase;
+using Mantasflowers.Contracts.Firebase.Response;
 
 namespace Mantasflowers.Services.FirebaseService
 {
@@ -20,7 +20,7 @@ namespace Mantasflowers.Services.FirebaseService
             _fbConfig = firebaseConfig;
         }
 
-        public async Task<GetTokensResponse> GetTokensAsync(string email, string password)
+        public async Task<PostTokensResponse> GetTokensAsync(string email, string password)
         {
             string responseData = string.Empty;
             try
@@ -36,7 +36,7 @@ namespace Mantasflowers.Services.FirebaseService
                 responseData = await response.Content.ReadAsStringAsync();
                 response.EnsureSuccessStatusCode();
 
-                return JsonConvert.DeserializeObject<GetTokensResponse>(responseData);
+                return JsonConvert.DeserializeObject<PostTokensResponse>(responseData);
             }
             catch (HttpRequestException)
             {
@@ -44,7 +44,7 @@ namespace Mantasflowers.Services.FirebaseService
             }
         }
 
-        public async Task<GetTokensResponse> RefreshIdTokenAsync(string refreshToken)
+        public async Task<PostTokensResponse> RefreshIdTokenAsync(string refreshToken)
         {
             string responseData = string.Empty;
             try
@@ -60,7 +60,7 @@ namespace Mantasflowers.Services.FirebaseService
                 responseData = await response.Content.ReadAsStringAsync();
                 response.EnsureSuccessStatusCode();
 
-                return JsonConvert.DeserializeObject<GetTokensResponse>(responseData);
+                return JsonConvert.DeserializeObject<PostTokensResponse>(responseData);
             }
             catch (HttpRequestException)
             {
