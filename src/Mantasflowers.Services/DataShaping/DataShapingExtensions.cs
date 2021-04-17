@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Reflection;
 using System.Threading.Tasks;
 using Mantasflowers.Contracts.Common;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,33 @@ namespace Mantasflowers.Services.DataShaping
             pagedResponse.TotalPages = (int)Math.Ceiling(pagedResponse.TotalItems / (double)limit);
 
             return pagedResponse;
+        }
+
+        public static IQueryable<T> OrderByPropertyName<T>(
+            this IQueryable<T> query,
+            string name,
+            bool descending = false
+        )
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return query;
+            }
+
+            var modelPropertyInfos = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            var sortablePropertyInfo = modelPropertyInfos.FirstOrDefault(x =>
+                x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            
+            if (sortablePropertyInfo == null)
+            {
+                return query;
+            }
+
+            string sortingOrder = descending ? "descending" : "ascending";
+            string orderByQuery = $"{sortablePropertyInfo.Name} {sortingOrder}";
+
+            return query.OrderBy(orderByQuery);
         }
     }
 }

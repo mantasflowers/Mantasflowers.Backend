@@ -61,6 +61,7 @@ namespace Mantasflowers.WebApi.Extensions
                             // TODO: frontend azure app address as origin?
                         }
 
+                        // TODO: might not need to set these (investigate)
                         builder.AllowAnyMethod()
                             .AllowAnyHeader();
                     });

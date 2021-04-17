@@ -15,12 +15,13 @@ namespace Mantasflowers.Services.Repositories
         public ProductRepository(DatabaseContext dbContext)
             : base(dbContext) {}
 
-        public async Task<PagedModel<Product>> GetPaginatedFilteredListAsync(int page, int limit,
-            Expression<Func<Product, bool>> filter)
+        public async Task<PagedModel<Product>> GetPaginatedFilteredOrderedListAsync(int page, int limit,
+            Expression<Func<Product, bool>> filter, string orderByPropertyName, bool orderDescending = false)
         {
             var products = await _dbContext.Products
                 .AsNoTracking()
                 .Where(filter)
+                .OrderByPropertyName(orderByPropertyName, orderDescending)
                 .PaginateAsync(page, limit);
 
             return products;

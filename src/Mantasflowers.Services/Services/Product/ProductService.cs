@@ -2,9 +2,12 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using Mantasflowers.Contracts.Common;
 using Mantasflowers.Contracts.Product.Request;
 using Mantasflowers.Contracts.Product.Response;
+using Mantasflowers.Services.Mapping;
 using Mantasflowers.Services.Repositories;
+using static Mantasflowers.Services.Mapping.ProductMappings;
 
 namespace Mantasflowers.Services.Services.Product
 {
@@ -24,11 +27,23 @@ namespace Mantasflowers.Services.Services.Product
             Expression<Func<Mantasflowers.Domain.Entities.Product, bool>> categoryFilter = 
                 (x => request.Categories.Contains(x.Category));
 
-            var paginatedProducts = await _productRepository.GetPaginatedFilteredListAsync(request.Page,
-                request.PageSize,
-                categoryFilter);
+            if (!ProductSortingMapping.TryGetValue(request.OrderBy, out var orderByPropertyName))
+            {
+                throw new MappingException($"No entity property mapping found for '{nameof(request.OrderBy)}'");
+            }
 
-            var paginatedProductsResponse = _mapper.Map<GetProductsResponse>(paginatedProducts);
+            var paginatedProducts = await _productRepository.GetPaginatedFilteredOrderedListAsync(request.Page,
+                request.PageSize,
+                categoryFilter,
+                orderByPropertyName,
+                request.OrderDescending);
+
+            var paginatedProductsResponse = _mapper.Map<GetProductsResponse>(paginatedProducts,
+                o => o.AfterMap((source, destination) => 
+                {
+                    destination.OrderedBy = request.OrderBy;
+                    destination.OrderDescending = request.OrderDescending;
+                }));
 
             return paginatedProductsResponse;
         }
