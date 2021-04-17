@@ -27,12 +27,17 @@ namespace Mantasflowers.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private static string _corsPolicyName = "CORSPolicy";
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IWebHostEnvironment Environment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -54,6 +59,8 @@ namespace Mantasflowers.WebApi
             services.Configure<WebApiKey>(o => o.Value = Configuration["WebApiKey"]);
 
             services.AddHttpClient();
+
+            services.ConfigureCORS(Environment, _corsPolicyName);
 
             services.SetupLogging();
 
@@ -104,8 +111,6 @@ namespace Mantasflowers.WebApi
 
             app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
-            app.UseAuthentication();
-
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mantasflowers API v1"));
 
@@ -115,6 +120,9 @@ namespace Mantasflowers.WebApi
 
             app.UseRouting();
 
+            app.UseCors(_corsPolicyName);
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

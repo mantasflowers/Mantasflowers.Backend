@@ -1,8 +1,10 @@
 using Mantasflowers.Persistence;
 using Mantasflowers.WebApi.Setup.Database;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.Linq;
 
@@ -39,6 +41,30 @@ namespace Mantasflowers.WebApi.Extensions
                     dbContext.Database.Migrate();
                 }
             }
+        }
+
+        public static void ConfigureCORS(this IServiceCollection services,
+            IWebHostEnvironment environment,
+            string policyName)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(policyName,
+                    builder => 
+                    {
+                        if (environment.IsDevelopment())
+                        {
+                            builder.AllowAnyOrigin();
+                        }
+                        else
+                        {
+                            // TODO: frontend azure app address as origin?
+                        }
+
+                        builder.AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
         }
     } 
 }
