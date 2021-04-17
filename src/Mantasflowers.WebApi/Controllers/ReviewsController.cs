@@ -25,10 +25,16 @@ namespace Mantasflowers.WebApi.Controllers
         /// </summary>
         [HttpGet("{productId}")]
         [ProducesResponseType(typeof(IList<GetProductReviewsResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProductReviews(Guid productId)
         {
             var response = await _productReviewService.GetProductReviewsAsync(productId);
+
+            if (response == null)
+            {
+                return NotFound("Product not found");
+            }
 
             return Ok(response);
         }

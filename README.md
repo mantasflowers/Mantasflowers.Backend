@@ -11,9 +11,9 @@ ASP.NET Core driven backend for university project.
 
 1. Make sure .NET 5 (Core) SDK/Runtime is intalled
 2. Either install SQL Server instance (e.g. [SQL Server Express LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver15)) or use IN_MEMORY database (see [How to use IN_MEMORY database](#How-to-use-IN_MEMORY-database))
-2. Navigate to /src/Mantasflowers.WebApi
+2. Navigate to */src/Mantasflowers.WebApi*
 3. Run `dotnet run`
-10. Alternatively use Dockerfile
+4. Alternatively use Dockerfile
 
 ## How to use IN_MEMORY database
 

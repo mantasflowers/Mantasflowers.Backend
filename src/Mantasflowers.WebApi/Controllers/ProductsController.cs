@@ -43,7 +43,7 @@ namespace Mantasflowers.WebApi.Controllers
 
             if (response == null)
             {
-                return NotFound("Product id not found");
+                return NotFound("Product not found");
             }
 
             return Ok(response);

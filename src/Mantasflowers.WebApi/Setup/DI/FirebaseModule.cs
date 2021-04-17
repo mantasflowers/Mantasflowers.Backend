@@ -8,7 +8,7 @@ namespace Mantasflowers.WebApi.Setup.DI
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<FirebaseService>()
-                .SingleInstance();
+                .InstancePerDependency();
 
             builder.RegisterType<FirebaseConfig>()
                 .SingleInstance();
