@@ -11,8 +11,6 @@ namespace Mantasflowers.Contracts.Product.Response
 
         public ProductCategory Category { get; set; }
 
-        public string ShortDescription { get; set; }
-
         public string Description { get; set; }
 
         public string ThumbnailPictureUrl { get; set; }

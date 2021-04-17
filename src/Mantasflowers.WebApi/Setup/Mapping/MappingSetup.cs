@@ -21,7 +21,8 @@ namespace Mantasflowers.WebApi.Setup.Mapping
                     .ForMember(d => d.PictureUrl, opt => opt.MapFrom(s => s.ProductInfo.PictureUrl));
 
                 x.CreateMap<ProductReview, GetProductReviewsResponse>()
-                    .ForMember(d => d.UserFirstName, opt => opt.MapFrom(s => s.User.FirstName));
+                    .ForMember(d => d.UserFirstName, opt => opt.MapFrom(s => s.User.FirstName))
+                    .ForMember(d => d.Date, opt => opt.MapFrom(s => s.UpdatedOn));
             });
 
             var mapper = config.CreateMapper();

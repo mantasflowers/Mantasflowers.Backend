@@ -6,7 +6,7 @@ namespace Mantasflowers.Contracts.Review
     {
         public Guid ProductId { get; set; }
 
-        public Guid UserId { get; set; }
+        public DateTime Date { get; set; }
 
         public string UserFirstName { get; set; }
 
