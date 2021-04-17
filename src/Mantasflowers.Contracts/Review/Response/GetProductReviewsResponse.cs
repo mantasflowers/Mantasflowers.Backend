@@ -1,6 +1,6 @@
 using System;
 
-namespace Mantasflowers.Contracts.Review
+namespace Mantasflowers.Contracts.Review.Response
 {
     public class GetProductReviewsResponse
     {

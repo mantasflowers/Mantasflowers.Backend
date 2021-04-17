@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mantasflowers.Contracts.Errors;
-using Mantasflowers.Contracts.Review;
+using Mantasflowers.Contracts.Review.Response;
 using Mantasflowers.Services.Services.Review;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

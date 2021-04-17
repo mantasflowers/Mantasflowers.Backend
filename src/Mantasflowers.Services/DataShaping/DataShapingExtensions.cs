@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mantasflowers.Services.DataShaping
 {
-    public static class PaginateExtensions
+    public static class DataShapingExtensions
     {
         public static async Task<PagedModel<T>> PaginateAsync<T>(
             this IQueryable<T> query,

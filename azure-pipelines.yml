@@ -15,8 +15,8 @@ pool:
 # Run on every push
 # trigger:
 
-# Run on every pull request
-# pr:
+# Run on pull requests to master
+pr: [ "master" ]
 
 stages:
   - stage: CI

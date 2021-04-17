@@ -2,7 +2,7 @@ using Autofac;
 using AutoMapper;
 using Mantasflowers.Contracts.Common;
 using Mantasflowers.Contracts.Product.Response;
-using Mantasflowers.Contracts.Review;
+using Mantasflowers.Contracts.Review.Response;
 using Mantasflowers.Domain.Entities;
 
 namespace Mantasflowers.WebApi.Setup.Mapping

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Mantasflowers.Contracts.Review;
+using Mantasflowers.Contracts.Review.Response;
 using Mantasflowers.Services.Repositories;
 
 namespace Mantasflowers.Services.Services.Review
