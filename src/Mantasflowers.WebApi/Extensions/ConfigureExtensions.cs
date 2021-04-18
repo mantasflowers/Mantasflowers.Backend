@@ -52,13 +52,14 @@ namespace Mantasflowers.WebApi.Extensions
                 options.AddPolicy(policyName,
                     builder => 
                     {
-                        if (environment.IsDevelopment())
+                        if (environment.IsProduction())
                         {
-                            builder.AllowAnyOrigin();
+                            // TODO: frontend azure app address as origin?
+                            builder.WithOrigins("*");
                         }
                         else
                         {
-                            // TODO: frontend azure app address as origin?
+                            builder.AllowAnyOrigin();
                         }
 
                         // TODO: might not need to set these (investigate)

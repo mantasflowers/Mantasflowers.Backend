@@ -27,7 +27,9 @@ namespace Mantasflowers.WebApi
 {
     public class Startup
     {
-        private static string _corsPolicyName = "CORSPolicy";
+        public IConfiguration Configuration { get; }
+
+        public IWebHostEnvironment Environment { get; set; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -35,9 +37,7 @@ namespace Mantasflowers.WebApi
             Environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
-
-        public IWebHostEnvironment Environment { get; set; }
+        private static string _corsPolicyName = "CORSPolicy";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
