@@ -1,8 +1,10 @@
 using Mantasflowers.Persistence;
 using Mantasflowers.WebApi.Setup.Database;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.Linq;
 
@@ -21,6 +23,7 @@ namespace Mantasflowers.WebApi.Extensions
                 if (sqlConfig.DatabaseConfiguration.IsInMemory)
                 {
                     logger.Information("Using IN MEMORY DB, migrations won't be applied.");
+                    dbContext.Database.EnsureCreated();
                     return;
                 }
 
@@ -38,6 +41,32 @@ namespace Mantasflowers.WebApi.Extensions
                     dbContext.Database.Migrate();
                 }
             }
+        }
+
+        public static void ConfigureCORS(this IServiceCollection services,
+            IWebHostEnvironment environment,
+            string policyName)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(policyName,
+                    builder => 
+                    {
+                        if (environment.IsProduction())
+                        {
+                            // TODO: frontend azure app address as origin?
+                            builder.WithOrigins("*");
+                        }
+                        else
+                        {
+                            builder.AllowAnyOrigin();
+                        }
+
+                        // TODO: might not need to set these (investigate)
+                        builder.AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
         }
     } 
 }

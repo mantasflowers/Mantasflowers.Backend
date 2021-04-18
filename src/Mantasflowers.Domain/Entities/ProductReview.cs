@@ -11,6 +11,6 @@ namespace Mantasflowers.Domain.Entities
         public Guid UserId { get; set; }
         public virtual User User { get; set; }
 
-        public string Review { get; set; } // TODO: is this an integer, a bool (heart) or a written review?
+        public double ReviewScore { get; set; }
     }
 }

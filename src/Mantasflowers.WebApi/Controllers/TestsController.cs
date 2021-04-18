@@ -82,8 +82,8 @@ namespace Mantasflowers.WebApi.Controllers
                 new {
                     ProductId = product.Id,
                     Name = product.Name,
-                    Description = product.Description,
-                    Price = product?.ProductInfo.Price
+                    Description = product?.ProductInfo.Description,
+                    Price = product.Price
                 }
             );
         }

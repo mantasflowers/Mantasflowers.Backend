@@ -2,10 +2,8 @@ namespace Mantasflowers.Domain.Entities
 {
     public class ProductInfo : BaseEntity
     {
-        public decimal Price { get; set; }
+        public string Description { get; set; }
 
-        public int LeftInStock { get; set; } // TODO: still unknown where we will get this from
-
-        public decimal? DiscountPercent { get; set; }
+        public string PictureUrl { get; set; } // TODO: this can just be url1;url2;...if needed 
     }
 }

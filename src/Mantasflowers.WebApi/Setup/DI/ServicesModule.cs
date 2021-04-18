@@ -1,4 +1,7 @@
 using Autofac;
+using Mantasflowers.Services.Services.Product;
+using Mantasflowers.Services.Services.Review;
+using Mantasflowers.WebApi.Setup.Mapping;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -6,7 +9,15 @@ namespace Mantasflowers.WebApi.Setup.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
-            // TODO: register service classes
+            builder.SetupMapping();
+
+            builder.RegisterType<ProductService>()
+                .As<IProductService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<ProductReviewService>()
+                .As<IProductReviewService>()
+                .InstancePerDependency();
 
             base.Load(builder);
         }

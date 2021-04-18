@@ -1,11 +1,14 @@
 using Autofac;
+using FluentValidation.AspNetCore;
 using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.WebApi.Extensions;
+using Mantasflowers.WebApi.Middleware;
 using Mantasflowers.WebApi.Setup.Database;
 using Mantasflowers.WebApi.Setup.DI;
 using Mantasflowers.WebApi.Setup.Logging;
 using Mantasflowers.WebApi.Setup.Newtonsoft;
 using Mantasflowers.WebApi.Setup.Swagger;
+using Mantasflowers.WebApi.Validation;
 using Mantasflowers.WebApi.Setup.UserManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -24,12 +27,17 @@ namespace Mantasflowers.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+
+        public IWebHostEnvironment Environment { get; set; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
+        private static string _corsPolicyName = "CORSPolicy";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -52,16 +60,30 @@ namespace Mantasflowers.WebApi
 
             services.AddHttpClient();
 
+            services.ConfigureCORS(Environment, _corsPolicyName);
+
             services.SetupLogging();
 
             services.AddControllers(options =>
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
+                options.Filters.Add(new ConsumesAttribute("application/json"));
+                options.Filters.Add(typeof(ValidateRequestAttribute));
             })
             .AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.Converters.Add(new StringEnumConverter { NamingStrategy = new SnakeCaseNamingStrategy() });
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            })
+            .AddFluentValidation(o =>
+            {
+                o.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                // This is replaced with a global ValidateRequestAttribute
+                options.SuppressModelStateInvalidFilter = true;
             });
 
             services.SetupNewtonsoftDefaults();
@@ -87,22 +109,20 @@ namespace Mantasflowers.WebApi
         {
             app.EnsureDatabaseState();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseAuthentication();
+            app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mantasflowers API v1"));
 
             app.UseHttpsRedirection();
 
-            app.UseSerilogRequestLogging(); // TODO: need to figure this out (log not only response, but also request)
+            // app.UseSerilogRequestLogging(); // TODO: this wont work with global exception handling. Need to write our own
 
             app.UseRouting();
 
+            app.UseCors(_corsPolicyName);
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
