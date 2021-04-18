@@ -11,7 +11,5 @@ namespace Mantasflowers.Contracts.Review.Response
         public string UserFirstName { get; set; }
 
         public double ReviewScore { get; set; }
-
-        public string ReviewText { get; set; }
     }
 }

@@ -90,9 +90,6 @@ namespace Mantasflowers.Persistence
                 {
                     e.HasIndex(p => new { p.ProductId, p.UserId })
                         .IsUnique();
-                    e.Property(p => p.ReviewText)
-                        .HasMaxLength(300)
-                        .IsRequired();
                 }
             );
 
@@ -358,7 +355,6 @@ namespace Mantasflowers.Persistence
                 new ProductReview
                 {
                     Id = Guid.NewGuid(),
-                    ReviewText = "im colorblind, ordered wrong flowers",
                     ReviewScore = 3.5,
                     ProductId = productId1,
                     UserId = userId1
@@ -366,7 +362,6 @@ namespace Mantasflowers.Persistence
                 new ProductReview
                 {
                     Id = Guid.NewGuid(),
-                    ReviewText = "This flower made me into the strongest ninja in the village",
                     ProductId = productId2,
                     ReviewScore = 10.0,
                     UserId = userId1

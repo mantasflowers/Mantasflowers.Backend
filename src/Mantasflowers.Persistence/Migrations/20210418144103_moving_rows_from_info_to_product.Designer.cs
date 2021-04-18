@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mantasflowers.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210409204543_Added_review_score")]
-    partial class Added_review_score
+    [Migration("20210418144103_moving_rows_from_info_to_product")]
+    partial class moving_rows_from_info_to_product
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,11 +57,11 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0e445786-f5a9-47a8-8f85-090fcce1478c"),
-                            BeginDate = new DateTime(2021, 4, 9, 20, 45, 42, 734, DateTimeKind.Utc).AddTicks(9482),
+                            Id = new Guid("2fa17dd3-c4f3-423e-abc4-b974786bd338"),
+                            BeginDate = new DateTime(2021, 4, 18, 14, 41, 2, 778, DateTimeKind.Utc).AddTicks(4403),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPrice = 10.0m,
-                            EndDate = new DateTime(2021, 7, 8, 20, 45, 42, 734, DateTimeKind.Utc).AddTicks(9885),
+                            EndDate = new DateTime(2021, 7, 17, 14, 41, 2, 778, DateTimeKind.Utc).AddTicks(4605),
                             Name = "PSK666",
                             OrderOverPrice = 15.0m,
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -102,7 +102,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b27498b3-8c3a-4169-bb56-cd581c0570cb"),
+                            Id = new Guid("55d626e5-f6a1-4984-a320-b98e16b96685"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Lambs street 13",
                             Name = "Hannibal Lecter",
@@ -170,14 +170,14 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c8ab8521-6a1f-4f68-a3d2-ae6deec529fb"),
+                            Id = new Guid("5df3b984-c74e-42a9-b465-be3a7f2a2766"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Message = "i feel like a flower",
-                            OrderAddressId = new Guid("d6885176-642f-476d-9e39-424a78f47bac"),
-                            OrderContactInfoId = new Guid("178beff7-7de9-4580-9868-a3d98cdad2a2"),
+                            OrderAddressId = new Guid("61d4a3e8-e751-4960-b2f7-9ded63689d61"),
+                            OrderContactInfoId = new Guid("a4231e59-9c36-4e42-8c10-669d58a5fce5"),
                             OrderNumber = 123m,
-                            PaymentId = new Guid("1a33844e-0bd6-4d29-9113-63d0e917b424"),
-                            ShipmentId = new Guid("dc167821-ef16-4d1d-b0c8-159503196799"),
+                            PaymentId = new Guid("56d4ff4f-8aba-4656-b27b-0afb5b91b8e1"),
+                            ShipmentId = new Guid("00267483-f810-4edb-97c7-c81418b30a6f"),
                             Status = "UNPAID",
                             TemporaryPasswordHash = "eyy123",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -223,7 +223,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d6885176-642f-476d-9e39-424a78f47bac"),
+                            Id = new Guid("61d4a3e8-e751-4960-b2f7-9ded63689d61"),
                             City = "Vilnius",
                             Country = "LT",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -261,7 +261,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("178beff7-7de9-4580-9868-a3d98cdad2a2"),
+                            Id = new Guid("a4231e59-9c36-4e42-8c10-669d58a5fce5"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "theforcebewithyou@coruscant.com",
                             Phone = "861234567",
@@ -305,10 +305,10 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5640e66f-209a-4e04-8766-6dfdd6bdb7ba"),
+                            Id = new Guid("9c91d80b-5982-4f23-9d70-4544cc3438f1"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderId = new Guid("c8ab8521-6a1f-4f68-a3d2-ae6deec529fb"),
-                            ProductId = new Guid("58555e5f-079c-4f6e-a86f-dd6450e2245c"),
+                            OrderId = new Guid("5df3b984-c74e-42a9-b465-be3a7f2a2766"),
+                            ProductId = new Guid("b909a958-286d-4875-9dea-171e84d7d574"),
                             Quantity = 666,
                             UnitPrice = 1.59m,
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -334,7 +334,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1a33844e-0bd6-4d29-9113-63d0e917b424"),
+                            Id = new Guid("56d4ff4f-8aba-4656-b27b-0afb5b91b8e1"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -391,27 +391,27 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("58555e5f-079c-4f6e-a86f-dd6450e2245c"),
+                            Id = new Guid("b909a958-286d-4875-9dea-171e84d7d574"),
                             Category = "FLOWER",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LeftInStock = 1000,
                             Name = "my rose",
                             Price = 1.99m,
-                            ProductInfoId = new Guid("5f12b5e3-36ca-4ff5-a2e0-f8382eb964e1"),
+                            ProductInfoId = new Guid("98a482a1-fa9d-41b5-bb3a-8d1af64085ce"),
                             ShortDescription = "veri priti flauver",
                             ThumbnailPictureUrl = "https://aodaisjdoasjdioas.com",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("64acfe75-d9e9-40a4-aa0f-000d786088d3"),
+                            Id = new Guid("7992e7a5-214c-4c9f-bab7-8be3b7e60784"),
                             Category = "FLOWER",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.2m,
                             LeftInStock = 123,
                             Name = "konoha leaf",
                             Price = 2.99m,
-                            ProductInfoId = new Guid("04807a6b-f6b2-43c3-881e-e2accd326091"),
+                            ProductInfoId = new Guid("59fe2108-08ab-41ed-a6c3-abf5ea76087e"),
                             ShortDescription = "its a real flower",
                             ThumbnailPictureUrl = "https://oiashdiasdias.com",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -445,7 +445,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5f12b5e3-36ca-4ff5-a2e0-f8382eb964e1"),
+                            Id = new Guid("98a482a1-fa9d-41b5-bb3a-8d1af64085ce"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "yes, a veri pritti flauever. plis buy",
                             PictureUrl = "https://aodaisjdoasjdioas.com",
@@ -453,7 +453,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("04807a6b-f6b2-43c3-881e-e2accd326091"),
+                            Id = new Guid("59fe2108-08ab-41ed-a6c3-abf5ea76087e"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "best flower in the ninja village",
                             PictureUrl = "https://ioashfiausfa.com",
@@ -476,11 +476,6 @@ namespace Mantasflowers.Persistence.Migrations
                     b.Property<double>("ReviewScore")
                         .HasColumnType("float");
 
-                    b.Property<string>("ReviewText")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
@@ -499,13 +494,21 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("37dbd85a-a9bd-484f-b1b0-fde8b7a0aefc"),
+                            Id = new Guid("1d9d4b9d-b239-44d6-9655-07cab817a42e"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProductId = new Guid("58555e5f-079c-4f6e-a86f-dd6450e2245c"),
-                            ReviewScore = 0.0,
-                            ReviewText = "im colorblind, ordered wrong flowers",
+                            ProductId = new Guid("b909a958-286d-4875-9dea-171e84d7d574"),
+                            ReviewScore = 3.5,
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("fe63a2e6-5244-43c9-87af-8cc5759e62fc")
+                            UserId = new Guid("c5726e81-6160-4ffe-bed9-ad6c3f0f2e05")
+                        },
+                        new
+                        {
+                            Id = new Guid("3c97b7d7-55cb-4a6e-bc9e-815ce9d8a183"),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ProductId = new Guid("7992e7a5-214c-4c9f-bab7-8be3b7e60784"),
+                            ReviewScore = 10.0,
+                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = new Guid("c5726e81-6160-4ffe-bed9-ad6c3f0f2e05")
                         });
                 });
 
@@ -528,7 +531,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dc167821-ef16-4d1d-b0c8-159503196799"),
+                            Id = new Guid("00267483-f810-4edb-97c7-c81418b30a6f"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -573,13 +576,13 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fe63a2e6-5244-43c9-87af-8cc5759e62fc"),
-                            AddressId = new Guid("4fdabf5e-e952-43e4-83b6-4d81eac4e7a6"),
+                            Id = new Guid("c5726e81-6160-4ffe-bed9-ad6c3f0f2e05"),
+                            AddressId = new Guid("dc7d9907-5562-4eef-b1c3-8754db1888be"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Obi-Wan",
                             LastName = "Kenobi",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserContactInfoId = new Guid("94f7958c-cf03-40ed-b27d-766527fed2a9")
+                            UserContactInfoId = new Guid("24d962e2-4464-459c-b177-ce5acae79f14")
                         });
                 });
 
@@ -622,7 +625,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4fdabf5e-e952-43e4-83b6-4d81eac4e7a6"),
+                            Id = new Guid("dc7d9907-5562-4eef-b1c3-8754db1888be"),
                             City = "Vilnius",
                             Country = "LT",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -661,7 +664,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94f7958c-cf03-40ed-b27d-766527fed2a9"),
+                            Id = new Guid("24d962e2-4464-459c-b177-ce5acae79f14"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "theforcebewithyou@coruscant.com",
                             Phone = "861234567",
@@ -699,11 +702,11 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0e60e36f-6bb4-4ec0-872d-527068631f3f"),
+                            Id = new Guid("0d2e8083-5329-4979-ad2a-59e3fd111443"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderId = new Guid("c8ab8521-6a1f-4f68-a3d2-ae6deec529fb"),
+                            OrderId = new Guid("5df3b984-c74e-42a9-b465-be3a7f2a2766"),
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("fe63a2e6-5244-43c9-87af-8cc5759e62fc")
+                            UserId = new Guid("c5726e81-6160-4ffe-bed9-ad6c3f0f2e05")
                         });
                 });
 

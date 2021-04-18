@@ -12,7 +12,5 @@ namespace Mantasflowers.Domain.Entities
         public virtual User User { get; set; }
 
         public double ReviewScore { get; set; }
-
-        public string ReviewText { get; set; }
     }
 }
