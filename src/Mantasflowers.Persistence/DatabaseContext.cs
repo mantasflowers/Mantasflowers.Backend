@@ -531,7 +531,7 @@ namespace Mantasflowers.Persistence
                 },
                 new User
                 {
-                    Id = userId1,
+                    Id = userId2,
                     FirstName = "Luke",
                     LastName = "Skywalker",
                     AddressId = userAddress2,
