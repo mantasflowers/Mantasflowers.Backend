@@ -267,13 +267,34 @@ namespace Mantasflowers.Persistence
 
         private static void Seed(ModelBuilder modelBuilder)
         {
+            string pictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg";
+
             var productInfoId1 = Guid.NewGuid();
             var productInfoId2 = Guid.NewGuid();
+            var productInfoId3 = Guid.NewGuid();
+            var productInfoId4 = Guid.NewGuid();
+            var productInfoId5 = Guid.NewGuid();
+            var productInfoId6 = Guid.NewGuid();
+            var productInfoId7 = Guid.NewGuid();
+            var productInfoId8 = Guid.NewGuid();
+            var productInfoId9 = Guid.NewGuid();
+            var productInfoId10 = Guid.NewGuid();
             var productId1 = Guid.NewGuid();
             var productId2 = Guid.NewGuid();
+            var productId3 = Guid.NewGuid();
+            var productId4 = Guid.NewGuid();
+            var productId5 = Guid.NewGuid();
+            var productId6 = Guid.NewGuid();
+            var productId7 = Guid.NewGuid();
+            var productId8 = Guid.NewGuid();
+            var productId9 = Guid.NewGuid();
+            var productId10 = Guid.NewGuid();
             var userId1 = Guid.NewGuid();
+            var userId2 = Guid.NewGuid();
             var userAddress1 = Guid.NewGuid();
+            var userAddress2 = Guid.NewGuid();
             var userContactInfo1 = Guid.NewGuid();
+            var userContactInfo2 = Guid.NewGuid();
             var paymentId1 = Guid.NewGuid();
             var shipmentId1 = Guid.NewGuid();
             var orderAddressId1 = Guid.NewGuid();
@@ -288,13 +309,61 @@ namespace Mantasflowers.Persistence
                 {
                     Id = productInfoId1,
                     Description = "yes, a veri pritti flauever. plis buy",
-                    PictureUrl = "https://aodaisjdoasjdioas.com"
+                    PictureUrl = pictureUrl
                 },
                 new ProductInfo
                 {
                     Id = productInfoId2,
                     Description = "best flower in the ninja village",
-                    PictureUrl = "https://ioashfiausfa.com"
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId3,
+                    Description = "description 3",
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId4,
+                    Description = "description 4",
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId5,
+                    Description = "description 5",
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId6,
+                    Description = "description 6",
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId7,
+                    Description = "description 7",
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId8,
+                    Description = "description 8",
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId9,
+                    Description = "description 9",
+                    PictureUrl = pictureUrl
+                },
+                new ProductInfo
+                {
+                    Id = productInfoId10,
+                    Description = "description 10",
+                    PictureUrl = pictureUrl
                 }
             );
             modelBuilder.Entity<Product>().HasData(
@@ -304,7 +373,7 @@ namespace Mantasflowers.Persistence
                     Name = "my rose",
                     Category = ProductCategory.FLOWER,
                     ShortDescription = "veri priti flauver",
-                    ThumbnailPictureUrl = "https://aodaisjdoasjdioas.com",
+                    ThumbnailPictureUrl = pictureUrl,
                     Price = 1.99m,
                     LeftInStock = 1000,
                     DiscountPercent = null,
@@ -316,11 +385,107 @@ namespace Mantasflowers.Persistence
                     Name = "konoha leaf",
                     Category = ProductCategory.FLOWER,
                     ShortDescription = "its a real flower",
-                    ThumbnailPictureUrl = "https://oiashdiasdias.com",
+                    ThumbnailPictureUrl = pictureUrl,
                     Price = 2.99m,
                     LeftInStock = 123,
                     DiscountPercent = 0.2m,
                     ProductInfoId = productInfoId2,
+                },
+                new Product
+                {
+                    Id = productId3,
+                    Name = "name 3",
+                    Category = ProductCategory.BOUQUET,
+                    ShortDescription = "short description 3",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 5.99m,
+                    LeftInStock = 4,
+                    DiscountPercent = 0.0m,
+                    ProductInfoId = productInfoId3,
+                },
+                new Product
+                {
+                    Id = productId4,
+                    Name = "name 4",
+                    Category = ProductCategory.FLOWER,
+                    ShortDescription = "short description 4",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 2.49m,
+                    LeftInStock = 400,
+                    DiscountPercent = 0.15m,
+                    ProductInfoId = productInfoId4,
+                },
+                new Product
+                {
+                    Id = productId5,
+                    Name = "name 5",
+                    Category = ProductCategory.BOUQUET,
+                    ShortDescription = "short description 5",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 11.29m,
+                    LeftInStock = 15,
+                    DiscountPercent = 0.0m,
+                    ProductInfoId = productInfoId5,
+                },
+                new Product
+                {
+                    Id = productId6,
+                    Name = "name 6",
+                    Category = ProductCategory.BOUQUET,
+                    ShortDescription = "short description 6",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 1.29m,
+                    LeftInStock = 153,
+                    DiscountPercent = 0.40m,
+                    ProductInfoId = productInfoId6,
+                },
+                new Product
+                {
+                    Id = productId7,
+                    Name = "name 7",
+                    Category = ProductCategory.FLOWER,
+                    ShortDescription = "short description 7",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 0.59m,
+                    LeftInStock = 4321,
+                    DiscountPercent = 0.10m,
+                    ProductInfoId = productInfoId7,
+                },
+                new Product
+                {
+                    Id = productId8,
+                    Name = "name 8",
+                    Category = ProductCategory.BOUQUET,
+                    ShortDescription = "short description 8",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 7.19m,
+                    LeftInStock = 125,
+                    DiscountPercent = 0.3m,
+                    ProductInfoId = productInfoId8,
+                },
+                new Product
+                {
+                    Id = productId9,
+                    Name = "name 9",
+                    Category = ProductCategory.FLOWER,
+                    ShortDescription = "short description 9",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 2.49m,
+                    LeftInStock = 1233,
+                    DiscountPercent = 0.0m,
+                    ProductInfoId = productInfoId9,
+                },
+                new Product
+                {
+                    Id = productId10,
+                    Name = "name 10",
+                    Category = ProductCategory.BOUQUET,
+                    ShortDescription = "short description 10",
+                    ThumbnailPictureUrl = pictureUrl,
+                    Price = 7.99m,
+                    LeftInStock = 34,
+                    DiscountPercent = 0.0m,
+                    ProductInfoId = productInfoId10,
                 }
             );
             modelBuilder.Entity<UserAddress>().HasData(
@@ -331,6 +496,14 @@ namespace Mantasflowers.Persistence
                     City = "Vilnius",
                     Street = "Autism street",
                     Zipcode = "LT-12345"
+                },
+                new UserAddress
+                {
+                    Id = userAddress2,
+                    Country = "LT",
+                    City = "Kaunas",
+                    Street = "Kaimas street",
+                    Zipcode = "LT-54321"
                 }
             );
             modelBuilder.Entity<UserContactInfo>().HasData(
@@ -338,7 +511,13 @@ namespace Mantasflowers.Persistence
                 {
                     Id = userContactInfo1,
                     Email = "theforcebewithyou@coruscant.com",
-                    Phone = "861234567"
+                    Phone = "+37061234567"
+                },
+                new UserContactInfo
+                {
+                    Id = userContactInfo2,
+                    Email = "asdiasdioas@asfiasifa.com",
+                    Phone = "+37069263957"
                 }
             );
             modelBuilder.Entity<User>().HasData(
@@ -349,6 +528,14 @@ namespace Mantasflowers.Persistence
                     LastName = "Kenobi",
                     AddressId = userAddress1,
                     UserContactInfoId = userContactInfo1
+                },
+                new User
+                {
+                    Id = userId1,
+                    FirstName = "Luke",
+                    LastName = "Skywalker",
+                    AddressId = userAddress2,
+                    UserContactInfoId = userContactInfo2
                 }
             );
             modelBuilder.Entity<ProductReview>().HasData(
