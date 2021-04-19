@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mantasflowers.Domain\Mantasflowers.Domain.csproj" />
     <ProjectReference Include="..\Mantasflowers.Persistence\Mantasflowers.Persistence.csproj" />
     <ProjectReference Include="..\Mantasflowers.Contracts\Mantasflowers.Contracts.csproj" />
   </ItemGroup>

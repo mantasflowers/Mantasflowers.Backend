@@ -1,4 +1,5 @@
 using Autofac;
+using Mantasflowers.Services.ServiceAgents;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -6,7 +7,8 @@ namespace Mantasflowers.WebApi.Setup.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
-            // TODO: register service agents
+            builder.RegisterType<FirebaseServiceAgent>()
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

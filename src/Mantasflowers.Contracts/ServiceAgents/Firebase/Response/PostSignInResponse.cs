@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mantasflowers.Contracts.Firebase.Response
+namespace Mantasflowers.Contracts.ServiceAgents.Firebase.Response
 {
-    public class PostTokensResponse
+    public class PostSignInResponse
     {
         [JsonProperty("idToken")]
         public string IdToken { get; set; }

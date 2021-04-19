@@ -1,5 +1,6 @@
 using Autofac;
 using AutoMapper;
+using Mantasflowers.WebApi.Setup.Mapping.ServiceAgentMappings;
 
 namespace Mantasflowers.WebApi.Setup.Mapping
 {
@@ -9,8 +10,13 @@ namespace Mantasflowers.WebApi.Setup.Mapping
         {
             var config = new MapperConfiguration(x =>
             {
+                /* Service mappings */
                 x.AddProfile<ProductProfile>();
                 x.AddProfile<ProductReviewProfile>();
+                x.AddProfile<UserProfile>();
+
+                /* Service agent mappings */
+                x.AddProfile<FirebaseServiceAgentProfile>();
             });
 
             var mapper = config.CreateMapper();

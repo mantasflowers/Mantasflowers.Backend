@@ -11,6 +11,8 @@ namespace Mantasflowers.WebApi.Controllers
 {
     [ApiController]
     [Route("/product")]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -25,7 +27,6 @@ namespace Mantasflowers.WebApi.Controllers
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(GetProductsResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPaginatedProducts([FromQuery] GetProductsRequest request)
         {
             var response = await _productService.GetPaginatedProductsAsync(request);
@@ -36,7 +37,6 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetDetailedProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProduct(Guid id)
         {
             var response = await _productService.GetDetailedProductInfoAsync(id);

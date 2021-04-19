@@ -97,11 +97,11 @@ namespace Mantasflowers.Persistence
                 e =>
                 {
                     e.Property(p => p.FirstName)
-                        .HasMaxLength(200)
-                        .IsRequired();
+                        .HasMaxLength(200);
                     e.Property(p => p.LastName)
-                        .HasMaxLength(200)
-                        .IsRequired();
+                        .HasMaxLength(200);
+                    e.HasIndex(p => p.Uid)
+                        .IsUnique();
                 }
             );
 
@@ -120,6 +120,8 @@ namespace Mantasflowers.Persistence
                     e.Property(p => p.Zipcode)
                         .HasMaxLength(20)
                         .IsRequired();
+                    e.HasIndex(p => p.UserId)
+                        .IsUnique();
                 }
             );
 
@@ -132,6 +134,8 @@ namespace Mantasflowers.Persistence
                     e.Property(p => p.Phone)
                         .HasMaxLength(20)
                         .IsRequired();
+                    e.HasIndex(p => p.UserId)
+                        .IsUnique();
                 }
             );
 
@@ -495,7 +499,8 @@ namespace Mantasflowers.Persistence
                     Country = "LT",
                     City = "Vilnius",
                     Street = "Autism street",
-                    Zipcode = "LT-12345"
+                    Zipcode = "LT-12345",
+                    UserId = userId1,
                 },
                 new UserAddress
                 {
@@ -503,7 +508,8 @@ namespace Mantasflowers.Persistence
                     Country = "LT",
                     City = "Kaunas",
                     Street = "Kaimas street",
-                    Zipcode = "LT-54321"
+                    Zipcode = "LT-54321",
+                    UserId = userId2
                 }
             );
             modelBuilder.Entity<UserContactInfo>().HasData(
@@ -511,31 +517,31 @@ namespace Mantasflowers.Persistence
                 {
                     Id = userContactInfo1,
                     Email = "theforcebewithyou@coruscant.com",
-                    Phone = "+37061234567"
+                    Phone = "+37061234567",
+                    UserId = userId1
                 },
                 new UserContactInfo
                 {
                     Id = userContactInfo2,
                     Email = "asdiasdioas@asfiasifa.com",
-                    Phone = "+37069263957"
+                    Phone = "+37069263957",
+                    UserId = userId2
                 }
             );
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
                     Id = userId1,
+                    Uid = "o2DfmuP9NRcw19bDbvSrg6lpavF2",
                     FirstName = "Obi-Wan",
                     LastName = "Kenobi",
-                    AddressId = userAddress1,
-                    UserContactInfoId = userContactInfo1
                 },
                 new User
                 {
                     Id = userId2,
+                    Uid = "ikpWhF3UzsXFAue98r9pBA7RwGs1",
                     FirstName = "Luke",
                     LastName = "Skywalker",
-                    AddressId = userAddress2,
-                    UserContactInfoId = userContactInfo2
                 }
             );
             modelBuilder.Entity<ProductReview>().HasData(

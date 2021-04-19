@@ -1,8 +1,13 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using FirebaseAdmin.Auth;
 using FluentValidation;
 using Mantasflowers.Contracts.Errors;
+using Mantasflowers.Services.FirebaseService;
+using Mantasflowers.Services.ServiceAgents.Exceptions;
+using Mantasflowers.Services.Services.Exceptions;
+using Mantasflowers.WebApi.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
@@ -46,13 +51,26 @@ namespace Mantasflowers.WebApi.Middleware
             e = e.GetBaseException();
 
             var statusCode = HttpStatusCode.InternalServerError;
-            string message = _environment.IsProduction() ? "Internal server error" : e.Message;
+            string message = e.Message;
             string stackTrace = _environment.IsProduction() ? null : e.StackTrace;
 
             switch (e)
             {
                 case ValidationException _:
                     statusCode = HttpStatusCode.BadRequest;
+                    break;
+                case FirebaseTokenException _:
+                    statusCode = HttpStatusCode.Unauthorized;
+                    break;
+                case FirebaseAuthException ex:
+                    statusCode = HttpStatusCode.BadRequest;
+                    message = HandleFirebaseAuthException(ex);
+                    break;
+                case FirebaseUidNotFoundException _:
+                    statusCode = HttpStatusCode.NotFound;
+                    break;
+                case UserNotFoundException _:
+                    statusCode = HttpStatusCode.NotFound;
                     break;
                 default:
                     break;
@@ -76,6 +94,16 @@ namespace Mantasflowers.WebApi.Middleware
                 "Exception {exceptioName} was caught by error middleware with message: {message}",
                 e.GetType().Name,
                 e.Message);
+        }
+
+        private string HandleFirebaseAuthException(FirebaseAuthException e)
+        {
+            if (e.Message.ContainsEnclosing('(', ')'))
+            {
+                return e.Message.SubstringWithin('(', ')');
+            }
+
+            return Enum.GetName(typeof(AuthError), e.AuthErrorCode);
         }
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using Mantasflowers.Contracts.Common;
 using Mantasflowers.Contracts.Product.Request;
 using Mantasflowers.Contracts.Product.Response;
 using Mantasflowers.Services.Mapping;

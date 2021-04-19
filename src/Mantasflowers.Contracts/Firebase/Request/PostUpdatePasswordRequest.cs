@@ -1,6 +1,6 @@
 ﻿namespace Mantasflowers.Contracts.Firebase.Request
 {
-    public class PostUpdatePasswordRequest : PostUidRequest
+    public class PostUpdatePasswordRequest
     {
         public string Password { get; set; }
     }

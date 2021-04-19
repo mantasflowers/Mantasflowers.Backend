@@ -11,6 +11,8 @@ namespace Mantasflowers.WebApi.Controllers
 {
     [ApiController]
     [Route("/review")]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class ReviewsController : ControllerBase
     {
         private readonly IProductReviewService _productReviewService;
@@ -26,7 +28,6 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpGet("{productId}")]
         [ProducesResponseType(typeof(IList<GetProductReviewsResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProductReviews(Guid productId)
         {
             var response = await _productReviewService.GetProductReviewsAsync(productId);
