@@ -63,7 +63,7 @@ namespace Mantasflowers.WebApi.Controllers
         }
 
         /// <summary>
-        /// Invalidates refresh token.
+        /// Invalidates refresh token. The actual token is still valid. It is the clients responsibility to remove any browser stored tokens.
         /// </summary>
         [Authorize]
         [HttpPost("logout")]

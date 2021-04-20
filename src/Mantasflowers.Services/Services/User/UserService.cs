@@ -27,7 +27,7 @@ namespace Mantasflowers.Services.Services.User
             var user = await _userRepository.GetUserByUidAsync(uid);
             if (user == null)
             {
-                throw new FirebaseUidNotFoundException("No user could be found for Uid");
+                throw new FirebaseUidNotFoundException($"No user could be found for {nameof(uid)}");
             }
             
             var getUserResponse = _mapper.Map<GetUserResponse>(user);
@@ -42,7 +42,7 @@ namespace Mantasflowers.Services.Services.User
             var user = await _userRepository.GetDetailedUserByUidAsync(uid);
             if (user == null)
             {
-                throw new FirebaseUidNotFoundException("No user could be found for Uid");
+                throw new FirebaseUidNotFoundException($"No user could be found for {nameof(uid)}");
             }
 
             var getDetailedUserResponse = _mapper.Map<GetDetailedUserResponse>(user,
@@ -60,7 +60,7 @@ namespace Mantasflowers.Services.Services.User
             var user = await _userRepository.GetDetailedUserByIdAsync(id);
             if (user == null)
             {
-                throw new UserNotFoundException("No user could be found for id");
+                throw new UserNotFoundException($"No user could be found for {nameof(id)}");
             }
 
             var userRecord = await _fbService.GetUserByUidAsync(user.Uid);
