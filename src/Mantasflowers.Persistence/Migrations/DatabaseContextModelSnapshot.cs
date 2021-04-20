@@ -55,11 +55,11 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b14b8f48-c45e-4a93-874e-dd33166ffec5"),
-                            BeginDate = new DateTime(2021, 4, 19, 23, 16, 0, 279, DateTimeKind.Utc).AddTicks(3303),
+                            Id = new Guid("2020634e-0566-4c9f-92a8-a064bbd3cb36"),
+                            BeginDate = new DateTime(2021, 4, 20, 12, 3, 44, 316, DateTimeKind.Utc).AddTicks(7007),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPrice = 10.0m,
-                            EndDate = new DateTime(2021, 7, 18, 23, 16, 0, 279, DateTimeKind.Utc).AddTicks(3698),
+                            EndDate = new DateTime(2021, 7, 19, 12, 3, 44, 316, DateTimeKind.Utc).AddTicks(7444),
                             Name = "PSK666",
                             OrderOverPrice = 15.0m,
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -100,7 +100,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6035a8f0-8b2f-44b9-bb1f-228842cc555f"),
+                            Id = new Guid("74b5728b-bd02-4dce-b5e7-43709fed134f"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Lambs street 13",
                             Name = "Hannibal Lecter",
@@ -124,12 +124,6 @@ namespace Mantasflowers.Persistence.Migrations
                     b.Property<string>("Message")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("OrderAddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderContactInfoId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("OrderNumber")
                         .HasColumnType("decimal(20,0)");
@@ -155,10 +149,6 @@ namespace Mantasflowers.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderAddressId");
-
-                    b.HasIndex("OrderContactInfoId");
-
                     b.HasIndex("PaymentId");
 
                     b.HasIndex("ShipmentId");
@@ -168,14 +158,12 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3a6e0c39-2bf3-4c13-9f12-81ac015385d3"),
+                            Id = new Guid("a0432edd-536a-4e0d-9754-bae37f0c177c"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Message = "i feel like a flower",
-                            OrderAddressId = new Guid("1daeb234-2080-4d67-a4c0-72c294498fa1"),
-                            OrderContactInfoId = new Guid("6c7b122f-d6af-4e21-a559-15b32738b95b"),
                             OrderNumber = 123m,
-                            PaymentId = new Guid("84a93913-d097-49c8-8d15-c1a04172aec8"),
-                            ShipmentId = new Guid("ae1ecd2d-3c8d-4980-a997-505a256386df"),
+                            PaymentId = new Guid("6453cd65-c3d6-4212-a900-d3a0b57d9daf"),
+                            ShipmentId = new Guid("fb48fb7b-f7f0-4e3a-93d2-9cad436e5f9a"),
                             Status = "UNPAID",
                             TemporaryPasswordHash = "eyy123",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -201,6 +189,9 @@ namespace Mantasflowers.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -216,15 +207,19 @@ namespace Mantasflowers.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
                     b.ToTable("OrderAddresses");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1daeb234-2080-4d67-a4c0-72c294498fa1"),
+                            Id = new Guid("8154b14b-205b-4aa8-9b71-56e6173bf9d7"),
                             City = "Vilnius",
                             Country = "LT",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderId = new Guid("a0432edd-536a-4e0d-9754-bae37f0c177c"),
                             Street = "Autism street",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zipcode = "LT-12345"
@@ -244,6 +239,9 @@ namespace Mantasflowers.Persistence.Migrations
                         .HasMaxLength(320)
                         .HasColumnType("nvarchar(320)");
 
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -254,14 +252,18 @@ namespace Mantasflowers.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
                     b.ToTable("OrderContactInfo");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6c7b122f-d6af-4e21-a559-15b32738b95b"),
+                            Id = new Guid("2321f86f-af60-4a30-97f4-83fd0de197e1"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "theforcebewithyou@coruscant.com",
+                            OrderId = new Guid("a0432edd-536a-4e0d-9754-bae37f0c177c"),
                             Phone = "861234567",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -303,10 +305,10 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3c922b5f-e1cb-4473-ae03-5c0c15fbc5cf"),
+                            Id = new Guid("82ca2a36-d2f9-4fbe-89e6-945eb1b5bdf6"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderId = new Guid("3a6e0c39-2bf3-4c13-9f12-81ac015385d3"),
-                            ProductId = new Guid("13e57632-dd98-4ad2-8b90-97393432a46a"),
+                            OrderId = new Guid("a0432edd-536a-4e0d-9754-bae37f0c177c"),
+                            ProductId = new Guid("71a4e7f6-333b-4dd1-997f-ce38efa3aee4"),
                             Quantity = 666,
                             UnitPrice = 1.59m,
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -332,7 +334,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("84a93913-d097-49c8-8d15-c1a04172aec8"),
+                            Id = new Guid("6453cd65-c3d6-4212-a900-d3a0b57d9daf"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -389,139 +391,139 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("13e57632-dd98-4ad2-8b90-97393432a46a"),
+                            Id = new Guid("71a4e7f6-333b-4dd1-997f-ce38efa3aee4"),
                             Category = "FLOWER",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LeftInStock = 1000,
                             Name = "my rose",
                             Price = 1.99m,
-                            ProductInfoId = new Guid("40c38637-8f95-4141-85b8-b54a14a3c7d4"),
+                            ProductInfoId = new Guid("46491fe1-7568-4a5b-864b-7212c554eba6"),
                             ShortDescription = "veri priti flauver",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("8bb8653d-01aa-45b2-a505-94b1f16c6376"),
+                            Id = new Guid("97c63343-f8d2-40bb-98b9-422c12fd2775"),
                             Category = "FLOWER",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.2m,
                             LeftInStock = 123,
                             Name = "konoha leaf",
                             Price = 2.99m,
-                            ProductInfoId = new Guid("6735991b-f060-4ba8-94f2-b2ac3e935e39"),
+                            ProductInfoId = new Guid("5040173e-4bff-440d-a289-4d463d7950b9"),
                             ShortDescription = "its a real flower",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("25eeb65d-5d6e-48bc-bb88-b960dc6f0d94"),
+                            Id = new Guid("3e2b157f-8a5a-4540-b316-c5688cfeac25"),
                             Category = "BOUQUET",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.0m,
                             LeftInStock = 4,
                             Name = "name 3",
                             Price = 5.99m,
-                            ProductInfoId = new Guid("e0f900b3-bf36-4380-9e1b-fbbd534fc915"),
+                            ProductInfoId = new Guid("7127c401-8832-4487-8c95-dafa790f4507"),
                             ShortDescription = "short description 3",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("9f9b61a8-41ba-445a-8e49-dd76d1918699"),
+                            Id = new Guid("8acf97e4-6459-4960-a895-7b4f36fb0761"),
                             Category = "FLOWER",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.15m,
                             LeftInStock = 400,
                             Name = "name 4",
                             Price = 2.49m,
-                            ProductInfoId = new Guid("6e723707-a565-436b-b24e-d38314f31a1f"),
+                            ProductInfoId = new Guid("fd81e311-d46d-432b-a5b7-5cafaaf5ea2c"),
                             ShortDescription = "short description 4",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("6843b919-710d-4044-8b67-0755d994e798"),
+                            Id = new Guid("d28b9d32-f6a7-4389-83a9-b6fb531c0dee"),
                             Category = "BOUQUET",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.0m,
                             LeftInStock = 15,
                             Name = "name 5",
                             Price = 11.29m,
-                            ProductInfoId = new Guid("9f5ee6bc-89f3-48a5-9407-628d91208077"),
+                            ProductInfoId = new Guid("8becb5f2-208b-49ee-ab11-0a9cc3a1d9b2"),
                             ShortDescription = "short description 5",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("6944022d-e222-40e8-8cc9-f6856b35354d"),
+                            Id = new Guid("c20ddae5-64e2-45e8-8d77-e1dce5b6d106"),
                             Category = "BOUQUET",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.40m,
                             LeftInStock = 153,
                             Name = "name 6",
                             Price = 1.29m,
-                            ProductInfoId = new Guid("80d2511b-77c5-47b9-a055-ace42ff14079"),
+                            ProductInfoId = new Guid("77507466-6e64-463f-94a9-01c4f35db4ee"),
                             ShortDescription = "short description 6",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("e220d349-8a41-4af1-bb4b-83f5784eb47a"),
+                            Id = new Guid("4c5d09e2-c971-4560-90b6-3f92ca12c901"),
                             Category = "FLOWER",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.10m,
                             LeftInStock = 4321,
                             Name = "name 7",
                             Price = 0.59m,
-                            ProductInfoId = new Guid("b57795b1-4521-4aa6-817c-22c9e82b3ea7"),
+                            ProductInfoId = new Guid("ffd760d6-65f4-4b12-b625-b082ff9cb9df"),
                             ShortDescription = "short description 7",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("31f6bccd-6aa5-49bf-a1e3-0c88ae80553a"),
+                            Id = new Guid("51f784fc-1efd-4dfd-a616-0e10e737104c"),
                             Category = "BOUQUET",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.3m,
                             LeftInStock = 125,
                             Name = "name 8",
                             Price = 7.19m,
-                            ProductInfoId = new Guid("5edf7b60-20e1-4ba2-9a56-56754ffc9dbd"),
+                            ProductInfoId = new Guid("23e99280-7a54-4b6e-85d4-bc2016f009b5"),
                             ShortDescription = "short description 8",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("21b2e6c8-fdf2-4efb-9e3a-3994add128b2"),
+                            Id = new Guid("c60edbc8-09e4-4af4-90de-b0d720f2604a"),
                             Category = "FLOWER",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.0m,
                             LeftInStock = 1233,
                             Name = "name 9",
                             Price = 2.49m,
-                            ProductInfoId = new Guid("908bc516-4fe5-45b6-8688-364ea39b4d46"),
+                            ProductInfoId = new Guid("ad5ed53a-c727-45ec-b639-1307951a2ba0"),
                             ShortDescription = "short description 9",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("0e9b9624-43cb-4c6b-b326-d5e8d2a8523f"),
+                            Id = new Guid("049ca675-987f-40ff-ab69-35a0bc1d5512"),
                             Category = "BOUQUET",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscountPercent = 0.0m,
                             LeftInStock = 34,
                             Name = "name 10",
                             Price = 7.99m,
-                            ProductInfoId = new Guid("08cb2f7d-e5fe-4615-a3e5-8576af69ac83"),
+                            ProductInfoId = new Guid("f8289853-5cee-4827-92ca-1639250bb442"),
                             ShortDescription = "short description 10",
                             ThumbnailPictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -555,7 +557,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("40c38637-8f95-4141-85b8-b54a14a3c7d4"),
+                            Id = new Guid("46491fe1-7568-4a5b-864b-7212c554eba6"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "yes, a veri pritti flauever. plis buy",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -563,7 +565,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6735991b-f060-4ba8-94f2-b2ac3e935e39"),
+                            Id = new Guid("5040173e-4bff-440d-a289-4d463d7950b9"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "best flower in the ninja village",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -571,7 +573,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e0f900b3-bf36-4380-9e1b-fbbd534fc915"),
+                            Id = new Guid("7127c401-8832-4487-8c95-dafa790f4507"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 3",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -579,7 +581,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6e723707-a565-436b-b24e-d38314f31a1f"),
+                            Id = new Guid("fd81e311-d46d-432b-a5b7-5cafaaf5ea2c"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 4",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -587,7 +589,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9f5ee6bc-89f3-48a5-9407-628d91208077"),
+                            Id = new Guid("8becb5f2-208b-49ee-ab11-0a9cc3a1d9b2"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 5",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -595,7 +597,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("80d2511b-77c5-47b9-a055-ace42ff14079"),
+                            Id = new Guid("77507466-6e64-463f-94a9-01c4f35db4ee"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 6",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -603,7 +605,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b57795b1-4521-4aa6-817c-22c9e82b3ea7"),
+                            Id = new Guid("ffd760d6-65f4-4b12-b625-b082ff9cb9df"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 7",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -611,7 +613,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5edf7b60-20e1-4ba2-9a56-56754ffc9dbd"),
+                            Id = new Guid("23e99280-7a54-4b6e-85d4-bc2016f009b5"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 8",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -619,7 +621,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("908bc516-4fe5-45b6-8688-364ea39b4d46"),
+                            Id = new Guid("ad5ed53a-c727-45ec-b639-1307951a2ba0"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 9",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -627,7 +629,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("08cb2f7d-e5fe-4615-a3e5-8576af69ac83"),
+                            Id = new Guid("f8289853-5cee-4827-92ca-1639250bb442"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description 10",
                             PictureUrl = "https://res.cloudinary.com/mantasflowers/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1618667917/Flowers/flower6-pink-rose_pajjsc.jpg",
@@ -668,21 +670,21 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("da8eab62-8547-4b35-b630-63b555a17242"),
+                            Id = new Guid("e1b429c5-ba7b-4a76-aace-1811ed289fc7"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProductId = new Guid("13e57632-dd98-4ad2-8b90-97393432a46a"),
+                            ProductId = new Guid("71a4e7f6-333b-4dd1-997f-ce38efa3aee4"),
                             ReviewScore = 3.5,
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("9638ae69-7629-4403-90a6-d3ddce6be39c")
+                            UserId = new Guid("81936dbc-7aaa-4e17-9f50-8eaf48bb5184")
                         },
                         new
                         {
-                            Id = new Guid("f0b4865b-00fa-4e6f-bf44-0772ba5f174e"),
+                            Id = new Guid("ed4f41d0-6c61-44f0-a8de-d88f0344f745"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProductId = new Guid("8bb8653d-01aa-45b2-a505-94b1f16c6376"),
+                            ProductId = new Guid("97c63343-f8d2-40bb-98b9-422c12fd2775"),
                             ReviewScore = 10.0,
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("9638ae69-7629-4403-90a6-d3ddce6be39c")
+                            UserId = new Guid("81936dbc-7aaa-4e17-9f50-8eaf48bb5184")
                         });
                 });
 
@@ -705,7 +707,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ae1ecd2d-3c8d-4980-a997-505a256386df"),
+                            Id = new Guid("fb48fb7b-f7f0-4e3a-93d2-9cad436e5f9a"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -745,7 +747,7 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9638ae69-7629-4403-90a6-d3ddce6be39c"),
+                            Id = new Guid("81936dbc-7aaa-4e17-9f50-8eaf48bb5184"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Obi-Wan",
                             LastName = "Kenobi",
@@ -754,7 +756,7 @@ namespace Mantasflowers.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("468a2813-85d9-4388-95ee-839047a70af0"),
+                            Id = new Guid("40874d07-9f29-43c5-9b9f-7d6a64151923"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Luke",
                             LastName = "Skywalker",
@@ -808,24 +810,24 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("866fefce-a223-4f8e-aab2-e7a504337174"),
+                            Id = new Guid("148b8273-8948-46ef-ae8c-5a6b0f997d5c"),
                             City = "Vilnius",
                             Country = "LT",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Street = "Autism street",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("9638ae69-7629-4403-90a6-d3ddce6be39c"),
+                            UserId = new Guid("81936dbc-7aaa-4e17-9f50-8eaf48bb5184"),
                             Zipcode = "LT-12345"
                         },
                         new
                         {
-                            Id = new Guid("bb87575b-7d3a-4dc8-969f-55c8f224ea5c"),
+                            Id = new Guid("fa0ae34f-fee3-4793-bf27-8caa69c1a96d"),
                             City = "Kaunas",
                             Country = "LT",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Street = "Kaimas street",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("468a2813-85d9-4388-95ee-839047a70af0"),
+                            UserId = new Guid("40874d07-9f29-43c5-9b9f-7d6a64151923"),
                             Zipcode = "LT-54321"
                         });
                 });
@@ -865,21 +867,21 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1b8ff0af-628c-403a-877a-080077eb1ce5"),
+                            Id = new Guid("8c5e161f-3363-4d10-8ec7-1bd432549601"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "theforcebewithyou@coruscant.com",
                             Phone = "+37061234567",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("9638ae69-7629-4403-90a6-d3ddce6be39c")
+                            UserId = new Guid("81936dbc-7aaa-4e17-9f50-8eaf48bb5184")
                         },
                         new
                         {
-                            Id = new Guid("1f409675-69f1-417f-a4d1-39713333635a"),
+                            Id = new Guid("04e9c438-4ab2-477d-b7e6-88150018e8e2"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "asdiasdioas@asfiasifa.com",
                             Phone = "+37069263957",
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("468a2813-85d9-4388-95ee-839047a70af0")
+                            UserId = new Guid("40874d07-9f29-43c5-9b9f-7d6a64151923")
                         });
                 });
 
@@ -913,28 +915,16 @@ namespace Mantasflowers.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("09608341-3cba-4d64-a96f-ede9065cdf97"),
+                            Id = new Guid("59bd1350-9ebc-4a13-8090-8190945eee55"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderId = new Guid("3a6e0c39-2bf3-4c13-9f12-81ac015385d3"),
+                            OrderId = new Guid("a0432edd-536a-4e0d-9754-bae37f0c177c"),
                             UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("9638ae69-7629-4403-90a6-d3ddce6be39c")
+                            UserId = new Guid("81936dbc-7aaa-4e17-9f50-8eaf48bb5184")
                         });
                 });
 
             modelBuilder.Entity("Mantasflowers.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("Mantasflowers.Domain.Entities.OrderAddress", "OrderAddress")
-                        .WithMany()
-                        .HasForeignKey("OrderAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mantasflowers.Domain.Entities.OrderContactInfo", "OrderContactInfo")
-                        .WithMany()
-                        .HasForeignKey("OrderContactInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Mantasflowers.Domain.Entities.Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId");
@@ -943,13 +933,31 @@ namespace Mantasflowers.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ShipmentId");
 
-                    b.Navigation("OrderAddress");
-
-                    b.Navigation("OrderContactInfo");
-
                     b.Navigation("Payment");
 
                     b.Navigation("Shipment");
+                });
+
+            modelBuilder.Entity("Mantasflowers.Domain.Entities.OrderAddress", b =>
+                {
+                    b.HasOne("Mantasflowers.Domain.Entities.Order", "Order")
+                        .WithOne("OrderAddress")
+                        .HasForeignKey("Mantasflowers.Domain.Entities.OrderAddress", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Mantasflowers.Domain.Entities.OrderContactInfo", b =>
+                {
+                    b.HasOne("Mantasflowers.Domain.Entities.Order", "Order")
+                        .WithOne("OrderContactInfo")
+                        .HasForeignKey("Mantasflowers.Domain.Entities.OrderContactInfo", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Mantasflowers.Domain.Entities.OrderItem", b =>
@@ -1044,6 +1052,10 @@ namespace Mantasflowers.Persistence.Migrations
 
             modelBuilder.Entity("Mantasflowers.Domain.Entities.Order", b =>
                 {
+                    b.Navigation("OrderAddress");
+
+                    b.Navigation("OrderContactInfo");
+
                     b.Navigation("OrderItems");
                 });
 

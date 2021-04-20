@@ -173,6 +173,8 @@ namespace Mantasflowers.Persistence
                     e.Property(p => p.Zipcode)
                         .HasMaxLength(20)
                         .IsRequired();
+                    e.HasIndex(p => p.OrderId)
+                        .IsUnique();
                 }
             );
 
@@ -185,6 +187,8 @@ namespace Mantasflowers.Persistence
                     e.Property(p => p.Phone)
                         .HasMaxLength(20)
                         .IsRequired();
+                    e.HasIndex(p => p.OrderId)
+                        .IsUnique();
                 }
             );
 
@@ -579,7 +583,8 @@ namespace Mantasflowers.Persistence
                     Country = "LT",
                     City = "Vilnius",
                     Street = "Autism street",
-                    Zipcode = "LT-12345"
+                    Zipcode = "LT-12345",
+                    OrderId = orderId1
                 }
             );
             modelBuilder.Entity<OrderContactInfo>().HasData(
@@ -587,7 +592,8 @@ namespace Mantasflowers.Persistence
                 {
                     Id = orderContactInfoId1,
                     Email = "theforcebewithyou@coruscant.com",
-                    Phone = "861234567"
+                    Phone = "861234567",
+                    OrderId = orderId1
                 }
             );
             modelBuilder.Entity<Order>().HasData(
@@ -597,8 +603,6 @@ namespace Mantasflowers.Persistence
                     Status = OrderStatus.UNPAID,
                     ShipmentId = shipmentId1,
                     PaymentId = paymentId1,
-                    OrderAddressId = orderAddressId1,
-                    OrderContactInfoId = orderContactInfoId1,
                     TemporaryPasswordHash = "eyy123",
                     OrderNumber = 123,
                     DiscountPrice = null,
