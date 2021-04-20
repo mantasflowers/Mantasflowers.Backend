@@ -4,7 +4,7 @@ namespace Mantasflowers.Contracts.ServiceAgents.Firebase.Response
 {
     public class PostRefreshIdTokenResponse
     {
-        [JsonProperty("access_token")]
+        [JsonProperty("id_token")]
         public string IdToken { get; set; }
 
         [JsonProperty("refresh_token")]
