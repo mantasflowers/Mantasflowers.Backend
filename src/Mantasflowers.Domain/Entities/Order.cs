@@ -14,10 +14,8 @@ namespace Mantasflowers.Domain.Entities
         public Guid? PaymentId { get; set; }
         public virtual Payment Payment { get; set; }
 
-        public Guid OrderAddressId { get; set; }
         public virtual OrderAddress OrderAddress { get; set; }
 
-        public Guid OrderContactInfoId { get; set; }
         public virtual OrderContactInfo OrderContactInfo { get; set; }
 
         public string TemporaryPasswordHash { get; set; } // TODO: this might change. Just a placeholder

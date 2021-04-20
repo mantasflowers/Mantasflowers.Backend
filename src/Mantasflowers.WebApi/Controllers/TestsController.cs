@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mantasflowers.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -86,6 +87,18 @@ namespace Mantasflowers.WebApi.Controllers
                     Price = product.Price
                 }
             );
+        }
+
+        [HttpGet("auth")]
+        [Authorize]
+        public IActionResult Auth()
+        {
+            var result = new
+            {
+                Authenticated = User.Identity.IsAuthenticated
+            };
+
+            return Ok(result);
         }
     }
 }

@@ -1,206 +1,98 @@
 ﻿using FirebaseAdmin.Auth;
-using Mantasflowers.Contracts.Firebase.Request;
-using Mantasflowers.Contracts.Firebase.Response;
-using Mantasflowers.Contracts.Responses;
+using Mantasflowers.Contracts.Errors;
+using Mantasflowers.Contracts.User.Request;
+using Mantasflowers.Contracts.User.Response;
 using Mantasflowers.Services.FirebaseService;
+using Mantasflowers.Services.Services.Exceptions;
+using Mantasflowers.Services.Services.User;
 using Mantasflowers.WebApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.WebApi.Controllers
 {
+    [Authorize]
+    [Route("/user")]
     [ApiController]
-    [Route("/userbase")]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class UserController : ControllerBase
     {
+        private readonly IUserService _userService;
         private readonly FirebaseService _fbService;
 
-        public UserController(FirebaseService fbService)
+        public UserController(IUserService userService, FirebaseService fbService)
         {
+            _userService = userService;
             _fbService = fbService;
         }
 
-        /// <summary>
-        /// A sign-in endpoint.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [HttpPost("tokens")]
-        [ProducesResponseType(typeof(PostTokensResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetTokensAsync([FromBody] PostCredentialsRequest request)
+        [HttpGet]
+        [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetUser()
         {
-            try
-            {
-                var response = await _fbService.GetTokensAsync(request.Email, request.Password);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                if (ex is HttpRequestException && !string.IsNullOrEmpty(ex.Message))
-                {
-                    var errorData = new { error = new { code = 0, message = "errorid" } };
-                    errorData = JsonConvert.DeserializeAnonymousType(ex.Message, errorData);
+            string uid = User.GetUidFromJwt();
+            var response = await _userService.GetUserByUidAsync(uid);
 
-                    return Unauthorized(errorData?.error?.message ?? ResponseMsg.NotFound);
-                }
-
-                return BadRequest(ResponseMsg.NotFound);
-            }
+            return Ok(response);
         }
 
-        [HttpPost("refresh-id-token")]
-        [ProducesResponseType(typeof(PostTokensResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> RefreshIdTokenAsync([FromBody] PostRefreshTokenRequest request)
+        [HttpGet("detailed")]
+        [ProducesResponseType(typeof(GetDetailedUserResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDetailedUser()
         {
-            string responseData = string.Empty;
-            try
-            {
-                var response = await _fbService.RefreshIdTokenAsync(request.RefreshToken);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                if (ex is HttpRequestException && !string.IsNullOrEmpty(ex.Message))
-                {
-                    var errorData = new { error = new { code = 0, message = "errorid" } };
-                    errorData = JsonConvert.DeserializeAnonymousType(ex.Message, errorData);
+            string uid = User.GetUidFromJwt();
+            var emailData = User.GetEmailInfoFromJwt();
 
-                    return BadRequest(errorData?.error?.message ?? ResponseMsg.NotFound);
-                }
+            var response = await _userService.GetDetailedUserByUidAsync(uid, emailData.Email, emailData.IsEmailVerified);
 
-                return BadRequest(ResponseMsg.NotFound);
-            }
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("revoke-refresh-token")]
-        public IActionResult RevokeRefreshTokens([FromBody] PostUidRequest request)
-        {
-            return HandleException(async () =>
-            {
-                await _fbService.RevokeRefreshTokensAsync(request.Uid);
-                return Ok(ResponseMsg.RefreshTokenRevoked);
-            });
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("custom-role")]
-        public IActionResult SetCustomUserRole([FromBody] PostRoleRequest request)
-        {
-            var claims = new Dictionary<string, object>()
-            {
-                { ClaimTypes.Role, request.Role.ToLower() },
-            };
-
-            return HandleException(async () =>
-            {
-                await _fbService.SetCustomUserClaimsAsync(request.Uid, claims);
-                return Ok(ResponseMsg.CustomClaimSet);
-            });
-        }
-
-        [HttpPost("create-user")]
-        public IActionResult CreateUser([FromBody] PostCredentialsRequest request)
-        {
-            return HandleException(async () =>
-            {
-                var user = await _fbService.CreateUserAsync(request.Email, request.Password);
-                return Ok(user);
-            });
+            return Ok(response);
         }
 
         /// <summary>
-        /// 
+        /// [NOT IMPLEMENTED] Completely delete user and all its information.
         /// </summary>
-        /// <param name="request">For testing purposes Uid: G46RSuLIvbUjaWJyokcCMDSCeVj1</param>
-        /// <returns></returns>
-        [Authorize(Roles = "admin")]
-        [HttpPost("user/by-uid")]
-        public IActionResult GetUserByUid([FromBody] PostUidRequest request)
+        [HttpPost("delete")]
+        public IActionResult DeleteUser()
         {
-            return HandleException(async () =>
+            // TODO: this needs to delete user and any data related to it in our DB + firebaseUser
+            throw new NotImplementedException("NOT IMPLEMENTED");
+        }
+
+        // TODO: transactions?
+        [AllowAnonymous]
+        [HttpPost("create")]
+        [ProducesResponseType(typeof(PostCreateUserResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CreateUser(PostCreateUserRequest postCreateUserRequest)
+        {
+            UserRecord firebaseUser = null;
+            firebaseUser = await _fbService.CreateUserAsync(postCreateUserRequest.Email, postCreateUserRequest.Password);
+
+            if (string.IsNullOrWhiteSpace(firebaseUser.Uid))
             {
-                var user = await _fbService.GetUserByUidAsync(request.Uid);
-                return Ok(user);
-            });
+                throw new FirebaseUidNotFoundException("Firebase did not return Uid after creating user");
+            }
+
+            var response = await _userService.CreateUserAsync(firebaseUser.Uid);
+
+            response.LoginEmail = firebaseUser.Email;
+
+            return StatusCode(StatusCodes.Status201Created, response);
         }
 
         /// <summary>
-        /// 
+        /// [NOT IMPLEMENTED]
         /// </summary>
-        /// <param name="email">For testing purposes: johnny@john.jo</param>
-        /// <returns></returns>
-        [Authorize(Roles = "admin")]
-        [HttpGet("user/by-email")]
-        public IActionResult GetUserByEmail(string email)
+        [HttpPut("update")]
+        public IActionResult UpdateUser()
         {
-            return HandleException(async () =>
-            {
-                var user = await _fbService.GetUserByEmailAsync(email);
-                return Ok(user);
-            });
-        }
-
-        [Authorize]
-        [HttpPost("update-user/email")]
-        public IActionResult UpdateUserEmail([FromBody] PostUpdateEmailRequest request)
-        {
-            return HandleException(async () =>
-            {
-                var user = await _fbService.UpdateUserEmailAsync(request.Uid, request.Email);
-                return Ok(user);
-            });
-        }
-
-        [Authorize]
-        [HttpPost("update-user/password")]
-        public IActionResult UpdateUserPassword([FromBody] PostUpdatePasswordRequest request)
-        {
-            return HandleException(async () =>
-            {
-                var user = await _fbService.UpdateUserPasswordAsync(request.Uid, request.Password);
-                return Ok(user);
-            });
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost("delete-user")]
-        public IActionResult DeleteUserByUid([FromBody] PostUidRequest request)
-        {
-            return HandleException(async () =>
-            {
-                await _fbService.DeleteUserByUidAsync(request.Uid);
-                return Ok(ResponseMsg.UserDeleted);
-            });
-        }
-
-        private IActionResult HandleException(Func<Task<IActionResult>> tryBlock)
-        {
-            try
-            {
-                return tryBlock.Invoke().Result;
-            }
-            catch (Exception ex)
-            {
-                if (ex.InnerException is FirebaseAuthException iex)
-                {
-                    if (iex.Message.ContainsEnclosing('(', ')'))
-                    {
-                        return BadRequest(iex.Message.SubstringWithin('(', ')'));
-                    }
-
-                    return BadRequest(Enum.GetName(typeof(AuthError), iex.AuthErrorCode));
-                }
-
-                return BadRequest(ResponseMsg.NotFound);
-            }
+            throw new NotImplementedException("NOT IMPLEMENTED");
         }
     }
 }

@@ -1,71 +1,42 @@
 ﻿using FirebaseAdmin.Auth;
-using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Text;
 using Mantasflowers.Contracts.Firebase.Response;
+using Mantasflowers.Contracts.Firebase.Request;
+using Mantasflowers.Services.ServiceAgents;
+using AutoMapper;
+using Mantasflowers.Contracts.ServiceAgents.Firebase.Request;
 
 namespace Mantasflowers.Services.FirebaseService
 {
     public sealed class FirebaseService
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly FirebaseServiceAgent _firebaseServiceAgent;
+        private readonly IMapper _mapper;
 
-        private readonly FirebaseConfig _fbConfig;
 
-        public FirebaseService(IHttpClientFactory clientFactory, FirebaseConfig firebaseConfig)
+        public FirebaseService(FirebaseServiceAgent firebaseServiceAgent, IMapper mapper)
         {
-            _clientFactory = clientFactory;
-            _fbConfig = firebaseConfig;
+            _firebaseServiceAgent = firebaseServiceAgent;
+            _mapper = mapper;
         }
 
-        public async Task<PostTokensResponse> GetTokensAsync(string email, string password)
+        public async Task<PostTokensResponse> GetTokensAsync(PostCredentialsRequest postCredentialsRequest)
         {
-            string responseData = string.Empty;
-            try
-            {
-                using var client = _clientFactory.CreateClient();
-                string content = JsonConvert.SerializeObject(new { email = email, password = password, returnSecureToken = true });
+            var firebaseSignInRequest = _mapper.Map<PostSignInRequest>(postCredentialsRequest);
+            var firebaseSignInResponse = await _firebaseServiceAgent.PostSignInAsync(firebaseSignInRequest);
+            var response = _mapper.Map<PostTokensResponse>(firebaseSignInResponse);
 
-                var response = await client.PostAsync(
-                    _fbConfig.SignInUri,
-                    new StringContent(content, Encoding.UTF8, "application/json")
-                    );
-
-                responseData = await response.Content.ReadAsStringAsync();
-                response.EnsureSuccessStatusCode();
-
-                return JsonConvert.DeserializeObject<PostTokensResponse>(responseData);
-            }
-            catch (HttpRequestException)
-            {
-                throw new HttpRequestException(responseData);
-            }
+            return response;
         }
 
-        public async Task<PostTokensResponse> RefreshIdTokenAsync(string refreshToken)
+        public async Task<PostTokensResponse> RefreshIdTokenAsync(PostRefreshTokenRequest request)
         {
-            string responseData = string.Empty;
-            try
-            {
-                using var client = _clientFactory.CreateClient();
-                string content = JsonConvert.SerializeObject(new { grant_type = "refresh_token", refresh_token = refreshToken });
+            var firebaseTokenRefreshRequest = _mapper.Map<PostRefreshIdTokenRequest>(request);
+            var firebaseTokenRefreshResponse = await _firebaseServiceAgent.PostTokenRefreshAsync(firebaseTokenRefreshRequest);
+            var response = _mapper.Map<PostTokensResponse>(firebaseTokenRefreshResponse);
 
-                var response = await client.PostAsync(
-                    _fbConfig.RefreshIdTokenUri,
-                    new StringContent(content, Encoding.UTF8, "application/json")
-                    );
-
-                responseData = await response.Content.ReadAsStringAsync();
-                response.EnsureSuccessStatusCode();
-
-                return JsonConvert.DeserializeObject<PostTokensResponse>(responseData);
-            }
-            catch (HttpRequestException)
-            {
-                throw new HttpRequestException(responseData);
-            }
+            return response;
         }
 
         public Task SetCustomUserClaimsAsync(string uid, Dictionary<string, object> claims)
@@ -134,7 +105,7 @@ namespace Mantasflowers.Services.FirebaseService
             return FirebaseAuth.DefaultInstance.DeleteUserAsync(uid);
         }
 
-        public Task RevokeRefreshTokensAsync(string uid)
+        public Task RevokeRefreshTokenAsync(string uid)
         {
             return FirebaseAuth.DefaultInstance.RevokeRefreshTokensAsync(uid);
         }

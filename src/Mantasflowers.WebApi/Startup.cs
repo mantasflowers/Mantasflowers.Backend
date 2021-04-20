@@ -101,7 +101,7 @@ namespace Mantasflowers.WebApi
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServiceAgentsModule());
             builder.RegisterModule(new ServicesModule());
-            builder.RegisterModule(new FirebaseModule());
+            builder.RegisterModule(new FirebaseModule()); // TODO: move this to ServicesModule
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,7 +116,7 @@ namespace Mantasflowers.WebApi
 
             app.UseHttpsRedirection();
 
-            // app.UseSerilogRequestLogging(); // TODO: this wont work with global exception handling. Need to write our own
+            // app.UseSerilogRequestLogging(); // TODO: this wont work with global exception handling. Need to write our own (or try to change the order)
 
             app.UseRouting();
 

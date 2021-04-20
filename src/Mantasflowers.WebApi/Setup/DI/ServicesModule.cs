@@ -1,6 +1,7 @@
 using Autofac;
 using Mantasflowers.Services.Services.Product;
 using Mantasflowers.Services.Services.Review;
+using Mantasflowers.Services.Services.User;
 using Mantasflowers.WebApi.Setup.Mapping;
 
 namespace Mantasflowers.WebApi.Setup.DI
@@ -17,6 +18,10 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<ProductReviewService>()
                 .As<IProductReviewService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<UserService>()
+                .As<IUserService>()
                 .InstancePerDependency();
 
             base.Load(builder);
