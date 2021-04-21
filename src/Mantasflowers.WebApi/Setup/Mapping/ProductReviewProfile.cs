@@ -8,9 +8,9 @@ namespace Mantasflowers.WebApi.Setup.Mapping
     {
         public ProductReviewProfile()
         {
-            CreateMap<ProductReview, GetProductReviewsResponse>()
-                .ForMember(d => d.UserFirstName, opt => opt.MapFrom(s => s.User.FirstName))
-                .ForMember(d => d.Date, opt => opt.MapFrom(s => s.UpdatedOn));
+            CreateMap<ProductReview, GetProductReviewForUserResponse>()
+                .ForMember(d => d.Score, opt => opt.MapFrom(s => s.ReviewScore))
+                .ForMember(d => d.SubmittedAt, opt => opt.MapFrom(s => s.CreatedOn));
         }
     }
 }

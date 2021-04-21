@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
@@ -13,14 +12,45 @@ namespace Mantasflowers.Services.Repositories
         public ProductReviewRepository(DatabaseContext dbContext)
             : base(dbContext) {}
 
-        public async Task<IList<ProductReview>> GetReviewsWithUsersAsync(Guid productId)
+        public async Task<(int count, double avgScore)?> GetReviewsAggregateForProductAsync(Guid productId)
         {
-            var reviews = await _dbContext.ProductReviews
-                .Include(x => x.User)
-                .Where(x => x.ProductId == productId)
-                .ToListAsync();
+            var aggregate = await _dbContext.ProductReviews
+                .GroupBy(x => x.ProductId)
+                .Where(x => x.Key == productId)
+                .Select(x => new {
+                    Count = x.Count(),
+                    Average = x.Average(y => y.ReviewScore)
+                })
+                .FirstOrDefaultAsync();
 
-            return reviews;
+            if (aggregate == null)
+            {
+                return null;
+            }
+
+            return (aggregate.Count, aggregate.Average);
+        }
+
+        public async Task<ProductReview> GetReviewForUserAsync(Guid userId, Guid productId)
+        {
+            var review = await _dbContext.ProductReviews
+                .Where(x => x.UserId == userId && x.ProductId == productId)
+                .FirstOrDefaultAsync();
+
+            return review;
+        }
+
+        public async Task CreateReviewForUserAsync(Guid userId, Guid productId, double score)
+        {
+            var review = new ProductReview
+            {
+                UserId = userId,
+                ProductId = productId,
+                ReviewScore = score,
+            };
+
+            await _dbContext.ProductReviews.AddAsync(review);
+            await _dbContext.SaveChangesAsync();
         }
     }   
 }
