@@ -1,39 +1,61 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mantasflowers.Contracts.Review.Response;
 using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.Services.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mantasflowers.Services.Services.Review
 {
     public class ProductReviewService : IProductReviewService
     {
         private readonly IProductReviewRepository _reviewRepository;
-        private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
-        public ProductReviewService(IProductReviewRepository reviewRepository,
-            IProductRepository productRepository,
-            IMapper mapper)
+        public ProductReviewService(IProductReviewRepository reviewRepository, IMapper mapper)
         {
             _reviewRepository = reviewRepository;
             _mapper = mapper;
-            _productRepository = productRepository;
         }
 
-        public async Task<IList<GetProductReviewsResponse>> GetProductReviewsAsync(Guid productId)
+        public async Task<GetProductReviewResponse> GetProductReviewsAsync(Guid productId)
         {
-            if ((await _productRepository.GetAsync(productId)) == null)
+            var aggregate = await _reviewRepository.GetReviewsAggregateForProductAsync(productId);
+
+            if (aggregate == null)
             {
                 return null;
             }
 
-            var reviews = await _reviewRepository.GetReviewsWithUsersAsync(productId);
+            var response = new GetProductReviewResponse
+            {
+                Count = aggregate.Value.count,
+                AverageScore = aggregate.Value.avgScore
+            };
 
-            var reviewsReponse = _mapper.Map<IList<GetProductReviewsResponse>>(reviews);
+            return response;
+        }
 
-            return reviewsReponse;
+        public async Task<GetProductReviewForUserResponse> GetProductReviewForUserAsync(Guid userId, Guid productId)
+        {
+            var review = await _reviewRepository.GetReviewForUserAsync(userId, productId);
+            var response = _mapper.Map<GetProductReviewForUserResponse>(review);
+
+            return response;
+        }
+
+        // TODO: [NFR] transactions? Exception catching? (review could exist or concurrent create review requests)
+        public async Task CreateReviewForUserAsync(Guid userId, Guid productId, double score)
+        {
+            try
+            {
+                await _reviewRepository.CreateReviewForUserAsync(userId, productId, score);
+            }
+            catch (DbUpdateException)
+            {
+                throw new FailedToAddDatabaseResourceException($"Failed to create review for product {productId}");
+            }
         }
     }   
 }

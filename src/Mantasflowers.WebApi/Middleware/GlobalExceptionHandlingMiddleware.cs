@@ -57,6 +57,7 @@ namespace Mantasflowers.WebApi.Middleware
             switch (e)
             {
                 case ValidationException _:
+                case FailedToAddDatabaseResourceException _ :
                     statusCode = HttpStatusCode.BadRequest;
                     break;
                 case FirebaseTokenException _:

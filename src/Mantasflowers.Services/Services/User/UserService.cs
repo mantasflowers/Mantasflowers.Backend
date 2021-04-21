@@ -2,6 +2,7 @@
 using Mantasflowers.Contracts.User.Response;
 using Mantasflowers.Services.Repositories;
 using Mantasflowers.Services.Services.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -82,6 +83,7 @@ namespace Mantasflowers.Services.Services.User
             return user?.Uid;
         }
 
+        // TODO: [NFR] transactions? Exception catching? (Uid could exist or concurrent add user requests)
         public async Task<PostCreateUserResponse> CreateUserAsync(string uid)
         {
             var user = new Domain.Entities.User
@@ -89,7 +91,15 @@ namespace Mantasflowers.Services.Services.User
                 Uid = uid
             };
 
-            await _userRepository.CreateAsync(user);
+            try
+            {
+                await _userRepository.CreateAsync(user);
+            }
+            catch (DbUpdateException)
+            {
+                throw new FailedToAddDatabaseResourceException("Failed to create user");
+            }
+
             var resposne = _mapper.Map<PostCreateUserResponse>(user);
 
             return resposne;

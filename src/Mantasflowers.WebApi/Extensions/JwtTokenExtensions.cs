@@ -1,5 +1,6 @@
 ﻿using Mantasflowers.Services.ServiceAgents.Exceptions;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 
@@ -24,7 +25,8 @@ namespace Mantasflowers.WebApi.Extensions
             if (string.IsNullOrWhiteSpace(uid))
             {
                 // Attempt to get uid from different JWT header
-                uid = claimsPrincipal.Claims.SingleOrDefault(claim => claim.Type == "sub")?.Value;
+                uid = claimsPrincipal.Claims.SingleOrDefault(
+                    claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value;
             }
 
             if (string.IsNullOrWhiteSpace(uid))

@@ -1,15 +1,9 @@
-using System;
-
 namespace Mantasflowers.Contracts.Review.Response
 {
-    public class GetProductReviewsResponse
+    public class GetProductReviewResponse
     {
-        public Guid ProductId { get; set; }
+        public int Count { get; set; }
 
-        public DateTime Date { get; set; }
-
-        public string UserFirstName { get; set; }
-
-        public double ReviewScore { get; set; }
+        public double AverageScore { get; set; }
     }
 }
