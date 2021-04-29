@@ -9,6 +9,7 @@ using Mantasflowers.WebApi.Setup.Logging;
 using Mantasflowers.WebApi.Setup.Newtonsoft;
 using Mantasflowers.WebApi.Setup.Swagger;
 using Mantasflowers.WebApi.Validation;
+using Mantasflowers.WebApi.Setup.Payment;
 using Mantasflowers.WebApi.Setup.UserManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -37,7 +38,7 @@ namespace Mantasflowers.WebApi
             Environment = environment;
         }
 
-        private static string _corsPolicyName = "CORSPolicy";
+        private static readonly string _corsPolicyName = "CORSPolicy";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -93,6 +94,8 @@ namespace Mantasflowers.WebApi
             services.SetupDbContext(Configuration);
 
             services.SetupFirebase(Configuration);
+
+            services.SetupStripe(Configuration);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -101,7 +104,6 @@ namespace Mantasflowers.WebApi
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServiceAgentsModule());
             builder.RegisterModule(new ServicesModule());
-            builder.RegisterModule(new FirebaseModule()); // TODO: move this to ServicesModule
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

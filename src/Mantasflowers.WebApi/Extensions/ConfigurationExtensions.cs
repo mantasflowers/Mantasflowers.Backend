@@ -1,13 +1,13 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
-namespace Mantasflowers.WebApi.Setup.Database
+namespace Mantasflowers.WebApi.Extensions
 {
-    public static class SetupDatabaseExtensions
+    public static class ConfigurationExtensions
     {
         public static T GetSection<T>(this IConfiguration configuration, string sectionName)
-            where T: new()
+            where T : new()
         {
-            T obj = new T();
+            T obj = new();
             configuration.GetSection(sectionName).Bind(obj);
             return obj;
         }
