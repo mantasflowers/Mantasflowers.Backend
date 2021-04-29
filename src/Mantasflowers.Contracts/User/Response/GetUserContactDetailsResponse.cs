@@ -1,9 +1,8 @@
-﻿namespace Mantasflowers.Contracts.User.Response
-{
-    public class GetUserContactDetailsResponse
-    {
-        public string Email { get; set; }
+﻿using Mantasflowers.Contracts.Common.Response;
 
-        public string Phone { get; set; }
+namespace Mantasflowers.Contracts.User.Response
+{
+    public class GetUserContactDetailsResponse : GetContactDetailsResponse
+    {
     }
 }

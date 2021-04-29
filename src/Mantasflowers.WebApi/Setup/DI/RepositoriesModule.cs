@@ -19,6 +19,10 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .As<IUserRepository>()
                 .InstancePerDependency();
 
+            builder.RegisterType<OrderRepository>()
+                .As<IOrderRepository>()
+                .InstancePerDependency();
+
             base.Load(builder);
         }
     }

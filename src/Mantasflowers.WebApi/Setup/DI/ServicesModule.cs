@@ -1,5 +1,6 @@
 using Autofac;
 using Mantasflowers.Services.FirebaseService;
+using Mantasflowers.Services.Services.Order;
 using Mantasflowers.Services.Services.Product;
 using Mantasflowers.Services.Services.Review;
 using Mantasflowers.Services.Services.User;
@@ -30,6 +31,10 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<FirebaseConfig>() // TODO: get rid of this (read MSDN docs on httpClients configuration)
                 .SingleInstance();
+
+            builder.RegisterType<OrderService>()
+                .As<IOrderService>()
+                .InstancePerDependency();
 
             base.Load(builder);
         }
