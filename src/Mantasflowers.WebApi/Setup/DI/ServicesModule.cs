@@ -14,15 +14,15 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<ProductService>()
                 .As<IProductService>()
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<ProductReviewService>()
                 .As<IProductReviewService>()
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<UserService>()
                 .As<IUserService>()
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }
