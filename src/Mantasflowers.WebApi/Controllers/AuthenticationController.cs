@@ -70,7 +70,7 @@ namespace Mantasflowers.WebApi.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> RevokeRefreshToken()
         {
-            string uid = User.GetUidFromJwt();
+            string uid = User.GetUid();
             await _fbService.RevokeRefreshTokenAsync(uid);
 
             return Ok(FirebaseTokenResponseMsg.RefreshTokenRevoked);
@@ -126,7 +126,7 @@ namespace Mantasflowers.WebApi.Controllers
         [ProducesResponseType(typeof(UpdateEmailResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateUserEmail(PostUpdateEmailRequest request)
         {
-            string uid = User.GetUidFromJwt();
+            string uid = User.GetUid();
 
             var user = await _fbService.UpdateUserEmailAsync(uid, request.Email);
             var resposne = new UpdateEmailResponse()
@@ -142,7 +142,7 @@ namespace Mantasflowers.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateUserPassword(PostUpdatePasswordRequest request)
         {
-            var uid = User.GetUidFromJwt();
+            var uid = User.GetUid();
 
             await _fbService.UpdateUserPasswordAsync(uid, request.Password);
 
