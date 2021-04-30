@@ -11,11 +11,11 @@ namespace Mantasflowers.Services.FirebaseService
 {
     public sealed class FirebaseService
     {
-        private readonly FirebaseServiceAgent _firebaseServiceAgent;
+        private readonly IFirebaseServiceAgent _firebaseServiceAgent;
         private readonly IMapper _mapper;
 
 
-        public FirebaseService(FirebaseServiceAgent firebaseServiceAgent, IMapper mapper)
+        public FirebaseService(IFirebaseServiceAgent firebaseServiceAgent, IMapper mapper)
         {
             _firebaseServiceAgent = firebaseServiceAgent;
             _mapper = mapper;
