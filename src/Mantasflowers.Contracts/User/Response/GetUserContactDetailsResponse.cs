@@ -1,8 +1,8 @@
-﻿using Mantasflowers.Contracts.Common.Response;
+﻿using Mantasflowers.Contracts.Common.Templates;
 
 namespace Mantasflowers.Contracts.User.Response
 {
-    public class GetUserContactDetailsResponse : GetContactDetailsResponse
+    public class GetUserContactDetailsResponse : ContactDetailsTemplate
     {
     }
 }

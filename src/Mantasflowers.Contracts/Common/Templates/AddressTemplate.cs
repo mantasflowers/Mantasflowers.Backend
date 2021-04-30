@@ -1,6 +1,6 @@
-﻿namespace Mantasflowers.Contracts.Common.Response
+﻿namespace Mantasflowers.Contracts.Common.Templates
 {
-    public abstract class GetAddressResponse
+    public abstract class AddressTemplate
     {
         public string Country { get; set; }
 

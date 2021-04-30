@@ -1,16 +1,9 @@
-﻿using System;
+﻿using Mantasflowers.Contracts.Common.Templates;
 
 namespace Mantasflowers.Contracts.Order.Response
 {
-    public class GetOrderItemResponse
+    public class GetOrderItemResponse : OrderItemTemplate
     {
-        // mapped from ProductId
-        public Guid Id { get; set; }
-        
         public string Name { get; set; }
-
-        public int Quantity { get; set; }
-
-        public decimal UnitPrice { get; set; }
     }
 }

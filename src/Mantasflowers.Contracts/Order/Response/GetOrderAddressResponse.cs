@@ -1,8 +1,8 @@
-﻿using Mantasflowers.Contracts.Common.Response;
+﻿using Mantasflowers.Contracts.Common.Templates;
 
 namespace Mantasflowers.Contracts.Order.Response
 {
-    public class GetOrderAddressResponse : GetAddressResponse
+    public class GetOrderAddressResponse : AddressTemplate
     {
     }
 }

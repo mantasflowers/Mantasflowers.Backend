@@ -1,6 +1,7 @@
 using Autofac;
 using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.Services.Services.Order;
+using Mantasflowers.Services.Services.Payment;
 using Mantasflowers.Services.Services.Product;
 using Mantasflowers.Services.Services.Review;
 using Mantasflowers.Services.Services.User;
@@ -34,6 +35,10 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<OrderService>()
                 .As<IOrderService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<PaymentService>()
+                .As<IPaymentService>()
                 .InstancePerDependency();
 
             base.Load(builder);
