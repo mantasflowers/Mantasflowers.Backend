@@ -12,7 +12,6 @@ namespace Mantasflowers.Services.Services.Order
 
         Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(Guid id);
 
-        // Consider having separate internal interface
         Task<Domain.Entities.Order> CreateOrderAsync(PostCreateOrderRequest request);
 
         Task<IDbContextTransaction> BeginTransactionAsync();

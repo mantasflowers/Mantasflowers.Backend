@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
+using Stripe;
 
 namespace Mantasflowers.WebApi.Middleware
 {
@@ -58,6 +59,7 @@ namespace Mantasflowers.WebApi.Middleware
             {
                 case ValidationException _:
                 case FailedToAddDatabaseResourceException _ :
+                case StripeException _:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
                 case FirebaseTokenException _:

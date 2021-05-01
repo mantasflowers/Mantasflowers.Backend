@@ -85,11 +85,10 @@ namespace Mantasflowers.Services.Services.Payment
 
                 await transaction.CommitAsync();
             }
-            catch (StripeException e)
+            catch (StripeException)
             {
-                // TODO
-                Console.WriteLine(e.StripeError);
                 await transaction.RollbackAsync();
+                throw;
             }
 
             var response = _mapper.Map<PostCreateCheckoutSessionResponse>(session);
