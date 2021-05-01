@@ -1,6 +1,7 @@
 ﻿using Mantasflowers.Contracts.Errors;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.Services.Order;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +22,7 @@ namespace Mantasflowers.WebApi.Controllers
             _orderService = orderService;
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetDetailedOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]

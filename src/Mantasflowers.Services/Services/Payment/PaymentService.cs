@@ -43,6 +43,7 @@ namespace Mantasflowers.Services.Services.Payment
             try
             {
                 var order = await _orderService.CreateOrderAsync(request.Order);
+                order = await _orderService.GetDetailedOrderAsync(order.Id); // Is there a better solution?
 
                 var lineItems = new List<SessionLineItemOptions>();
 
@@ -53,7 +54,10 @@ namespace Mantasflowers.Services.Services.Payment
                         {
                             PriceData = new SessionLineItemPriceDataOptions
                             {
-                                UnitAmountDecimal = orderItem.UnitPrice * 100, // why stripe
+                                UnitAmountDecimal = decimal.Round(
+                                    orderItem.UnitPrice, 2,
+                                    MidpointRounding.AwayFromZero
+                                    ) * 100, // why stripe
                                 Currency = "eur",
                                 ProductData = new SessionLineItemPriceDataProductDataOptions
                                 {

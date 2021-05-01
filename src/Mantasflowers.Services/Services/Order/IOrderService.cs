@@ -8,6 +8,8 @@ namespace Mantasflowers.Services.Services.Order
 {
     public interface IOrderService
     {
+        Task<Domain.Entities.Order> GetDetailedOrderAsync(Guid id);
+
         Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(Guid id);
 
         // Consider having separate internal interface

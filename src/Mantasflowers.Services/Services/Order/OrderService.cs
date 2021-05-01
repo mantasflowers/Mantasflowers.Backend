@@ -35,7 +35,12 @@ namespace Mantasflowers.Services.Services.Order
                 throw new FailedToAddDatabaseResourceException("Failed to create order");
             }
 
-            order = await _orderRepository.GetDetailedOrderAsync(order.Id); // Is there a better solution?
+            return order;
+        }
+
+        public async Task<Domain.Entities.Order> GetDetailedOrderAsync(Guid id)
+        {
+            var order = await _orderRepository.GetDetailedOrderAsync(id);
 
             return order;
         }
