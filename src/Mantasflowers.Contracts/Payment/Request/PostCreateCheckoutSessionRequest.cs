@@ -8,6 +8,6 @@ namespace Mantasflowers.Contracts.Payment.Request
 
         public string SuccessUrl { get; set; }
 
-        public string Cancelurl { get; set; }
+        public string CancelUrl { get; set; }
     }
 }

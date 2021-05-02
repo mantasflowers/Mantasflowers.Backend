@@ -8,7 +8,7 @@ namespace Mantasflowers.WebApi.Validation.Payment
     {
         public PostCreateCheckoutSessionRequestValidator()
         {
-            RuleFor(x => x.Cancelurl)
+            RuleFor(x => x.CancelUrl)
                 .NotEmpty();
 
             RuleFor(x => x.SuccessUrl)

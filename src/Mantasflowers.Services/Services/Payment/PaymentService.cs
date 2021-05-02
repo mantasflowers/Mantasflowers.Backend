@@ -76,7 +76,7 @@ namespace Mantasflowers.Services.Services.Payment
                     Mode = "payment",
                     LineItems = lineItems,
                     SuccessUrl = request.SuccessUrl,
-                    CancelUrl = request.Cancelurl
+                    CancelUrl = request.CancelUrl
                 };
 
                 var service = new SessionService();
