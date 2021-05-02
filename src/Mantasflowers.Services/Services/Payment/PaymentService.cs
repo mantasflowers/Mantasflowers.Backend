@@ -14,11 +14,13 @@ namespace Mantasflowers.Services.Services.Payment
     public class PaymentService : IPaymentService
     {
         private readonly IOrderService _orderService;
+        private readonly SessionService _sessionService;
         private readonly IMapper _mapper;
 
-        public PaymentService(IOrderService orderService, IMapper mapper)
+        public PaymentService(IOrderService orderService, SessionService sessionService, IMapper mapper)
         {
             _orderService = orderService;
+            _sessionService = sessionService;
             _mapper = mapper;
         }
 
@@ -79,9 +81,7 @@ namespace Mantasflowers.Services.Services.Payment
                     CancelUrl = request.CancelUrl
                 };
 
-                var service = new SessionService();
-
-                session = service.Create(options);
+                session = _sessionService.Create(options);
 
                 await transaction.CommitAsync();
             }

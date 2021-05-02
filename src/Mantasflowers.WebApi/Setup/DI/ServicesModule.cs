@@ -6,6 +6,7 @@ using Mantasflowers.Services.Services.Product;
 using Mantasflowers.Services.Services.Review;
 using Mantasflowers.Services.Services.User;
 using Mantasflowers.WebApi.Setup.Mapping;
+using Stripe.Checkout;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -39,6 +40,9 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<PaymentService>()
                 .As<IPaymentService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<SessionService>()
                 .InstancePerDependency();
 
             base.Load(builder);
