@@ -1,5 +1,4 @@
-﻿using Mantasflowers.Contracts.Coupon.Request;
-using Mantasflowers.Contracts.Errors;
+﻿using Mantasflowers.Contracts.Errors;
 using Mantasflowers.Contracts.Payment.Request;
 using Mantasflowers.Contracts.Payment.Response;
 using Mantasflowers.Services.Services.Payment;

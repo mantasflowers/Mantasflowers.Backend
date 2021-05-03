@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Mantasflowers.Contracts.Coupon.Request;
+using Mantasflowers.Contracts.Payment.Request;
 using Mantasflowers.Services.Repositories;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Mantasflowers.Contracts.Coupon.Request
+namespace Mantasflowers.Contracts.Payment.Request
 {
     public class PostCreateCouponRequest
     {

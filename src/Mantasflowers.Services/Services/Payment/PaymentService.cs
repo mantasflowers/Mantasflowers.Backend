@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Mantasflowers.Contracts.Coupon.Request;
-using Mantasflowers.Contracts.Coupon.Response;
 using Mantasflowers.Contracts.Payment.Request;
 using Mantasflowers.Contracts.Payment.Response;
 using Mantasflowers.Services.Services.Coupon;

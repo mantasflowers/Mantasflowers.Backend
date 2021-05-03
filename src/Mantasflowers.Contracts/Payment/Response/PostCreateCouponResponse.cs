@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mantasflowers.Contracts.Coupon.Response
+namespace Mantasflowers.Contracts.Payment.Response
 {
     public class PostCreateCouponResponse
     {

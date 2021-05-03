@@ -1,4 +1,4 @@
-﻿using Mantasflowers.Contracts.Coupon.Request;
+﻿using Mantasflowers.Contracts.Payment.Request;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading.Tasks;
 
