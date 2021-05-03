@@ -15,8 +15,8 @@ namespace Mantasflowers.WebApi.Setup.Logging
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
                 .MinimumLevel.Information() // this is the default
-                .WriteTo.Console();
-            // TODO: add sink to elastic or file here later
+                .WriteTo.Console()
+                .WriteTo.File("log.txt", rollOnFileSizeLimit: true); // TODO: move this to appsettings when doing global "code -> file" configuration migration (glassbox NFR). Currently no proper way to turn it off/on or configure.
 
             Log.Logger = loggerConfiguration.CreateLogger();
 

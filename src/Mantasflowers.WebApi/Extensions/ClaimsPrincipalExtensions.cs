@@ -6,19 +6,11 @@ using System.Security.Claims;
 
 namespace Mantasflowers.WebApi.Extensions
 {
-    public static class JwtTokenExtensions
+    public static class ClaimsPrincipalExtensions
     {
-        public static string GetUidFromJwt(this ClaimsPrincipal claimsPrincipal)
+        public static string GetUid(this ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal?.Identity == null)
-            {
-                throw new InvalidOperationException("JWT Token not found");
-            }
-
-            if (!claimsPrincipal.Identity.IsAuthenticated)
-            {
-                throw new InvalidOperationException("No valid JWT token to extract information from");
-            }
+            ValidatePrincipal(claimsPrincipal);
 
             string uid = claimsPrincipal.Claims.SingleOrDefault(claim => claim.Type == "user_id")?.Value;
 
@@ -37,17 +29,9 @@ namespace Mantasflowers.WebApi.Extensions
             return uid;
         }
 
-        public static (string Email, bool IsEmailVerified) GetEmailInfoFromJwt(this ClaimsPrincipal claimsPrincipal)
+        public static (string Email, bool IsEmailVerified) GetEmailInfo(this ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal?.Identity == null)
-            {
-                throw new InvalidOperationException("JWT Token not found");
-            }
-
-            if (!claimsPrincipal.Identity.IsAuthenticated)
-            {
-                throw new InvalidOperationException("No valid JWT token to extract information from");
-            }
+            ValidatePrincipal(claimsPrincipal);
 
             var email = claimsPrincipal.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
             
@@ -58,6 +42,28 @@ namespace Mantasflowers.WebApi.Extensions
             }
 
             return (email, isVerified);
+        }
+
+        public static string GetRole(this ClaimsPrincipal claimsPrincipal)
+        {
+            ValidatePrincipal(claimsPrincipal);
+
+            var role = claimsPrincipal.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
+
+            return role;
+        }
+
+        private static void ValidatePrincipal(ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal?.Identity == null)
+            {
+                throw new InvalidOperationException("JWT Token not found");
+            }
+
+            if (!claimsPrincipal.Identity.IsAuthenticated)
+            {
+                throw new InvalidOperationException("No valid JWT token to extract information from");
+            }
         }
     }
 }

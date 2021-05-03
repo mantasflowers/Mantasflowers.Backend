@@ -3,9 +3,11 @@ using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.Services.Services.Coupon;
 using Mantasflowers.Services.Services.Order;
 using Mantasflowers.Services.Services.Payment;
+using Autofac.Extras.DynamicProxy;
 using Mantasflowers.Services.Services.Product;
 using Mantasflowers.Services.Services.Review;
 using Mantasflowers.Services.Services.User;
+using Mantasflowers.WebApi.Setup.DI.Interceptors;
 using Mantasflowers.WebApi.Setup.Mapping;
 using Stripe.Checkout;
 
@@ -19,16 +21,26 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<ProductService>()
                 .As<IProductService>()
-                .InstancePerDependency();
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<ProductReviewService>()
                 .As<IProductReviewService>()
-                .InstancePerDependency();
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<UserService>()
                 .As<IUserService>()
-                .InstancePerDependency();
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
 
+            // TODO: this doesn't have an interface and can't be logged using interface interception.
+            //     Class interception would require changes to the FirebaseService itself and as such:
+            //     1. We either add a useless interface to this (just for interception)
+            //     2. We don't log this with hopes that noone sees it or we can justify not logging this :)
             builder.RegisterType<FirebaseService>()
                 .InstancePerDependency();
 
@@ -37,11 +49,15 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<OrderService>()
                 .As<IOrderService>()
-                .InstancePerDependency();
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<PaymentService>()
                 .As<IPaymentService>()
-                .InstancePerDependency();
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<SessionService>()
                 .InstancePerDependency();
@@ -54,7 +70,9 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<CouponService>()
                 .As<ICouponService>()
-                .InstancePerDependency();
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

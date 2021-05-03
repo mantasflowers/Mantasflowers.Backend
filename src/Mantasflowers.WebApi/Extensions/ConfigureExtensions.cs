@@ -68,5 +68,13 @@ namespace Mantasflowers.WebApi.Extensions
                     });
             });
         }
-    } 
+
+        public static void UseSerilogRequestResponseLogging(this IApplicationBuilder builder)
+        {
+            builder.UseSerilogRequestLogging(o =>
+            {
+                o.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+            });
+        }
+    }
 }

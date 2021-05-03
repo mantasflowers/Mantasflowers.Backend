@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.ServiceAgents
 {
-    public class FirebaseServiceAgent
+    public class FirebaseServiceAgent : IFirebaseServiceAgent
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly FirebaseConfig _fbConfig;
