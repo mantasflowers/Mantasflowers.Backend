@@ -29,10 +29,14 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<OrderRepository>()
                 .As<IOrderRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerDependency();
 
             builder.RegisterType<CouponRepository>()
                 .As<ICouponRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerDependency();
 
             base.Load(builder);
