@@ -52,7 +52,7 @@ namespace Mantasflowers.WebApi.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProductReviewForUser([FromQuery] Guid productId)
         {
-            var uid = User.GetUidFromJwt();
+            var uid = User.GetUid();
             
             var user = await _userService.GetUserByUidAsync(uid);
             var response = await _productReviewService.GetProductReviewForUserAsync(user.Id, productId);
@@ -74,7 +74,7 @@ namespace Mantasflowers.WebApi.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> PostProductReview(PostProductReviewRequest request)
         {
-            var uid = User.GetUidFromJwt();
+            var uid = User.GetUid();
             
             var user = await _userService.GetUserByUidAsync(uid);
             await _productReviewService.CreateReviewForUserAsync(user.Id, request.ProductId, request.Score);

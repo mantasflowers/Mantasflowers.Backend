@@ -36,7 +36,7 @@ namespace Mantasflowers.WebApi.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUser()
         {
-            string uid = User.GetUidFromJwt();
+            string uid = User.GetUid();
             var response = await _userService.GetUserByUidAsync(uid);
 
             return Ok(response);
@@ -46,8 +46,8 @@ namespace Mantasflowers.WebApi.Controllers
         [ProducesResponseType(typeof(GetDetailedUserResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDetailedUser()
         {
-            string uid = User.GetUidFromJwt();
-            var emailData = User.GetEmailInfoFromJwt();
+            string uid = User.GetUid();
+            var emailData = User.GetEmailInfo();
 
             var response = await _userService.GetDetailedUserByUidAsync(uid, emailData.Email, emailData.IsEmailVerified);
 

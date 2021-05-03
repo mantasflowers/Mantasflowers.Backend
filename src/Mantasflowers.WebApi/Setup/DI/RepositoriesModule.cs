@@ -1,5 +1,7 @@
 using Autofac;
+using Autofac.Extras.DynamicProxy;
 using Mantasflowers.Services.Repositories;
+using Mantasflowers.WebApi.Setup.DI.Interceptors;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -9,14 +11,20 @@ namespace Mantasflowers.WebApi.Setup.DI
         {
             builder.RegisterType<ProductRepository>()
                 .As<IProductRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerDependency();
 
             builder.RegisterType<ProductReviewRepository>()
                 .As<IProductReviewRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerDependency();
 
             builder.RegisterType<UserRepository>()
                 .As<IUserRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerDependency();
 
             base.Load(builder);

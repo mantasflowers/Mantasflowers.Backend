@@ -101,13 +101,19 @@ namespace Mantasflowers.WebApi
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServiceAgentsModule());
             builder.RegisterModule(new ServicesModule());
-            builder.RegisterModule(new FirebaseModule()); // TODO: move this to ServicesModule
+            // TODO: IMPORTANT: interceptors need to be configurable (on/off) via configuration
+            //     file. Not doing this now, because we will have to move the entire DI registration
+            //     to json files before presentation (java damaged lecturer :)) )
+            //     This should be done with "Extensibility/Glass-box extensibility" NFR task.
+            builder.RegisterModule(new InterceptorsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.EnsureDatabaseState();
+
+            app.UseSerilogRequestResponseLogging();
 
             app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
@@ -116,14 +122,14 @@ namespace Mantasflowers.WebApi
 
             app.UseHttpsRedirection();
 
-            // app.UseSerilogRequestLogging(); // TODO: this wont work with global exception handling. Need to write our own (or try to change the order)
-
             app.UseRouting();
 
             app.UseCors(_corsPolicyName);
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<LogContextInjectionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
