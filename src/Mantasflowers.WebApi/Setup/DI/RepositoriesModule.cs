@@ -23,6 +23,10 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .As<IOrderRepository>()
                 .InstancePerDependency();
 
+            builder.RegisterType<CouponRepository>()
+                .As<ICouponRepository>()
+                .InstancePerDependency();
+
             base.Load(builder);
         }
     }

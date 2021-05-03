@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Mantasflowers.Contracts.Coupon.Request;
+using Mantasflowers.Contracts.Coupon.Response;
 using Mantasflowers.Contracts.Payment.Request;
 using Mantasflowers.Contracts.Payment.Response;
+using Mantasflowers.Services.Services.Coupon;
 using Mantasflowers.Services.Services.Order;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
@@ -14,17 +17,28 @@ namespace Mantasflowers.Services.Services.Payment
     public class PaymentService : IPaymentService
     {
         private readonly IOrderService _orderService;
-        private readonly SessionService _sessionService;
+        private readonly ICouponService _couponService;
+        private readonly SessionService _stripeSessionService;
+        private readonly Stripe.CouponService _stripeCouponService;
+        private readonly PromotionCodeService _promotionCodeService;
         private readonly IMapper _mapper;
 
-        public PaymentService(IOrderService orderService, SessionService sessionService, IMapper mapper)
+        public PaymentService(IOrderService orderService,
+            ICouponService couponService,
+            SessionService stripeSessionService,
+            Stripe.CouponService stripeCouponService,
+            PromotionCodeService promotionCodeService,
+            IMapper mapper)
         {
             _orderService = orderService;
-            _sessionService = sessionService;
+            _couponService = couponService;
+            _stripeSessionService = stripeSessionService;
+            _stripeCouponService = stripeCouponService;
+            _promotionCodeService = promotionCodeService;
             _mapper = mapper;
         }
 
-        public async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSession(PostCreateCheckoutSessionRequest request)
+        public async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionAsync(PostCreateCheckoutSessionRequest request)
         {
             var executionStrategy = _orderService.CreateExecutionStrategy();
 
@@ -32,12 +46,12 @@ namespace Mantasflowers.Services.Services.Payment
              * As a unit of repetition
              * Read more on: https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-resilient-entity-framework-core-sql-connections
              */
-            var response = await executionStrategy.ExecuteAsync(() => CreateCheckoutSessionBody(request));
+            var response = await executionStrategy.ExecuteAsync(() => CreateCheckoutSessionBodyAsync(request));
 
             return response;
         }
 
-        private async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionBody(PostCreateCheckoutSessionRequest request)
+        private async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionBodyAsync(PostCreateCheckoutSessionRequest request)
         {
             using var transaction = await _orderService.BeginTransactionAsync();
             var session = new Session();
@@ -81,7 +95,7 @@ namespace Mantasflowers.Services.Services.Payment
                     CancelUrl = request.CancelUrl
                 };
 
-                session = _sessionService.Create(options);
+                session = await _stripeSessionService.CreateAsync(options);
 
                 await transaction.CommitAsync();
             }
@@ -92,6 +106,66 @@ namespace Mantasflowers.Services.Services.Payment
             }
 
             var response = _mapper.Map<PostCreateCheckoutSessionResponse>(session);
+            return response;
+        }
+
+        public async Task<PostCreateCouponResponse> CreateCouponAsync(PostCreateCouponRequest request)
+        {
+            var executionStrategy = _couponService.CreateExecutionStrategy();
+
+            var response = await executionStrategy.ExecuteAsync(() => CreateCouponBodyAsync(request));
+
+            return response;
+        }
+
+        private async Task<PostCreateCouponResponse> CreateCouponBodyAsync(PostCreateCouponRequest request)
+        {
+            using var transaction = await _couponService.BeginTransactionAsync();
+            var promotionCode = new PromotionCode();
+
+            try
+            {
+                request.RedeemBy = request.RedeemBy.Date;
+                request.BeginDate = DateTime.Today;
+                var coupon = await _couponService.CreateCouponAsync(request);
+
+                var couponOptions = new CouponCreateOptions()
+                {
+                    Id = coupon.Id.ToString(),
+                    Name = coupon.Name,
+                    AmountOff = (long)coupon.DiscountPrice,
+                    Currency = "eur",
+                    Duration = "repeating",
+                    DurationInMonths = request.DurationInMonths,
+                    RedeemBy = coupon.EndDate,
+                };
+
+                await _stripeCouponService.CreateAsync(couponOptions);
+
+                // Hate stripe already
+                var promoCodeOptions = new PromotionCodeCreateOptions()
+                {
+                    Coupon = coupon.Id.ToString(),
+                    Code = coupon.Name,
+                    Restrictions = new PromotionCodeRestrictionsOptions()
+                    {
+                        MinimumAmount = (long)coupon.OrderOverPrice,
+                        MinimumAmountCurrency = "eur"
+                    }
+                };
+
+                promotionCode = await _promotionCodeService.CreateAsync(promoCodeOptions);
+                promotionCode.Created = promotionCode.Created.Date;
+
+                await transaction.CommitAsync();
+            }
+            catch (StripeException)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+
+            var response = _mapper.Map<PostCreateCouponResponse>(promotionCode);
             return response;
         }
     }

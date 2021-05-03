@@ -23,7 +23,7 @@ namespace Mantasflowers.Services.Services.Product
 
         public async Task<GetProductsResponse> GetPaginatedProductsAsync(GetProductsRequest request)
         {
-            Expression<Func<Mantasflowers.Domain.Entities.Product, bool>> categoryFilter = 
+            Expression<Func<Domain.Entities.Product, bool>> categoryFilter = 
                 (x => request.Categories.Contains(x.Category));
 
             if (!ProductSortingMapping.TryGetValue(request.OrderBy, out var orderByPropertyName))

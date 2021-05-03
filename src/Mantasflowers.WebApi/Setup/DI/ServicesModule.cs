@@ -1,5 +1,6 @@
 using Autofac;
 using Mantasflowers.Services.FirebaseService;
+using Mantasflowers.Services.Services.Coupon;
 using Mantasflowers.Services.Services.Order;
 using Mantasflowers.Services.Services.Payment;
 using Mantasflowers.Services.Services.Product;
@@ -43,6 +44,16 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .InstancePerDependency();
 
             builder.RegisterType<SessionService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<Stripe.CouponService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<Stripe.PromotionCodeService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<CouponService>()
+                .As<ICouponService>()
                 .InstancePerDependency();
 
             base.Load(builder);

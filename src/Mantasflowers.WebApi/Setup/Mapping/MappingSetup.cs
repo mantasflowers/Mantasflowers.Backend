@@ -16,6 +16,7 @@ namespace Mantasflowers.WebApi.Setup.Mapping
                 x.AddProfile<UserProfile>();
                 x.AddProfile<OrderProfile>();
                 x.AddProfile<PaymentProfile>();
+                x.AddProfile<CouponProfile>();
 
                 /* Service agent mappings */
                 x.AddProfile<FirebaseServiceAgentProfile>();
