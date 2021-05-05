@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
 
-namespace Mantasflowers.Services.Repositories
+namespace Mantasflowers.Services.DataAccess.Repositories
 {
     public interface IBaseRepository<T>
         where T : BaseEntity
@@ -11,8 +11,10 @@ namespace Mantasflowers.Services.Repositories
 
         Task<T> GetAsync(Guid id);
 
-        Task<T> UpdateAsync(T entity);
+        T UpdateAsync(T entity);
 
-        Task DeleteAsync(T entity);
+        void Delete(T entity);
+
+        Task<int> SaveChangesAsync();
     }
 }

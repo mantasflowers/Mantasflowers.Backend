@@ -1,6 +1,6 @@
 using Autofac;
 using Autofac.Extras.DynamicProxy;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess.Repositories;
 using Mantasflowers.WebApi.Setup.DI.Interceptors;
 
 namespace Mantasflowers.WebApi.Setup.DI

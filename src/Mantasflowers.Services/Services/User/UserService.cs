@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Mantasflowers.Contracts.User.Response;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess.Repositories;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;

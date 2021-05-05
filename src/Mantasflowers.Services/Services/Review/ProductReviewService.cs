@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mantasflowers.Contracts.Review.Response;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess.Repositories;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +51,7 @@ namespace Mantasflowers.Services.Services.Review
             try
             {
                 await _reviewRepository.CreateReviewForUserAsync(userId, productId, score);
+                await _reviewRepository.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {

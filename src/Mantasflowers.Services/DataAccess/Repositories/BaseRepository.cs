@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
 using Mantasflowers.Persistence;
 
-namespace Mantasflowers.Services.Repositories
+namespace Mantasflowers.Services.DataAccess.Repositories
 {
     public abstract class BaseRepository<T> : IBaseRepository<T>
         where T : BaseEntity
@@ -17,16 +17,14 @@ namespace Mantasflowers.Services.Repositories
 
         public virtual async Task<T> CreateAsync(T entity)
         {
-            var entityEntry = _dbContext.Add(entity);
-            await _dbContext.SaveChangesAsync();
+            var entityEntry = await _dbContext.AddAsync(entity);
 
             return entityEntry.Entity;
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual void Delete(T entity)
         {
-            var result = _dbContext.Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.Remove(entity);
         }
 
         public virtual async Task<T> GetAsync(Guid id)
@@ -34,12 +32,16 @@ namespace Mantasflowers.Services.Repositories
             return await _dbContext.FindAsync<T>(id);
         }
 
-        public virtual async Task<T> UpdateAsync(T entity)
+        public virtual T UpdateAsync(T entity)
         {
             var entityEntry = _dbContext.Update(entity);
-            await _dbContext.SaveChangesAsync();
 
             return entityEntry.Entity;
+        }
+
+        public virtual async Task<int> SaveChangesAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

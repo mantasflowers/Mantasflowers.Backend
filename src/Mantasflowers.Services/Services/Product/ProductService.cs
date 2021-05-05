@@ -5,7 +5,7 @@ using AutoMapper;
 using Mantasflowers.Contracts.Product.Request;
 using Mantasflowers.Contracts.Product.Response;
 using Mantasflowers.Services.Mapping;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess.Repositories;
 using static Mantasflowers.Services.Mapping.ProductMappings;
 
 namespace Mantasflowers.Services.Services.Product

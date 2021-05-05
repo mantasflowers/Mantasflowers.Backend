@@ -5,7 +5,7 @@ using Mantasflowers.Domain.Entities;
 using Mantasflowers.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mantasflowers.Services.Repositories
+namespace Mantasflowers.Services.DataAccess.Repositories
 {
     public class ProductReviewRepository : BaseRepository<ProductReview>, IProductReviewRepository
     {
@@ -49,8 +49,7 @@ namespace Mantasflowers.Services.Repositories
                 ReviewScore = score,
             };
 
-            await _dbContext.ProductReviews.AddAsync(review);
-            await _dbContext.SaveChangesAsync();
+            await CreateAsync(review);
         }
     }   
 }
