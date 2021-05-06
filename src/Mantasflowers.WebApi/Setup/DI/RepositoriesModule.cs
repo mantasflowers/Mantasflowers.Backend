@@ -13,19 +13,19 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .As<IProductRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<ProductReviewRepository>()
                 .As<IProductReviewRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<UserRepository>()
                 .As<IUserRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }
