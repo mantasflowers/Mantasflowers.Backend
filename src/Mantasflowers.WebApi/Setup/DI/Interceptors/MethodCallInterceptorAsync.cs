@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Castle.DynamicProxy;
 using Newtonsoft.Json;
@@ -62,7 +65,7 @@ namespace Mantasflowers.WebApi.Setup.DI.Interceptors
             _logger.Information("Calling method {methodName} with parameters {parameters}..." + 
                 "(User UID: {userUid}; User role: {userRole})",
                 $"{invocation.Method.DeclaringType.FullName}.{invocation.Method.Name}",
-                JsonConvert.SerializeObject(invocation.Arguments)
+                JsonConvert.SerializeObject(invocation.Arguments.Select(ArgumentFilter))
             );
         }
 
@@ -72,6 +75,20 @@ namespace Mantasflowers.WebApi.Setup.DI.Interceptors
                 $"{invocation.Method.DeclaringType.FullName}.{invocation.Method.Name}",
                 JsonConvert.SerializeObject(returnValue)
             );
+        }
+
+        private static object ArgumentFilter(object argument)
+        {
+            if (argument is Delegate)
+            {
+                return $"{typeof(Delegate).FullName}";
+            }
+            else if (argument is Expression)
+            {
+                return $"{typeof(Expression).FullName}";
+            }
+
+            return argument;
         }
     }
 }
