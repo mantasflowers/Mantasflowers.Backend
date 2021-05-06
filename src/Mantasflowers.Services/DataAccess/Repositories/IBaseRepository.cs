@@ -11,7 +11,7 @@ namespace Mantasflowers.Services.DataAccess.Repositories
 
         Task<T> GetAsync(Guid id);
 
-        T UpdateAsync(T entity);
+        T Update(T entity);
 
         void Delete(T entity);
 

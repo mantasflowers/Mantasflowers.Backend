@@ -32,7 +32,7 @@ namespace Mantasflowers.Services.DataAccess.Repositories
             return await _dbContext.FindAsync<T>(id);
         }
 
-        public virtual T UpdateAsync(T entity)
+        public virtual T Update(T entity)
         {
             var entityEntry = _dbContext.Update(entity);
 
