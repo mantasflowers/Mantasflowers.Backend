@@ -5,19 +5,19 @@ using AutoMapper;
 using Mantasflowers.Contracts.Product.Request;
 using Mantasflowers.Contracts.Product.Response;
 using Mantasflowers.Services.Mapping;
-using Mantasflowers.Services.DataAccess.Repositories;
+using Mantasflowers.Services.DataAccess;
 using static Mantasflowers.Services.Mapping.ProductMappings;
 
 namespace Mantasflowers.Services.Services.Product
 {
     public class ProductService : IProductService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository productRepository, IMapper mapper)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -31,7 +31,7 @@ namespace Mantasflowers.Services.Services.Product
                 throw new MappingException($"No entity property mapping found for '{nameof(request.OrderBy)}'");
             }
 
-            var paginatedProducts = await _productRepository.GetPaginatedFilteredOrderedListAsync(request.Page,
+            var paginatedProducts = await _unitOfWork.ProductRepository.GetPaginatedFilteredOrderedListAsync(request.Page,
                 request.PageSize,
                 categoryFilter,
                 orderByPropertyName,
@@ -49,7 +49,7 @@ namespace Mantasflowers.Services.Services.Product
 
         public async Task<GetDetailedProductResponse> GetDetailedProductInfoAsync(Guid id)
         {
-            var product = await _productRepository.GetDetailedProductAsync(id);
+            var product = await _unitOfWork.ProductRepository.GetDetailedProductAsync(id);
 
             var detailedProductResponse = _mapper.Map<GetDetailedProductResponse>(product);
 

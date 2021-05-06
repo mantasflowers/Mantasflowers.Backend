@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extras.DynamicProxy;
+using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.DataAccess.Repositories;
 using Mantasflowers.WebApi.Setup.DI.Interceptors;
 
@@ -9,6 +10,10 @@ namespace Mantasflowers.WebApi.Setup.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<UnitOfWork>()
+                .As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<ProductRepository>()
                 .As<IProductRepository>()
                 .EnableInterfaceInterceptors()
