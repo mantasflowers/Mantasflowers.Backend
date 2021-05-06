@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Mantasflowers.Services.Repositories
 {
@@ -14,5 +15,9 @@ namespace Mantasflowers.Services.Repositories
         Task<T> UpdateAsync(T entity);
 
         Task DeleteAsync(T entity);
+
+        Task<IDbContextTransaction> BeginTransactionAsync();
+
+        IExecutionStrategy CreateExecutionStrategy();
     }
 }

@@ -402,9 +402,9 @@ namespace Mantasflowers.Persistence
                 new Product
                 {
                     Id = productId3,
-                    Name = "name 3",
+                    Name = "bone",
                     Category = ProductCategory.BOUQUET,
-                    ShortDescription = "short description 3",
+                    ShortDescription = "Big bone with extra calcium",
                     ThumbnailPictureUrl = pictureUrl,
                     Price = 5.99m,
                     LeftInStock = 4,
@@ -617,6 +617,16 @@ namespace Mantasflowers.Persistence
                     ProductId = productId1,
                     Quantity = 666,
                     UnitPrice = 1.59m
+                }
+            );
+            modelBuilder.Entity<OrderItem>().HasData(
+                new OrderItem
+                {
+                    Id = Guid.NewGuid(),
+                    OrderId = orderId1,
+                    ProductId = productId3,
+                    Quantity = 8008,
+                    UnitPrice = 1.58m
                 }
             );
             modelBuilder.Entity<UserOrder>().HasData(

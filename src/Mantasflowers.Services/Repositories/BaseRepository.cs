@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
 using Mantasflowers.Persistence;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Mantasflowers.Services.Repositories
 {
@@ -40,6 +41,16 @@ namespace Mantasflowers.Services.Repositories
             await _dbContext.SaveChangesAsync();
 
             return entityEntry.Entity;
+        }
+
+        public virtual async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _dbContext.Database.BeginTransactionAsync();
+        } 
+
+        public virtual IExecutionStrategy CreateExecutionStrategy()
+        {
+            return _dbContext.Database.CreateExecutionStrategy();
         }
     }
 }
