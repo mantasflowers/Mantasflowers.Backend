@@ -3,9 +3,9 @@ using Mantasflowers.Contracts.Product.Request;
 
 namespace Mantasflowers.WebApi.Validation.Product
 {
-    public class GetProductsValidator : AbstractValidator<GetProductsRequest>
+    public class GetProductsRequestValidator : AbstractValidator<GetProductsRequest>
     {
-        public GetProductsValidator()
+        public GetProductsRequestValidator()
         {
             RuleFor(x => x.Page)
                 .NotEmpty()

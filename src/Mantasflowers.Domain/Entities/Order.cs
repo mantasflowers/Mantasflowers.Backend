@@ -6,7 +6,7 @@ namespace Mantasflowers.Domain.Entities
 {
     public class Order : BaseEntity
     {
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status { get; set; } = OrderStatus.UNPAID;
 
         public Guid? ShipmentId { get; set; }
         public virtual Shipment Shipment { get; set; }
