@@ -93,6 +93,8 @@ namespace Mantasflowers.Services.Services.Payment
                     CancelUrl = request.CancelUrl
                 };
 
+                options.AddExtraParam("allow_promotion_codes", "true");
+
                 session = await _stripeSessionService.CreateAsync(options);
 
                 await transaction.CommitAsync();
