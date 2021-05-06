@@ -36,13 +36,13 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .As<IOrderRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<CouponRepository>()
                 .As<ICouponRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

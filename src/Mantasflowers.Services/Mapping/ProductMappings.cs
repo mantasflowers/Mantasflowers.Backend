@@ -7,7 +7,7 @@ namespace Mantasflowers.Services.Mapping
     public static class ProductMappings
     {
         public static readonly Dictionary<ProductOrderByOptions, string> ProductSortingMapping
-            = new Dictionary<ProductOrderByOptions, string>
+            = new()
             {
                 { ProductOrderByOptions.NAME, nameof(Product.Name) },
                 { ProductOrderByOptions.PRICE, nameof(Product.Price) },

@@ -11,17 +11,24 @@ namespace Mantasflowers.Services.DataAccess
         private readonly IProductRepository _productRepository;
         private readonly IProductReviewRepository _productReviewRepository;
         private readonly IUserRepository _userReviewRepository;
+        private readonly ICouponRepository _couponRepository;
+        private readonly IOrderRepository _orderRepository;
 
         public UnitOfWork(
             DatabaseContext dbContext,
             IProductRepository productRepository,
             IProductReviewRepository productReviewRepository,
-            IUserRepository userReviewRepository)
+            IUserRepository userReviewRepository,
+            ICouponRepository couponRepository,
+            IOrderRepository orderRepository
+            )
         {
             _dbContext = dbContext;
             _productRepository = productRepository;
             _productReviewRepository = productReviewRepository;
             _userReviewRepository = userReviewRepository;
+            _couponRepository = couponRepository;
+            _orderRepository = orderRepository;
         }
 
 
@@ -33,6 +40,12 @@ namespace Mantasflowers.Services.DataAccess
 
         public IUserRepository UserRepository
             => _userReviewRepository;
+
+        public ICouponRepository CouponRepository
+            => _couponRepository;
+
+        public IOrderRepository OrderRepository
+            => _orderRepository;
 
 
         public async Task<int> SaveChangesAsync()

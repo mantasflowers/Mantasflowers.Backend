@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Mantasflowers.Services.DataAccess.Repositories
 {

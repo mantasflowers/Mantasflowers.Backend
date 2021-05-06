@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Mantasflowers.Contracts.Payment.Request;
 using Mantasflowers.Contracts.Payment.Response;
+using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Coupon;
 using Mantasflowers.Services.Services.Order;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace Mantasflowers.Services.Services.Payment
 {
     public class PaymentService : IPaymentService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderService _orderService;
         private readonly ICouponService _couponService;
         private readonly SessionService _stripeSessionService;
@@ -21,13 +23,16 @@ namespace Mantasflowers.Services.Services.Payment
         private readonly PromotionCodeService _promotionCodeService;
         private readonly IMapper _mapper;
 
-        public PaymentService(IOrderService orderService,
+        public PaymentService(
+            IUnitOfWork unitOfWork,
+            IOrderService orderService,
             ICouponService couponService,
             SessionService stripeSessionService,
             Stripe.CouponService stripeCouponService,
             PromotionCodeService promotionCodeService,
             IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
             _orderService = orderService;
             _couponService = couponService;
             _stripeSessionService = stripeSessionService;
@@ -38,7 +43,7 @@ namespace Mantasflowers.Services.Services.Payment
 
         public async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionAsync(PostCreateCheckoutSessionRequest request)
         {
-            var executionStrategy = _orderService.CreateExecutionStrategy();
+            var executionStrategy = _unitOfWork.CreateExecutionStrategy();
 
             /**
              * As a unit of repetition
@@ -51,13 +56,14 @@ namespace Mantasflowers.Services.Services.Payment
 
         private async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionBodyAsync(PostCreateCheckoutSessionRequest request)
         {
-            using var transaction = await _orderService.BeginTransactionAsync();
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
             var session = new Session();
 
             try
             {
                 var order = await _orderService.CreateOrderAsync(request.Order);
-                order = await _orderService.GetDetailedOrderAsync(order.Id); // Is there a better solution?
+                await _unitOfWork.SaveChangesAsync();
+                order = await _orderService.GetDetailedOrderAsync(order.Id);
 
                 var lineItems = new List<SessionLineItemOptions>();
 
@@ -111,7 +117,7 @@ namespace Mantasflowers.Services.Services.Payment
 
         public async Task<PostCreateCouponResponse> CreateCouponAsync(PostCreateCouponRequest request)
         {
-            var executionStrategy = _couponService.CreateExecutionStrategy();
+            var executionStrategy = _unitOfWork.CreateExecutionStrategy();
 
             var response = await executionStrategy.ExecuteAsync(() => CreateCouponBodyAsync(request));
 
@@ -120,7 +126,7 @@ namespace Mantasflowers.Services.Services.Payment
 
         private async Task<PostCreateCouponResponse> CreateCouponBodyAsync(PostCreateCouponRequest request)
         {
-            using var transaction = await _couponService.BeginTransactionAsync();
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
             var promotionCode = new PromotionCode();
 
             try
@@ -128,12 +134,13 @@ namespace Mantasflowers.Services.Services.Payment
                 request.RedeemBy = request.RedeemBy.Date;
                 request.BeginDate = DateTime.Today;
                 var coupon = await _couponService.CreateCouponAsync(request);
+                await _unitOfWork.SaveChangesAsync();
 
                 var couponOptions = new CouponCreateOptions()
                 {
                     Id = coupon.Id.ToString(),
                     Name = coupon.Name,
-                    AmountOff = (long)coupon.DiscountPrice,
+                    AmountOff = (long)coupon.DiscountPrice * 100,
                     Currency = "eur",
                     Duration = "repeating",
                     DurationInMonths = request.DurationInMonths,
@@ -149,13 +156,15 @@ namespace Mantasflowers.Services.Services.Payment
                     Code = coupon.Name,
                     Restrictions = new PromotionCodeRestrictionsOptions()
                     {
-                        MinimumAmount = (long)coupon.OrderOverPrice,
+                        MinimumAmount = (long)coupon.OrderOverPrice * 100,
                         MinimumAmountCurrency = "eur"
                     }
                 };
 
                 promotionCode = await _promotionCodeService.CreateAsync(promoCodeOptions);
                 promotionCode.Created = promotionCode.Created.Date;
+                promotionCode.Restrictions.MinimumAmount /= 100;
+                promotionCode.Coupon.AmountOff /= 100;
 
                 await transaction.CommitAsync();
             }

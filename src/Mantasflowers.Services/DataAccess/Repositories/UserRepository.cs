@@ -2,7 +2,6 @@
 using Mantasflowers.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.DataAccess.Repositories

@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Threading.Tasks;
 
@@ -12,12 +11,12 @@ namespace Mantasflowers.Services.Services.Order
 {
     public class OrderService : IOrderService
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository, IMapper mapper)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _orderRepository = orderRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -28,7 +27,7 @@ namespace Mantasflowers.Services.Services.Order
 
             try
             {
-                order = await _orderRepository.CreateAsync(order);
+                order = await _unitOfWork.OrderRepository.CreateAsync(order);
             }
             catch (DbUpdateException)
             {
@@ -40,28 +39,18 @@ namespace Mantasflowers.Services.Services.Order
 
         public async Task<Domain.Entities.Order> GetDetailedOrderAsync(Guid id)
         {
-            var order = await _orderRepository.GetDetailedOrderAsync(id);
+            var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(id);
 
             return order;
         }
 
         public async Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(Guid id)
         {
-            var order = await _orderRepository.GetDetailedOrderAsync(id);
+            var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(id);
 
             var detailedOrderResponse = _mapper.Map<GetDetailedOrderResponse>(order);
 
             return detailedOrderResponse;
-        }
-
-        public Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            return _orderRepository.BeginTransactionAsync();
-        }
-
-        public IExecutionStrategy CreateExecutionStrategy()
-        {
-            return _orderRepository.CreateExecutionStrategy();
         }
     }
 }
