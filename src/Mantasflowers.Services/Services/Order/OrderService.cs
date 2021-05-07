@@ -28,6 +28,7 @@ namespace Mantasflowers.Services.Services.Order
             try
             {
                 order = await _unitOfWork.OrderRepository.CreateAsync(order);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {

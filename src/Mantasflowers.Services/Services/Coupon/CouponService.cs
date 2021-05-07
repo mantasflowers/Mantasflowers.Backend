@@ -25,6 +25,7 @@ namespace Mantasflowers.Services.Services.Coupon
             try
             {
                 coupon = await _unitOfWork.CouponRepository.CreateAsync(coupon);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
