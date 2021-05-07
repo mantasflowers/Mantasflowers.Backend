@@ -10,7 +10,8 @@ namespace Mantasflowers.WebApi.Validation.Payment
         {
             RuleFor(x => x.DiscountPrice)
                 .NotEmpty()
-                .GreaterThan(0);
+                .GreaterThan(0)
+                .ScalePrecision(2, 18);
 
             RuleFor(x => x.DurationInMonths)
                 .NotEmpty()
@@ -21,7 +22,8 @@ namespace Mantasflowers.WebApi.Validation.Payment
 
             RuleFor(x => x.OrderOverPrice)
                 .NotEmpty()
-                .GreaterThanOrEqualTo(x => x.DiscountPrice);
+                .GreaterThanOrEqualTo(x => x.DiscountPrice)
+                .ScalePrecision(2, 18);
 
             RuleFor(x => x.RedeemBy)
                 .NotEmpty()

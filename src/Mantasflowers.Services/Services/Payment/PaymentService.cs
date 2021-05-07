@@ -140,7 +140,7 @@ namespace Mantasflowers.Services.Services.Payment
                 {
                     Id = coupon.Id.ToString(),
                     Name = coupon.Name,
-                    AmountOff = (long)coupon.DiscountPrice * 100,
+                    AmountOff = (long)(coupon.DiscountPrice * 100),
                     Currency = "eur",
                     Duration = "repeating",
                     DurationInMonths = request.DurationInMonths,
@@ -156,15 +156,13 @@ namespace Mantasflowers.Services.Services.Payment
                     Code = coupon.Name,
                     Restrictions = new PromotionCodeRestrictionsOptions()
                     {
-                        MinimumAmount = (long)coupon.OrderOverPrice * 100,
+                        MinimumAmount = (long)(coupon.OrderOverPrice * 100),
                         MinimumAmountCurrency = "eur"
                     }
                 };
 
                 promotionCode = await _promotionCodeService.CreateAsync(promoCodeOptions);
                 promotionCode.Created = promotionCode.Created.Date;
-                promotionCode.Restrictions.MinimumAmount /= 100;
-                promotionCode.Coupon.AmountOff /= 100;
 
                 await transaction.CommitAsync();
             }
