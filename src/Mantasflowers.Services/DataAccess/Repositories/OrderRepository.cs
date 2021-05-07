@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
-namespace Mantasflowers.Services.Repositories
+namespace Mantasflowers.Services.DataAccess.Repositories
 {
     public class OrderRepository : BaseRepository<Order>, IOrderRepository
     {

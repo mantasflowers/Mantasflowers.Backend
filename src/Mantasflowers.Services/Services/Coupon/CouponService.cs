@@ -1,21 +1,20 @@
 ﻿using AutoMapper;
 using Mantasflowers.Contracts.Payment.Request;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.Services.Coupon
 {
     public class CouponService : ICouponService
     {
-        private readonly ICouponRepository _couponRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CouponService(ICouponRepository couponRepository, IMapper mapper)
+        public CouponService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _couponRepository = couponRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -25,7 +24,7 @@ namespace Mantasflowers.Services.Services.Coupon
 
             try
             {
-                coupon = await _couponRepository.CreateAsync(coupon);
+                coupon = await _unitOfWork.CouponRepository.CreateAsync(coupon);
             }
             catch (DbUpdateException)
             {
@@ -33,16 +32,6 @@ namespace Mantasflowers.Services.Services.Coupon
             }
 
             return coupon;
-        }
-
-        public Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            return _couponRepository.BeginTransactionAsync();
-        }
-
-        public IExecutionStrategy CreateExecutionStrategy()
-        {
-            return _couponRepository.CreateExecutionStrategy();
         }
     }
 }

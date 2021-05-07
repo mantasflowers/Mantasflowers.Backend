@@ -8,7 +8,7 @@ using Mantasflowers.Persistence;
 using Mantasflowers.Services.DataShaping;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mantasflowers.Services.Repositories
+namespace Mantasflowers.Services.DataAccess.Repositories
 {
     public class ProductRepository : BaseRepository<Product>, IProductRepository
     {

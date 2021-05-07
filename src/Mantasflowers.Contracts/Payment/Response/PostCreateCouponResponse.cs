@@ -20,9 +20,9 @@ namespace Mantasflowers.Contracts.Payment.Response
 
         public string Currency { get; set; }
 
-        public long DiscountPrice { get; set; }
+        public decimal DiscountPrice { get; set; }
 
-        public long OrderOverPrice { get; set; }
+        public decimal OrderOverPrice { get; set; }
 
         public long TimesRedeemed { get; set; }
     }

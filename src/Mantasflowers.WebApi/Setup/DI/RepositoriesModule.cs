@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extras.DynamicProxy;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess;
+using Mantasflowers.Services.DataAccess.Repositories;
 using Mantasflowers.WebApi.Setup.DI.Interceptors;
 
 namespace Mantasflowers.WebApi.Setup.DI
@@ -9,35 +10,39 @@ namespace Mantasflowers.WebApi.Setup.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<UnitOfWork>()
+                .As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<ProductRepository>()
                 .As<IProductRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<ProductReviewRepository>()
                 .As<IProductReviewRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<UserRepository>()
                 .As<IUserRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<OrderRepository>()
                 .As<IOrderRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<CouponRepository>()
                 .As<ICouponRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             base.Load(builder);
         }

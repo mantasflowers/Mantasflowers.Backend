@@ -1,7 +1,7 @@
 ﻿using Mantasflowers.Domain.Entities;
 using Mantasflowers.Persistence;
 
-namespace Mantasflowers.Services.Repositories
+namespace Mantasflowers.Services.DataAccess.Repositories
 {
     public class CouponRepository : BaseRepository<Coupon>, ICouponRepository
     {

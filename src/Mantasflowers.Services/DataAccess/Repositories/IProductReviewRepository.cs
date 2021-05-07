@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
 
-namespace Mantasflowers.Services.Repositories
+namespace Mantasflowers.Services.DataAccess.Repositories
 {
     public interface IProductReviewRepository : IBaseRepository<ProductReview>
     {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Mantasflowers.Contracts.User.Response;
-using Mantasflowers.Services.Repositories;
+using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,21 +11,21 @@ namespace Mantasflowers.Services.Services.User
     public class UserService : IUserService
     {
         private readonly FirebaseService.FirebaseService _fbService;
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public UserService(FirebaseService.FirebaseService fbService,
-            IUserRepository userRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fbService = fbService;
         }
 
         public async Task<GetUserResponse> GetUserByUidAsync(string uid)
         {
-            var user = await _userRepository.GetUserByUidAsync(uid);
+            var user = await _unitOfWork.UserRepository.GetUserByUidAsync(uid);
             if (user == null)
             {
                 throw new FirebaseUidNotFoundException($"No user could be found for {nameof(uid)}");
@@ -40,7 +40,7 @@ namespace Mantasflowers.Services.Services.User
             string loginEmail,
             bool isLoginEmailVerified)
         {
-            var user = await _userRepository.GetDetailedUserByUidAsync(uid);
+            var user = await _unitOfWork.UserRepository.GetDetailedUserByUidAsync(uid);
             if (user == null)
             {
                 throw new FirebaseUidNotFoundException($"No user could be found for {nameof(uid)}");
@@ -58,7 +58,7 @@ namespace Mantasflowers.Services.Services.User
 
         public async Task<GetDetailedUserResponse> GetDetailedUserByGuidAsync(Guid id)
         {
-            var user = await _userRepository.GetDetailedUserByIdAsync(id);
+            var user = await _unitOfWork.UserRepository.GetDetailedUserByIdAsync(id);
             if (user == null)
             {
                 throw new UserNotFoundException($"No user could be found for {nameof(id)}");
@@ -78,12 +78,11 @@ namespace Mantasflowers.Services.Services.User
 
         public async Task<string> GetUserUidByGuidAsync(Guid id)
         {
-            var user = await _userRepository.GetAsync(id);
+            var user = await _unitOfWork.UserRepository.GetAsync(id);
 
             return user?.Uid;
         }
 
-        // TODO: [NFR] transactions? Exception catching? (Uid could exist or concurrent add user requests)
         public async Task<PostCreateUserResponse> CreateUserAsync(string uid)
         {
             var user = new Domain.Entities.User
@@ -93,7 +92,8 @@ namespace Mantasflowers.Services.Services.User
 
             try
             {
-                await _userRepository.CreateAsync(user);
+                await _unitOfWork.UserRepository.CreateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {

@@ -28,7 +28,7 @@ namespace Mantasflowers.WebApi.Setup.Database
                         .ConfigureWarnings(x => 
                             x.Throw(RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning));
                 },
-                ServiceLifetime.Transient,
+                ServiceLifetime.Scoped,
                 ServiceLifetime.Singleton);
             }
             else
@@ -39,7 +39,7 @@ namespace Mantasflowers.WebApi.Setup.Database
                         .ConfigureWarnings(x =>
                             x.Throw(RelationalEventId.QueryPossibleUnintendedUseOfEqualsWarning));
                 },
-                ServiceLifetime.Transient,
+                ServiceLifetime.Scoped,
                 ServiceLifetime.Singleton);
             }
         }

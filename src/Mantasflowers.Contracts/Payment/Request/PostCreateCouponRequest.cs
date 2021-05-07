@@ -14,8 +14,8 @@ namespace Mantasflowers.Contracts.Payment.Request
 
         public DateTime RedeemBy { get; set; }
 
-        public long DiscountPrice { get; set; }
+        public decimal DiscountPrice { get; set; }
 
-        public long OrderOverPrice { get; set; }
+        public decimal OrderOverPrice { get; set; }
     }
 }

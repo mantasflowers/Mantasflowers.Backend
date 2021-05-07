@@ -21,8 +21,8 @@ namespace Mantasflowers.WebApi.Setup.Mapping
                 .ForMember(d => d.Duration, opt => opt.MapFrom(d => d.Coupon.Duration))
                 .ForMember(d => d.Currency, opt => opt.MapFrom(d => d.Coupon.Currency))
                 .ForMember(d => d.Name, opt => opt.MapFrom(d => d.Code))
-                .ForMember(d => d.DiscountPrice, opt => opt.MapFrom(d => d.Coupon.AmountOff))
-                .ForMember(d => d.OrderOverPrice, opt => opt.MapFrom(d => d.Restrictions.MinimumAmount));
+                .ForMember(d => d.DiscountPrice, opt => opt.MapFrom(d => d.Coupon.AmountOff / 100m))
+                .ForMember(d => d.OrderOverPrice, opt => opt.MapFrom(d => d.Restrictions.MinimumAmount / 100m));
         }
     }
 }
