@@ -3,9 +3,9 @@
 ## 1 - Custom minimal autofac registration via JSON
 Turime JSON [formatą](src/Mantasflowers.WebApi/autofacCustom.json), kuris leidžia registruoti bet kokį _business layer_ komponentą (mūsų panaudojimo atvėjui). Registracijos kodas: [CustomAutofacSetup.cs](/src/Mantasflowers.WebApi/Setup/DI/CustomAutofac/CustomAutofacSetup.cs).
 
-Kaip POC, yra užregistruotas [ProductReviewService](src/Mantasflowers.Services/Services/Review/ProductReviewService.cs), kuris turi savo antrininką po tuo pačiu interface: [DummyProductReviewService](src/Mantasflowers.Services/Services/Review/ProductReviewService.cs) (demo tikslais).
+Kaip POC, yra užregistruotas [ProductReviewService](src/Mantasflowers.Services/Services/Review/ProductReviewService.cs), kuris turi savo antrininką po tuo pačiu interface: [DummyProductReviewService](src/Mantasflowers.Services/Services/Review/DummyProductReviewService.cs) (demo tikslais).
 
-Įdomus aspektas, kad JSON registracija įvyksta po visų kitų **kodo** registracijų (žr. [Startup.cs](src/Mantasflowers.Webapi/Startup.cs) 108 eilutę) ir *autofac* to pačio tipo registracijas perrašo ant viršaus. Tai reiškia, kad jei norime pakeisti kažkokį komponentą (net ir tą kuris nebuvo užregistruotas per JSON), tai galime padaryti.
+Įdomus aspektas, kad JSON registracija įvyksta po visų kitų **kodo** registracijų (žr. [Startup.cs](src/Mantasflowers.WebApi/Startup.cs) 108 eilutę) ir *autofac* to pačio tipo registracijas perrašo ant viršaus. Tai reiškia, kad jei norime pakeisti kažkokį komponentą (net ir tą kuris nebuvo užregistruotas per JSON), tai galime padaryti.
 
 ### Klausimai:
 1. Ar toks POC jau pilnai tenkintų reikalavimą? T.y., nors dabar techniškai galėtume visą *business layer* suregistruoti, ar užtenka tik vienos registracijos kaip pavyzdžio?
@@ -35,7 +35,7 @@ Tuomet savo JSON faile galime rašyti (šiuo atvėju išjungiame vieną visus in
         "type": "Mantasflowers.Services.Services.Product.IProductService, Mantasflowers.Services"
     }
     ],
-    "interceptors": []
+    "interceptors": [],
     "scope": "perlifetimescope"
 }
 ```
