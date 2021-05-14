@@ -25,11 +25,11 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<ProductReviewService>()
-                .As<IProductReviewService>()
-                .EnableInterfaceInterceptors()
-                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
-                .InstancePerLifetimeScope();
+            // builder.RegisterType<ProductReviewService>()
+            //     .As<IProductReviewService>()
+            //     .EnableInterfaceInterceptors()
+            //     .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+            //     .InstancePerLifetimeScope();
 
             builder.RegisterType<UserService>()
                 .As<IUserService>()
@@ -37,10 +37,6 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();
 
-            // TODO: this doesn't have an interface and can't be logged using interface interception.
-            //     Class interception would require changes to the FirebaseService itself and as such:
-            //     1. We either add a useless interface to this (just for interception)
-            //     2. We don't log this with hopes that noone sees it or we can justify not logging this :)
             builder.RegisterType<FirebaseService>()
                 .InstancePerDependency();
 

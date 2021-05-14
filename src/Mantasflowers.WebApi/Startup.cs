@@ -21,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Mantasflowers.WebApi.Setup.DI.CustomAutofac;
 
 namespace Mantasflowers.WebApi
 {
@@ -61,7 +62,7 @@ namespace Mantasflowers.WebApi
 
             services.ConfigureCORS(Environment, _corsPolicyName);
 
-            services.SetupLogging();
+            services.SetupLogging(Configuration);
 
             services.AddControllers(options =>
             {
@@ -102,11 +103,9 @@ namespace Mantasflowers.WebApi
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServiceAgentsModule());
             builder.RegisterModule(new ServicesModule());
-            // TODO: IMPORTANT: interceptors need to be configurable (on/off) via configuration
-            //     file. Not doing this now, because we will have to move the entire DI registration
-            //     to json files before presentation (java damaged lecturer :)) )
-            //     This should be done with "Extensibility/Glass-box extensibility" NFR task.
-            builder.RegisterModule(new InterceptorsModule());
+            // builder.RegisterModule(new InterceptorsModule());
+
+            builder.LoadCustomAutofacJson(Configuration["CustomAutofacConfig:ConfigFilePath"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

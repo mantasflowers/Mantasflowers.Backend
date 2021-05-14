@@ -1,0 +1,25 @@
+{
+  "components": [
+    {
+      "type": "Mantasflowers.WebApi.Setup.DI.Interceptors.AsyncInterceptorAdapter`1, Mantasflowers.WebApi"
+    },
+    {
+      "type": "Mantasflowers.WebApi.Setup.DI.Interceptors.MethodCallInterceptorAsync, Mantasflowers.WebApi"
+    },
+
+    {
+      "type": "Mantasflowers.Services.Services.Review.ProductReviewService, Mantasflowers.Services",
+      "interfaces": [
+        {
+          "type": "Mantasflowers.Services.Services.Review.IProductReviewService, Mantasflowers.Services"
+        }
+      ],
+      "interceptors": [
+        {
+          "type": "Mantasflowers.WebApi.Setup.DI.Interceptors.AsyncInterceptorAdapter`1[[Mantasflowers.WebApi.Setup.DI.Interceptors.MethodCallInterceptorAsync, Mantasflowers.WebApi]], Mantasflowers.WebApi"
+        }
+      ],
+      "scope": "perlifetimescope"
+    }
+  ]
+}
