@@ -11,5 +11,7 @@ namespace Mantasflowers.Services.DataAccess.Repositories
         Task<User> GetDetailedUserByUidAsync(string uid);
 
         Task<User> GetDetailedUserByIdAsync(Guid id);
+
+        Task<User> GetUserGraphByUidAsync(string uid);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
 using Mantasflowers.Persistence;
@@ -25,6 +26,11 @@ namespace Mantasflowers.Services.DataAccess.Repositories
         public virtual void Delete(T entity)
         {
             _dbContext.Remove(entity);
+        }
+
+        public virtual void DeleteRange(IEnumerable<T> entities)
+        {
+            _dbContext.RemoveRange(entities);
         }
 
         public virtual async Task<T> GetAsync(Guid id)

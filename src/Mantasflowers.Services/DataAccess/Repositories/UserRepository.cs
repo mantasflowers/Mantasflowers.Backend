@@ -38,5 +38,19 @@ namespace Mantasflowers.Services.DataAccess.Repositories
 
             return user;
         }
+
+        public async Task<User> GetUserGraphByUidAsync(string uid)
+        {
+            var user = await _dbContext.Users
+                .Include(x => x.UserOrders)
+                    .ThenInclude(x => x.Order)
+                        .ThenInclude(x => x.Payment)
+                .Include(x => x.UserOrders)
+                    .ThenInclude(x => x.Order)
+                        .ThenInclude(x => x.Shipment)
+                .SingleOrDefaultAsync(x => x.Uid == uid);
+
+            return user;
+        }
     }
 }

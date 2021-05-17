@@ -1,4 +1,5 @@
-﻿using Mantasflowers.Contracts.User.Response;
+﻿using Mantasflowers.Contracts.User.Request;
+using Mantasflowers.Contracts.User.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -15,6 +16,10 @@ namespace Mantasflowers.Services.Services.User
 
         Task<string> GetUserUidByGuidAsync(Guid id);
 
-        Task<PostCreateUserResponse> CreateUserAsync(string uid);
+        Task<PostCreateUserResponse> CreateUserAsync(string email, string password);
+
+        Task DeleteUserAsync(string uid);
+
+        Task<UpdateUserResponse> UpdateUserAsync(string uid, UpdateUserRequest request);
     }
 }

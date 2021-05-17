@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mantasflowers.Domain.Entities;
 
@@ -14,6 +15,8 @@ namespace Mantasflowers.Services.DataAccess.Repositories
         T Update(T entity);
 
         void Delete(T entity);
+
+        void DeleteRange(IEnumerable<T> entities);
 
         Task<int> SaveChangesAsync();
     }

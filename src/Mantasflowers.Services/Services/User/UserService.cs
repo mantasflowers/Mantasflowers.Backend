@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Mantasflowers.Contracts.User.Request;
 using Mantasflowers.Contracts.User.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.Services.User
@@ -83,11 +85,18 @@ namespace Mantasflowers.Services.Services.User
             return user?.Uid;
         }
 
-        public async Task<PostCreateUserResponse> CreateUserAsync(string uid)
+        public async Task<PostCreateUserResponse> CreateUserAsync(string email, string password)
         {
+            var firebaseUser = await _fbService.CreateUserAsync(email, password);
+
+            if (string.IsNullOrWhiteSpace(firebaseUser.Uid))
+            {
+                throw new FirebaseUidNotFoundException("Firebase did not return Uid after creating user");
+            }
+
             var user = new Domain.Entities.User
             {
-                Uid = uid
+                Uid = firebaseUser.Uid
             };
 
             try
@@ -97,12 +106,60 @@ namespace Mantasflowers.Services.Services.User
             }
             catch (DbUpdateException)
             {
+                await _fbService.DeleteUserByUidAsync(firebaseUser.Uid);
                 throw new FailedToAddDatabaseResourceException("Failed to create user");
             }
 
-            var resposne = _mapper.Map<PostCreateUserResponse>(user);
+            var resposne = _mapper.Map<PostCreateUserResponse>(user,
+                o => o.AfterMap((source, destination) =>
+                {
+                    destination.LoginEmail = firebaseUser.Email;
+                }));
 
             return resposne;
+        }
+
+        public async Task DeleteUserAsync(string uid)
+        {
+            var user = await _unitOfWork.UserRepository.GetUserGraphByUidAsync(uid);
+
+            if (user == null)
+            {
+                throw new FirebaseUidNotFoundException($"No database user matching the {nameof(uid)} could be found");
+            }
+
+            await _fbService.DeleteUserByUidAsync(uid);
+
+            // These entities aren't linked for automatic cascading. Need to delete by hand.
+            var ordersToDelete = user.UserOrders.Select(x => x.Order);
+            var shipmentsToDelete = ordersToDelete.Select(x => x.Shipment);
+            var paymentsToDelete = ordersToDelete.Select(x => x.Payment);
+
+            _unitOfWork.OrderRepository.DeleteRange(ordersToDelete);
+            _unitOfWork.ShipmentRepository.DeleteRange(shipmentsToDelete);
+            _unitOfWork.PaymentRepository.DeleteRange(paymentsToDelete);
+            _unitOfWork.UserRepository.Delete(user);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<UpdateUserResponse> UpdateUserAsync(string uid, UpdateUserRequest request)
+        {
+            var user = await _unitOfWork.UserRepository.GetDetailedUserByUidAsync(uid);
+
+            if (user == null)
+            {
+                throw new FirebaseUidNotFoundException($"No database user matching the {nameof(uid)} could be found");
+            }
+
+            _mapper.Map(request, user);
+
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.UserRepository.SaveChangesAsync();
+
+            var response = _mapper.Map<UpdateUserResponse>(user);
+
+            return response;
         }
     }
 }

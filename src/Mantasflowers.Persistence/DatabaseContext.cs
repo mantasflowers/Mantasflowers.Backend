@@ -102,6 +102,19 @@ namespace Mantasflowers.Persistence
                         .HasMaxLength(200);
                     e.HasIndex(p => p.Uid)
                         .IsUnique();
+
+                    e.HasOne(p => p.Address)
+                        .WithOne(p => p.User)
+                        .OnDelete(DeleteBehavior.Cascade);
+                    e.HasOne(p => p.UserContactInfo)
+                        .WithOne(p => p.User)
+                        .OnDelete(DeleteBehavior.Cascade);
+                    e.HasMany(p => p.UserOrders)
+                        .WithOne(p => p.User)
+                        .OnDelete(DeleteBehavior.Cascade);
+                    e.HasMany(p => p.ProductReviews)
+                        .WithOne(p => p.User)
+                        .OnDelete(DeleteBehavior.Cascade);
                 }
             );
 
@@ -155,6 +168,16 @@ namespace Mantasflowers.Persistence
                         .HasColumnType("decimal(18,4)");
                     e.Property(p => p.Message)
                         .HasMaxLength(500);
+
+                    e.HasOne(p => p.OrderAddress)
+                        .WithOne(p => p.Order)
+                        .OnDelete(DeleteBehavior.Cascade);
+                    e.HasOne(p => p.OrderContactInfo)
+                        .WithOne(p => p.Order)
+                        .OnDelete(DeleteBehavior.Cascade);
+                    e.HasMany(p => p.OrderItems)
+                        .WithOne(p => p.Order)
+                        .OnDelete(DeleteBehavior.Cascade);
                 }
             );
 
