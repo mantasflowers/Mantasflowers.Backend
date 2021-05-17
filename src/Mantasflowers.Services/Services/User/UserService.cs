@@ -99,9 +99,10 @@ namespace Mantasflowers.Services.Services.User
                 Uid = firebaseUser.Uid
             };
 
+            await _unitOfWork.UserRepository.CreateAsync(user);
+            
             try
             {
-                await _unitOfWork.UserRepository.CreateAsync(user);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateException)
@@ -154,8 +155,21 @@ namespace Mantasflowers.Services.Services.User
 
             _mapper.Map(request, user);
 
+            if (request.RowVersion != null)
+            {
+                _unitOfWork.UserRepository.UpdateOriginalInternalRowVersion(user, request.RowVersion);
+            }
+
             _unitOfWork.UserRepository.Update(user);
-            await _unitOfWork.UserRepository.SaveChangesAsync();
+            
+            try
+            {
+                await _unitOfWork.UserRepository.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new ConcurrentEntityUpdateException($"Concurrent update on user {user.Id} was detected");
+            }
 
             var response = _mapper.Map<UpdateUserResponse>(user);
 

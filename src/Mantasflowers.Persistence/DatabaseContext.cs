@@ -102,6 +102,8 @@ namespace Mantasflowers.Persistence
                         .HasMaxLength(200);
                     e.HasIndex(p => p.Uid)
                         .IsUnique();
+                    e.Property(x => x.RowVersion)
+                        .IsRowVersion();
 
                     e.HasOne(p => p.Address)
                         .WithOne(p => p.User)
@@ -263,7 +265,7 @@ namespace Mantasflowers.Persistence
 
 
             // TODO: remove data seed when no longer needed
-            Seed(modelBuilder);
+            //Seed(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,6 +1,8 @@
-﻿namespace Mantasflowers.Contracts.User.Request
+﻿using Mantasflowers.Contracts.Common;
+
+namespace Mantasflowers.Contracts.User.Request
 {
-    public class UpdateUserRequest
+    public class UpdateUserRequest : VersionableDtoTemplate
     {
         public string FirstName { get; set; }
 

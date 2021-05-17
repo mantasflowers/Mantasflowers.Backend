@@ -1,8 +1,9 @@
 ﻿using System;
+using Mantasflowers.Contracts.Common;
 
 namespace Mantasflowers.Contracts.User.Response
 {
-    public class GetUserResponse
+    public class GetUserResponse : VersionableDtoTemplate
     {
         public Guid Id { get; set; }
 

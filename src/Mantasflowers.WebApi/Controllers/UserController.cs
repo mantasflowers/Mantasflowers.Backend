@@ -1,6 +1,7 @@
 ﻿using Mantasflowers.Contracts.Errors;
 using Mantasflowers.Contracts.User.Request;
 using Mantasflowers.Contracts.User.Response;
+using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.User;
 using Mantasflowers.WebApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,8 @@ namespace Mantasflowers.WebApi.Controllers
         {
             string uid = User.GetUid();
             var response = await _userService.GetUserByUidAsync(uid);
+            
+            Response.Headers.AddETagHeader(response.RowVersion);
 
             return Ok(response);
         }
@@ -45,6 +48,8 @@ namespace Mantasflowers.WebApi.Controllers
             var emailData = User.GetEmailInfo();
 
             var response = await _userService.GetDetailedUserByUidAsync(uid, emailData.Email, emailData.IsEmailVerified);
+
+            Response.Headers.AddETagHeader(response.RowVersion);
 
             return Ok(response);
         }
@@ -82,13 +87,23 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpPatch("update")]
         [ProducesResponseType(typeof(UpdateUserResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateUser(UpdateUserRequest request)
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> UpdateUser(UpdateUserRequest request,
+            [FromHeader] byte[] etag)
         {
             string uid = User.GetUid();
 
-            var response = await _userService.UpdateUserAsync(uid, request);
+            request.RowVersion = etag;
 
-            return Ok(response);
+            try
+            {
+                var response = await _userService.UpdateUserAsync(uid, request);
+                return Ok(response);
+            }
+            catch (ConcurrentEntityUpdateException e)
+            {
+                return Conflict(e.Message);
+            }
         }
     }
 }

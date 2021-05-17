@@ -19,6 +19,11 @@ namespace Mantasflowers.Services.DataAccess.Repositories
             return user;
         }
 
+        public void UpdateOriginalInternalRowVersion(User user, byte[] rowVersion)
+        {
+            _dbContext.Entry(user).OriginalValues[nameof(user.RowVersion)] = rowVersion;
+        }
+
         public async Task<User> GetDetailedUserByUidAsync(string uid)
         {
             var user = await _dbContext.Users
