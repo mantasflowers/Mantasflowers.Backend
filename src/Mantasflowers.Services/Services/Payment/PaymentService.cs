@@ -63,7 +63,6 @@ namespace Mantasflowers.Services.Services.Payment
             {
                 var order = await _orderService.CreateOrderAsync(request.Order);
                 await _unitOfWork.SaveChangesAsync();
-                order = await _orderService.GetDetailedOrderAsync(order.Id);
 
                 var lineItems = new List<SessionLineItemOptions>();
 

@@ -24,5 +24,18 @@ namespace Mantasflowers.Services.DataAccess.Repositories
 
             return order;
         }
+
+        public async override Task<Order> CreateAsync(Order entity)
+        {
+            foreach (var item in entity.OrderItems)
+            {
+                item.Product = await _dbContext.Products.FindAsync(item.ProductId);
+                _dbContext.Entry(item.Product).State = EntityState.Unchanged;
+            }
+
+            entity = await base.CreateAsync(entity);
+
+            return entity;
+        }
     }
 }
