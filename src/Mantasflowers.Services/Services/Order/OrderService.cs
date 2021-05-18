@@ -3,7 +3,6 @@ using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -29,7 +28,7 @@ namespace Mantasflowers.Services.Services.Order
             {
                 order = await _unitOfWork.OrderRepository.CreateAsync(order);
             }
-            catch (DbUpdateException)
+            catch (ArgumentNullException)
             {
                 throw new FailedToAddDatabaseResourceException("Failed to create order");
             }
