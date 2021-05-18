@@ -122,7 +122,7 @@ namespace Mantasflowers.Services.Services.User
 
         public async Task DeleteUserAsync(string uid)
         {
-            var user = await _unitOfWork.UserRepository.GetUserGraphByUidAsync(uid);
+            var user = await _unitOfWork.UserRepository.GetUserByUidAsync(uid);
 
             if (user == null)
             {
@@ -131,14 +131,6 @@ namespace Mantasflowers.Services.Services.User
 
             await _fbService.DeleteUserByUidAsync(uid);
 
-            // These entities aren't linked for automatic cascading. Need to delete by hand.
-            var ordersToDelete = user.UserOrders.Select(x => x.Order);
-            var shipmentsToDelete = ordersToDelete.Select(x => x.Shipment);
-            var paymentsToDelete = ordersToDelete.Select(x => x.Payment);
-
-            _unitOfWork.OrderRepository.DeleteRange(ordersToDelete);
-            _unitOfWork.ShipmentRepository.DeleteRange(shipmentsToDelete);
-            _unitOfWork.PaymentRepository.DeleteRange(paymentsToDelete);
             _unitOfWork.UserRepository.Delete(user);
 
             await _unitOfWork.SaveChangesAsync();

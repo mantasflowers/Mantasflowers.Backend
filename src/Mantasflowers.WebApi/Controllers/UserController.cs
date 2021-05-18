@@ -54,9 +54,6 @@ namespace Mantasflowers.WebApi.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// Completely delete user and all its information.
-        /// </summary>
         [HttpDelete("delete")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
