@@ -37,11 +37,12 @@ namespace Mantasflowers.WebApi.Controllers
         public async Task<IActionResult> CreateCheckoutSessionAsync(PostCreateCheckoutSessionRequest request)
         {
             Guid? userId = null;
-            try
+
+            if (User.Identity.IsAuthenticated)
             {
                 string uid = User.GetUid();
                 userId = await _userService.GetUserGuidByUidAsync(uid);
-            } catch (Exception) { }
+            }
 
             var response = await _paymentService.CreateCheckoutSessionAsync(request, userId);
 

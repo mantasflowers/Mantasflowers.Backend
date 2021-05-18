@@ -58,10 +58,11 @@ namespace Mantasflowers.Services.Services.Payment
         {
             using var transaction = await _unitOfWork.BeginTransactionAsync();
             var session = new Session();
+            Domain.Entities.Order order;
 
             try
             {
-                var order = await _orderService.CreateOrderAsync(request.Order);
+                order = await _orderService.CreateOrderAsync(request.Order);
                 await _unitOfWork.SaveChangesAsync();
 
                 if (userId.HasValue)
@@ -116,6 +117,7 @@ namespace Mantasflowers.Services.Services.Payment
             }
 
             var response = _mapper.Map<PostCreateCheckoutSessionResponse>(session);
+            response.OrderPassword = order.UniquePassword;
             return response;
         }
 
