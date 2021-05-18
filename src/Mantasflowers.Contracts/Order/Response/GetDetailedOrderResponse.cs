@@ -14,7 +14,7 @@ namespace Mantasflowers.Contracts.Order.Response
 
         public GetOrderContactDetailsResponse ContactDetails { get; set; }
 
-        public string TemporaryPasswordHash { get; set; } // TODO: this might change. Just a placeholder
+        public string UniquePassword { get; set; }
 
         public ulong OrderNumber { get; set; }
 

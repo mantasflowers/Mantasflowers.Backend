@@ -37,5 +37,15 @@ namespace Mantasflowers.WebApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("get-order")]
+        [ProducesResponseType(typeof(GetDetailedOrderResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetOrder(string password)
+        {
+            var response = await _orderService.GetDetailedOrderInfoAsync(password);
+
+            return Ok(response);
+        }
     }
 }

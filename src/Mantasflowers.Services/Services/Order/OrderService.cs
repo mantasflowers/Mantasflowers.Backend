@@ -2,11 +2,9 @@
 using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.DataAccess;
+using Mantasflowers.Services.Generators;
 using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.HashMap;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using shortid;
-using shortid.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -32,7 +30,7 @@ namespace Mantasflowers.Services.Services.Order
         {
             var order = _mapper.Map<Domain.Entities.Order>(request);
 
-            (string uniquePassword, string passwordHash) = HashUniquePassword();
+            (string uniquePassword, string passwordHash) = PasswordGenerator.HashUniquePassword();
 
             order.UniquePassword = uniquePassword;
 
@@ -57,6 +55,16 @@ namespace Mantasflowers.Services.Services.Order
             return order;
         }
 
+        public async Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(string uniquePassword)
+        {
+            var hashMap = await _hashMapService.GetHashMapAsync(uniquePassword);
+            var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(hashMap.OrderId);
+
+            var detailedOrderResponse = _mapper.Map<GetDetailedOrderResponse>(order);
+
+            return detailedOrderResponse;
+        }
+
         public async Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(Guid id)
         {
             var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(id);
@@ -64,30 +72,6 @@ namespace Mantasflowers.Services.Services.Order
             var detailedOrderResponse = _mapper.Map<GetDetailedOrderResponse>(order);
 
             return detailedOrderResponse;
-        }
-
-        private static (string, string) HashUniquePassword(
-            bool useNumbers = true, 
-            bool useSpecialCharacters = false, 
-            int length = 9
-            )
-        {
-            var options = new GenerationOptions
-            {
-                UseNumbers = useNumbers,
-                UseSpecialCharacters = useSpecialCharacters,
-                Length = length
-            };
-            string uniquePassword = ShortId.Generate(options);
-
-            string passwordHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: uniquePassword,
-                salt: new byte[] { 0x00 },
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-
-            return (uniquePassword, passwordHash);
         }
     }
 }
