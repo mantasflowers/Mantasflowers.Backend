@@ -182,8 +182,8 @@ namespace Mantasflowers.Persistence
                             EnumModelToStringProvider<OrderStatus>(),
                             StringProviderToEnumModel<OrderStatus>()
                         );
-                    e.Property(p => p.TemporaryPasswordHash)
-                        .HasMaxLength(300)
+                    e.Property(p => p.UniquePassword)
+                        .HasMaxLength(64)
                         .IsRequired();
                     e.Property(p => p.DiscountPrice)
                         .HasColumnType("decimal(18,4)");

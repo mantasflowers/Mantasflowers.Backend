@@ -34,7 +34,7 @@ namespace Mantasflowers.Services.Services.Order
 
             (string uniquePassword, string passwordHash) = HashUniquePassword();
 
-            order.TemporaryPasswordHash = passwordHash;
+            order.UniquePassword = uniquePassword;
 
             try
             {
