@@ -18,7 +18,7 @@ namespace Mantasflowers.Domain.Entities
 
         public virtual OrderContactInfo OrderContactInfo { get; set; }
 
-        public string TemporaryPasswordHash { get; set; } // TODO: this might change. Just a placeholder
+        public string UniquePassword { get; set; }
 
         public ulong OrderNumber { get; set; }
 

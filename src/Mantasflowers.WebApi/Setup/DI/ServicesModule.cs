@@ -10,6 +10,7 @@ using Mantasflowers.Services.Services.User;
 using Mantasflowers.WebApi.Setup.DI.Interceptors;
 using Mantasflowers.WebApi.Setup.Mapping;
 using Stripe.Checkout;
+using Mantasflowers.Services.Services.HashMap;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -66,6 +67,12 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<CouponService>()
                 .As<ICouponService>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<HashMapService>()
+                .As<IHashMapService>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();

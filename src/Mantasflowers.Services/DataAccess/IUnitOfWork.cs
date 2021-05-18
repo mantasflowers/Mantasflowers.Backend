@@ -13,6 +13,8 @@ namespace Mantasflowers.Services.DataAccess
         IOrderRepository OrderRepository { get; }
         IShipmentRepository ShipmentRepository { get; }
         IPaymentRepository PaymentRepository { get; }
+        IHashMapRepository HashMapRepository { get; }
+        IUserOrderRepository UserOrderRepository { get; }
 
         Task<int> SaveChangesAsync();
 
