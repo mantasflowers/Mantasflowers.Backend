@@ -46,12 +46,29 @@ namespace Mantasflowers.Persistence
 
         public DbSet<Feedback> Feedback { get; set; }
 
+        public DbSet<HashMap> HashMap { get; set; }
+
         // TODO: future TODO and aren't used by anything
         // public DbSet<Supplier> Suppliers { get; set; }
         // public DbSet<Warehousing> Warehousing { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<HashMap>(
+                e =>
+                {
+                    e.Property(p => p.PasswordHash)
+                        .HasMaxLength(300)
+                        .IsRequired();
+
+                    e.HasOne(p => p.Order)
+                        .WithOne();
+
+                    e.HasIndex(p => p.OrderId)
+                        .IsUnique();
+                }
+                );
+
             modelBuilder.Entity<Product>(
                 e =>
                 {
@@ -170,7 +187,6 @@ namespace Mantasflowers.Persistence
                         .HasColumnType("decimal(18,4)");
                     e.Property(p => p.Message)
                         .HasMaxLength(500);
-
                     e.HasOne(p => p.OrderAddress)
                         .WithOne(p => p.Order)
                         .OnDelete(DeleteBehavior.Cascade);
@@ -628,7 +644,6 @@ namespace Mantasflowers.Persistence
                     Status = OrderStatus.UNPAID,
                     ShipmentId = shipmentId1,
                     PaymentId = paymentId1,
-                    TemporaryPasswordHash = "eyy123",
                     OrderNumber = 123,
                     DiscountPrice = null,
                     Message = "i feel like a flower"
