@@ -5,6 +5,7 @@ using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Generators;
 using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.HashMap;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -77,8 +78,17 @@ namespace Mantasflowers.Services.Services.Order
         public async Task<Domain.Entities.UserOrder> LinkUserToOrderAsync(PostLinkUserOrderRequest request)
         {
             var userOrder = _mapper.Map<Domain.Entities.UserOrder>(request);
-            userOrder = await _unitOfWork.UserOrderRepository.CreateAsync(userOrder);
-            await _unitOfWork.SaveChangesAsync();
+
+            try
+            {
+                userOrder = await _unitOfWork.UserOrderRepository.CreateAsync(userOrder);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex) when
+            (ex is DbUpdateException || ex is ArgumentNullException)
+            {
+                throw new FailedToAddDatabaseResourceException("Failed to link user to order");
+            }
 
             return userOrder;
         }
