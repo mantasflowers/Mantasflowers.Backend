@@ -26,7 +26,7 @@ namespace Mantasflowers.Services.DataAccess
             ICouponRepository couponRepository,
             IOrderRepository orderRepository,
             IShipmentRepository shipmentRepository,
-            IPaymentRepository paymentRepository)
+            IPaymentRepository paymentRepository,
             IHashMapRepository hashMapRepository,
             IUserOrderRepository userOrderRepository
             )

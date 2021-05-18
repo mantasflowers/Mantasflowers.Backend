@@ -288,7 +288,7 @@ namespace Mantasflowers.Persistence
 
 
             // TODO: remove data seed when no longer needed
-            //Seed(modelBuilder);
+            // Seed(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -653,7 +653,8 @@ namespace Mantasflowers.Persistence
                     PaymentId = paymentId1,
                     OrderNumber = 123,
                     DiscountPrice = null,
-                    Message = "i feel like a flower"
+                    Message = "i feel like a flower",
+                    UniquePassword = "pepe hands"
                 }
             );
             modelBuilder.Entity<OrderItem>().HasData(
