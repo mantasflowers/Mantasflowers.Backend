@@ -70,9 +70,8 @@ namespace Mantasflowers.WebApi.Middleware
                     message = HandleFirebaseAuthException(ex);
                     break;
                 case FirebaseUidNotFoundException _:
-                    statusCode = HttpStatusCode.NotFound;
-                    break;
                 case UserNotFoundException _:
+                case HashMapOrderNotFoundException _:
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 default:

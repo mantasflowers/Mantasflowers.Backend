@@ -2,7 +2,9 @@
 using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.DataAccess;
+using Mantasflowers.Services.Generators;
 using Mantasflowers.Services.Services.Exceptions;
+using Mantasflowers.Services.Services.HashMap;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -12,24 +14,34 @@ namespace Mantasflowers.Services.Services.Order
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHashMapService _hashMapService;
         private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(
+            IUnitOfWork unitOfWork,
+            IHashMapService hashMapService,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _hashMapService = hashMapService;
             _mapper = mapper;
         }
 
         public async Task<Domain.Entities.Order> CreateOrderAsync(PostCreateOrderRequest request)
         {
             var order = _mapper.Map<Domain.Entities.Order>(request);
-            order.TemporaryPasswordHash = "stoppolice";
+
+            (string uniquePassword, string passwordHash) = PasswordGenerator.HashUniquePassword();
+
+            order.UniquePassword = uniquePassword;
 
             try
             {
                 order = await _unitOfWork.OrderRepository.CreateAsync(order);
+                var hashMap = await _hashMapService.CreateHashMapAsync(passwordHash);
+                hashMap.Order = order;
             }
-            catch (DbUpdateException)
+            catch (ArgumentNullException)
             {
                 throw new FailedToAddDatabaseResourceException("Failed to create order");
             }
@@ -44,6 +56,16 @@ namespace Mantasflowers.Services.Services.Order
             return order;
         }
 
+        public async Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(string uniquePassword)
+        {
+            var hashMap = await _hashMapService.GetHashMapAsync(uniquePassword);
+            var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(hashMap.OrderId);
+
+            var detailedOrderResponse = _mapper.Map<GetDetailedOrderResponse>(order);
+
+            return detailedOrderResponse;
+        }
+
         public async Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(Guid id)
         {
             var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(id);
@@ -51,6 +73,28 @@ namespace Mantasflowers.Services.Services.Order
             var detailedOrderResponse = _mapper.Map<GetDetailedOrderResponse>(order);
 
             return detailedOrderResponse;
+        }
+
+        public async Task<Domain.Entities.UserOrder> LinkUserToOrderAsync(Guid userId, Domain.Entities.Order order)
+        {
+            var userOrder = new Domain.Entities.UserOrder
+            {
+                UserId = userId,
+                Order = order
+            };
+
+            try
+            {
+                userOrder = await _unitOfWork.UserOrderRepository.CreateAsync(userOrder);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex) when
+            (ex is DbUpdateException || ex is ArgumentNullException)
+            {
+                throw new FailedToAddDatabaseResourceException("Failed to link user to order");
+            }
+
+            return userOrder;
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public class PostCreateCheckoutSessionResponse
     {
-        public string Id;
+        public string Id { get; set; }
     }
 }

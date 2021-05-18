@@ -17,5 +17,7 @@ namespace Mantasflowers.Domain.Entities
         public virtual IEnumerable<UserOrder> UserOrders { get; set; }
 
         public virtual IEnumerable<ProductReview> ProductReviews { get; set; }
+
+        public byte[] RowVersion { get; set; }
     }
 }

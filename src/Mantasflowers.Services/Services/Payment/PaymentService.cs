@@ -41,7 +41,7 @@ namespace Mantasflowers.Services.Services.Payment
             _mapper = mapper;
         }
 
-        public async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionAsync(PostCreateCheckoutSessionRequest request)
+        public async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionAsync(PostCreateCheckoutSessionRequest request, Guid? userId)
         {
             var executionStrategy = _unitOfWork.CreateExecutionStrategy();
 
@@ -49,12 +49,12 @@ namespace Mantasflowers.Services.Services.Payment
              * As a unit of repetition
              * Read more on: https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-resilient-entity-framework-core-sql-connections
              */
-            var response = await executionStrategy.ExecuteAsync(() => CreateCheckoutSessionBodyAsync(request));
+            var response = await executionStrategy.ExecuteAsync(() => CreateCheckoutSessionBodyAsync(request, userId));
 
             return response;
         }
 
-        private async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionBodyAsync(PostCreateCheckoutSessionRequest request)
+        private async Task<PostCreateCheckoutSessionResponse> CreateCheckoutSessionBodyAsync(PostCreateCheckoutSessionRequest request, Guid? userId)
         {
             using var transaction = await _unitOfWork.BeginTransactionAsync();
             var session = new Session();
@@ -63,7 +63,11 @@ namespace Mantasflowers.Services.Services.Payment
             {
                 var order = await _orderService.CreateOrderAsync(request.Order);
                 await _unitOfWork.SaveChangesAsync();
-                order = await _orderService.GetDetailedOrderAsync(order.Id);
+
+                if (userId.HasValue)
+                {
+                    await _orderService.LinkUserToOrderAsync(userId.Value, order);
+                }
 
                 var lineItems = new List<SessionLineItemOptions>();
 
@@ -95,7 +99,7 @@ namespace Mantasflowers.Services.Services.Payment
                     PaymentMethodTypes = new List<string> { "card" },
                     Mode = "payment",
                     LineItems = lineItems,
-                    SuccessUrl = request.SuccessUrl,
+                    SuccessUrl = request.SuccessUrl + $"password={order.UniquePassword}",
                     CancelUrl = request.CancelUrl
                 };
 
