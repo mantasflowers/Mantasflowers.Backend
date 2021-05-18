@@ -3,6 +3,7 @@ using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
+using Mantasflowers.Services.Services.HashMap;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using shortid;
 using shortid.Configuration;
@@ -14,11 +15,16 @@ namespace Mantasflowers.Services.Services.Order
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHashMapService _hashMapService;
         private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(
+            IUnitOfWork unitOfWork,
+            IHashMapService hashMapService,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _hashMapService = hashMapService;
             _mapper = mapper;
         }
 
@@ -33,6 +39,8 @@ namespace Mantasflowers.Services.Services.Order
             try
             {
                 order = await _unitOfWork.OrderRepository.CreateAsync(order);
+                var hashMap = await _hashMapService.CreateHashMapAsync(passwordHash);
+                hashMap.Order = order;
             }
             catch (ArgumentNullException)
             {
