@@ -58,11 +58,10 @@ namespace Mantasflowers.Services.Services.Payment
         {
             using var transaction = await _unitOfWork.BeginTransactionAsync();
             var session = new Session();
-            Domain.Entities.Order order;
 
             try
             {
-                order = await _orderService.CreateOrderAsync(request.Order);
+                var order = await _orderService.CreateOrderAsync(request.Order);
                 await _unitOfWork.SaveChangesAsync();
 
                 if (userId.HasValue)
@@ -100,7 +99,7 @@ namespace Mantasflowers.Services.Services.Payment
                     PaymentMethodTypes = new List<string> { "card" },
                     Mode = "payment",
                     LineItems = lineItems,
-                    SuccessUrl = request.SuccessUrl,
+                    SuccessUrl = request.SuccessUrl + $"password={order.UniquePassword}",
                     CancelUrl = request.CancelUrl
                 };
 
@@ -117,7 +116,6 @@ namespace Mantasflowers.Services.Services.Payment
             }
 
             var response = _mapper.Map<PostCreateCheckoutSessionResponse>(session);
-            response.OrderPassword = order.UniquePassword;
             return response;
         }
 
