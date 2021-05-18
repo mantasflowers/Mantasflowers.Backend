@@ -73,5 +73,14 @@ namespace Mantasflowers.Services.Services.Order
 
             return detailedOrderResponse;
         }
+
+        public async Task<Domain.Entities.UserOrder> LinkUserToOrderAsync(PostLinkUserOrderRequest request)
+        {
+            var userOrder = _mapper.Map<Domain.Entities.UserOrder>(request);
+            userOrder = await _unitOfWork.UserOrderRepository.CreateAsync(userOrder);
+            await _unitOfWork.SaveChangesAsync();
+
+            return userOrder;
+        }
     }
 }

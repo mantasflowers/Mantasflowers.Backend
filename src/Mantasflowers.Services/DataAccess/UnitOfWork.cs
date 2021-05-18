@@ -14,6 +14,7 @@ namespace Mantasflowers.Services.DataAccess
         private readonly ICouponRepository _couponRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IHashMapRepository _hashMapRepository;
+        private readonly IUserOrderRepository _userOrderRepository;
 
         public UnitOfWork(
             DatabaseContext dbContext,
@@ -22,7 +23,8 @@ namespace Mantasflowers.Services.DataAccess
             IUserRepository userReviewRepository,
             ICouponRepository couponRepository,
             IOrderRepository orderRepository,
-            IHashMapRepository hashMapRepository
+            IHashMapRepository hashMapRepository,
+            IUserOrderRepository userOrderRepository
             )
         {
             _dbContext = dbContext;
@@ -32,6 +34,7 @@ namespace Mantasflowers.Services.DataAccess
             _couponRepository = couponRepository;
             _orderRepository = orderRepository;
             _hashMapRepository = hashMapRepository;
+            _userOrderRepository = userOrderRepository;
         }
 
 
@@ -52,6 +55,9 @@ namespace Mantasflowers.Services.DataAccess
 
         public IHashMapRepository HashMapRepository
             => _hashMapRepository;
+
+        public IUserOrderRepository UserOrderRepository
+            => _userOrderRepository;
 
 
         public async Task<int> SaveChangesAsync()
