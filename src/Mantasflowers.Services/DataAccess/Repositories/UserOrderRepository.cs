@@ -12,7 +12,6 @@ namespace Mantasflowers.Services.DataAccess.Repositories
 
         public async override Task<UserOrder> CreateAsync(UserOrder entity)
         {
-            entity.Order = await _dbContext.Orders.FindAsync(entity.OrderId);
             _dbContext.Entry(entity.Order).State = EntityState.Unchanged;
 
             entity.User = await _dbContext.Users.FindAsync(entity.UserId);

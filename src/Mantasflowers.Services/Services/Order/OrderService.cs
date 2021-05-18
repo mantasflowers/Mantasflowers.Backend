@@ -75,9 +75,13 @@ namespace Mantasflowers.Services.Services.Order
             return detailedOrderResponse;
         }
 
-        public async Task<Domain.Entities.UserOrder> LinkUserToOrderAsync(PostLinkUserOrderRequest request)
+        public async Task<Domain.Entities.UserOrder> LinkUserToOrderAsync(Guid userId, Domain.Entities.Order order)
         {
-            var userOrder = _mapper.Map<Domain.Entities.UserOrder>(request);
+            var userOrder = new Domain.Entities.UserOrder
+            {
+                UserId = userId,
+                Order = order
+            };
 
             try
             {

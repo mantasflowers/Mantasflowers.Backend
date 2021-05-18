@@ -26,7 +26,7 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetDetailedOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetOrder(Guid id)
+        public async Task<IActionResult> GetOrderAsync(Guid id)
         {
             var response = await _orderService.GetDetailedOrderInfoAsync(id);
 
@@ -41,7 +41,7 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpPost("get-order")]
         [ProducesResponseType(typeof(GetDetailedOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetOrder(string password)
+        public async Task<IActionResult> GetOrderAsync(string password)
         {
             var response = await _orderService.GetDetailedOrderInfoAsync(password);
 

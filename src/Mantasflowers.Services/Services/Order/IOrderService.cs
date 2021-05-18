@@ -14,5 +14,7 @@ namespace Mantasflowers.Services.Services.Order
         Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(string uniquePassword);
 
         Task<Domain.Entities.Order> CreateOrderAsync(PostCreateOrderRequest request);
+
+        Task<Domain.Entities.UserOrder> LinkUserToOrderAsync(Guid userId, Domain.Entities.Order order);
     }
 }

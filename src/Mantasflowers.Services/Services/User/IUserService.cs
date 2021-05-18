@@ -15,6 +15,8 @@ namespace Mantasflowers.Services.Services.User
 
         Task<string> GetUserUidByGuidAsync(Guid id);
 
+        Task<Guid> GetUserGuidByUidAsync(string uid);
+
         Task<PostCreateUserResponse> CreateUserAsync(string uid);
     }
 }
