@@ -83,17 +83,6 @@ namespace Mantasflowers.Services.Services.User
             return user?.Uid;
         }
 
-        public async Task<Guid> GetUserGuidByUidAsync(string uid)
-        {
-            var user = await _unitOfWork.UserRepository.GetUserByUidAsync(uid);
-            if (user == null)
-            {
-                throw new FirebaseUidNotFoundException($"No user could be found for {nameof(uid)}");
-            }
-
-            return user.Id;
-        }
-
         public async Task<PostCreateUserResponse> CreateUserAsync(string uid)
         {
             var user = new Domain.Entities.User

@@ -41,7 +41,7 @@ namespace Mantasflowers.WebApi.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string uid = User.GetUid();
-                userId = await _userService.GetUserGuidByUidAsync(uid);
+                userId = (await _userService.GetUserByUidAsync(uid)).Id;
             }
 
             var response = await _paymentService.CreateCheckoutSessionAsync(request, userId);
