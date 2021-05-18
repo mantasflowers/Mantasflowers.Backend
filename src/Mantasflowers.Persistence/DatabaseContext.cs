@@ -171,6 +171,8 @@ namespace Mantasflowers.Persistence
                 }
             );
 
+            modelBuilder.HasSequence<long>("OrderNumbers");
+
             modelBuilder.Entity<Order>(
                 e =>
                 {
@@ -196,6 +198,8 @@ namespace Mantasflowers.Persistence
                     e.HasMany(p => p.OrderItems)
                         .WithOne(p => p.Order)
                         .OnDelete(DeleteBehavior.Cascade);
+                    e.Property(p => p.OrderNumber)
+                        .HasDefaultValueSql("NEXT VALUE FOR OrderNumbers");
                 }
             );
 
