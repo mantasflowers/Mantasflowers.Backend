@@ -65,7 +65,7 @@ namespace Mantasflowers.WebApi.Setup.DI.Interceptors
             _logger.Information("Calling method {methodName} with parameters {parameters}..." + 
                 "(User UID: {userUid}; User role: {userRole})",
                 $"{invocation.Method.DeclaringType.FullName}.{invocation.Method.Name}",
-                JsonConvert.SerializeObject(invocation.Arguments.Select(ArgumentFilter))
+                JsonConvert.SerializeObject(invocation.Arguments.Select(ValueFilter))
             );
         }
 
@@ -73,11 +73,11 @@ namespace Mantasflowers.WebApi.Setup.DI.Interceptors
         {
             _logger.Information("Method {methodName} finished with return value: {returnValue}",
                 $"{invocation.Method.DeclaringType.FullName}.{invocation.Method.Name}",
-                JsonConvert.SerializeObject(returnValue)
+                JsonConvert.SerializeObject(ValueFilter(returnValue))
             );
         }
 
-        private static object ArgumentFilter(object argument)
+        private static object ValueFilter(object argument)
         {
             if (argument is Delegate)
             {

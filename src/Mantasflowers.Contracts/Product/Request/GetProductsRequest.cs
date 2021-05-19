@@ -20,6 +20,6 @@ namespace Mantasflowers.Contracts.Product.Request
         public bool OrderDescending { get; set; } = false;
 
         [FromQuery(Name = "categories")]
-        public IList<ProductCategory> Categories { get; set; }
+        public IList<ProductCategory> Categories { get; set; } = new List<ProductCategory>();
     }
 }

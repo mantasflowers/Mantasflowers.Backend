@@ -72,7 +72,11 @@ namespace Mantasflowers.WebApi.Middleware
                 case FirebaseUidNotFoundException _:
                 case UserNotFoundException _:
                 case HashMapOrderNotFoundException _:
+                case ProductNotFoundException _:
                     statusCode = HttpStatusCode.NotFound;
+                    break;
+                case ConcurrentEntityUpdateException _:
+                    statusCode = HttpStatusCode.Conflict;
                     break;
                 default:
                     break;

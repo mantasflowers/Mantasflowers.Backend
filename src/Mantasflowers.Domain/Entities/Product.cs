@@ -20,6 +20,8 @@ namespace Mantasflowers.Domain.Entities
 
         public string ThumbnailPictureUrl { get; set; }
 
+        public byte[] RowVersion { get; set; }
+
         public Guid ProductInfoId { get; set; }
         public virtual ProductInfo ProductInfo { get; set; }
 

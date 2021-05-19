@@ -86,9 +86,11 @@ namespace Mantasflowers.Persistence
                     e.Property(p => p.DiscountPercent)
                         .HasColumnType("decimal(18,4)");
                     e.Property(p => p.ShortDescription)
-                        .HasMaxLength(50);
+                        .HasMaxLength(2000);
                     e.Property(p => p.ThumbnailPictureUrl)
-                        .HasMaxLength(260);
+                        .HasMaxLength(2000);
+                    e.Property(p => p.RowVersion)
+                        .IsRowVersion();
                 }
             );
 
@@ -96,9 +98,9 @@ namespace Mantasflowers.Persistence
                 e =>
                 {
                     e.Property(p => p.Description)
-                        .HasMaxLength(300);
+                        .HasMaxLength(2000);
                     e.Property(p => p.PictureUrl)
-                        .HasMaxLength(260);
+                        .HasMaxLength(2000);
                 }
             );
 
