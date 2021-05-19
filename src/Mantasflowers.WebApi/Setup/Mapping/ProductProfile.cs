@@ -1,5 +1,6 @@
 using AutoMapper;
 using Mantasflowers.Contracts.Common;
+using Mantasflowers.Contracts.Product.Request;
 using Mantasflowers.Contracts.Product.Response;
 using Mantasflowers.Domain.Entities;
 
@@ -15,6 +16,9 @@ namespace Mantasflowers.WebApi.Setup.Mapping
             CreateMap<Product, GetDetailedProductResponse>()
                 .ForMember(d => d.Description, opt => opt.MapFrom(s => s.ProductInfo.Description))
                 .ForMember(d => d.PictureUrl, opt => opt.MapFrom(s => s.ProductInfo.PictureUrl));
+
+            CreateMap<CreateProductInfoRequest, ProductInfo>();
+            CreateMap<CreateProductRequest, Product>();
         }
     }
 }

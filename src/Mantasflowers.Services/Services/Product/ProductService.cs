@@ -55,5 +55,18 @@ namespace Mantasflowers.Services.Services.Product
 
             return detailedProductResponse;
         }
+
+        public async Task<GetDetailedProductResponse> CreateProductAsync(CreateProductRequest request)
+        {
+            var product = _mapper.Map<Domain.Entities.Product>(request);
+
+            await _unitOfWork.ProductRepository.CreateAsync(product);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var response = _mapper.Map<GetDetailedProductResponse>(product);
+
+            return response;
+        }
     }
 }

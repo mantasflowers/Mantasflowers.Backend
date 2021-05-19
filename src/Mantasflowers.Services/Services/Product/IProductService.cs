@@ -10,5 +10,7 @@ namespace Mantasflowers.Services.Services.Product
         Task<GetProductsResponse> GetPaginatedProductsAsync(GetProductsRequest request);
 
         Task<GetDetailedProductResponse> GetDetailedProductInfoAsync(Guid id);
+
+        Task<GetDetailedProductResponse> CreateProductAsync(CreateProductRequest request);
     }
 }

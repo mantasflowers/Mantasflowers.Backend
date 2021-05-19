@@ -54,7 +54,7 @@ namespace Mantasflowers.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteUser()
@@ -67,7 +67,7 @@ namespace Mantasflowers.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("create")]
+        [HttpPost]
         [ProducesResponseType(typeof(PostCreateUserResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreateUser(PostCreateUserRequest postCreateUserRequest)
@@ -81,7 +81,7 @@ namespace Mantasflowers.WebApi.Controllers
         /// <summary>
         /// For updating login email/password, look at 'Authentication'.
         /// </summary>
-        [HttpPatch("update")]
+        [HttpPatch]
         [ProducesResponseType(typeof(UpdateUserResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]

@@ -4,6 +4,7 @@ using Mantasflowers.Contracts.Errors;
 using Mantasflowers.Contracts.Product.Request;
 using Mantasflowers.Contracts.Product.Response;
 using Mantasflowers.Services.Services.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,6 +46,16 @@ namespace Mantasflowers.WebApi.Controllers
             {
                 return NotFound("Product not found");
             }
+
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        [ProducesResponseType(typeof(GetDetailedProductResponse), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateProduct(CreateProductRequest request)
+        {
+            var response = await _productService.CreateProductAsync(request);
 
             return Ok(response);
         }
