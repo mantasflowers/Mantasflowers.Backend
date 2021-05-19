@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using Serilog;
 
 namespace Mantasflowers.WebApi.Controllers
@@ -58,12 +61,10 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpGet("githash")]
         public IActionResult Githash()
         {
-            string githash = _config["Githash"] ?? "NOT FOUND";
+            var a = _dbContext.Users.Select(x => x);
             
             return Ok(
-                new {
-                    GitHash = githash
-                }
+                a
             );
         }
 
@@ -99,6 +100,23 @@ namespace Mantasflowers.WebApi.Controllers
             };
 
             return Ok(result);
+        }
+
+        [HttpPost("email")]
+        public async Task<IActionResult> Email()
+        {
+            var apiKey = _config["sendgrid"];
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("shop.mantasflowers@gmail.com", "Example User");
+            var subject = "Sending first test email";
+            var to = new EmailAddress("dominykas.prievelis@mif.stud.vu.lt", "Dominykas User");
+            var plainTextContent = "Plain text test email content";
+            var htmlContent = "<strong>HTML test email content</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+
+            var response = await client.SendEmailAsync(msg);
+            
+            return Ok(JsonConvert.SerializeObject(response));
         }
     }
 }
