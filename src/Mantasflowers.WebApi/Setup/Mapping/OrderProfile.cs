@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mantasflowers.Contracts.Common;
 using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Domain.Entities;
@@ -27,6 +28,9 @@ namespace Mantasflowers.WebApi.Setup.Mapping
             CreateMap<PostCreateOrderRequest, Order>()
                 .ForMember(d => d.OrderAddress, opt => opt.MapFrom(s => s.Address))
                 .ForMember(d => d.OrderContactInfo, opt => opt.MapFrom(s => s.ContactDetails));
+
+            CreateMap<Order, GetOrderResponse>();
+            CreateMap<PagedModel<Order>, GetOrdersResponse>();
         }
     }
 }

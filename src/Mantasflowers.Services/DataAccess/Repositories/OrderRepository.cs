@@ -1,7 +1,11 @@
-﻿using Mantasflowers.Domain.Entities;
+﻿using Mantasflowers.Contracts.Common;
+using Mantasflowers.Domain.Entities;
 using Mantasflowers.Persistence;
+using Mantasflowers.Services.DataShaping;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.DataAccess.Repositories
@@ -36,6 +40,18 @@ namespace Mantasflowers.Services.DataAccess.Repositories
             entity = await base.CreateAsync(entity);
 
             return entity;
+        }
+
+        public async Task<PagedModel<Order>> GetPaginatedFilteredOrderedListAsync(int page, int limit, 
+            Expression<Func<Order, bool>> filter, string orderByPropertyName, bool orderDescending)
+        {
+            var orders = await _dbContext.Orders
+                .AsNoTracking()
+                .Where(filter)
+                .OrderByPropertyName(orderByPropertyName, orderDescending)
+                .PaginateAsync(page, limit);
+
+            return orders;
         }
     }
 }

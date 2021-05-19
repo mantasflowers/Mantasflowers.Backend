@@ -3,11 +3,14 @@ using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Generators;
+using Mantasflowers.Services.Mapping;
 using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.HashMap;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using static Mantasflowers.Services.Mapping.OrderMappings;
 
 namespace Mantasflowers.Services.Services.Order
 {
@@ -95,6 +98,32 @@ namespace Mantasflowers.Services.Services.Order
             }
 
             return userOrder;
+        }
+
+        public async Task<GetOrdersResponse> GetPaginatedOrdersAsync(GetOrdersRequest request)
+        {
+            Expression<Func<Domain.Entities.Order, bool>> categoryFilter =
+                (x => request.Statuses.Contains(x.Status));
+
+            if (!OrderSortingMapping.TryGetValue(request.OrderBy, out var orderByPropertyName))
+            {
+                throw new MappingException($"No entity property mapping found for '{nameof(request.OrderBy)}'");
+            }
+
+            var paginatedOrders = await _unitOfWork.OrderRepository.GetPaginatedFilteredOrderedListAsync(request.Page,
+                request.PageSize,
+                categoryFilter,
+                orderByPropertyName,
+                request.OrderDescending);
+
+            var paginatedProductsResponse = _mapper.Map<GetOrdersResponse>(paginatedOrders,
+                o => o.AfterMap((source, destination) =>
+                {
+                    destination.OrderedBy = request.OrderBy;
+                    destination.OrderDescending = request.OrderDescending;
+                }));
+
+            return paginatedProductsResponse;
         }
     }
 }

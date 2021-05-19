@@ -1,4 +1,5 @@
 ﻿using Mantasflowers.Contracts.Errors;
+using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.Services.Order;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +23,11 @@ namespace Mantasflowers.WebApi.Controllers
             _orderService = orderService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetDetailedOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetOrderAsync(Guid id)
+        public async Task<IActionResult> GetDetailedOrderAsync(Guid id)
         {
             var response = await _orderService.GetDetailedOrderInfoAsync(id);
 
@@ -41,9 +42,19 @@ namespace Mantasflowers.WebApi.Controllers
         [HttpPost("get-order")]
         [ProducesResponseType(typeof(GetDetailedOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetOrderAsync(string password)
+        public async Task<IActionResult> GetDetailedOrderAsync(string password)
         {
             var response = await _orderService.GetDetailedOrderInfoAsync(password);
+
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        [ProducesResponseType(typeof(GetOrdersResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPaginatedOrders([FromQuery] GetOrdersRequest request)
+        {
+            var response = await _orderService.GetPaginatedOrdersAsync(request);
 
             return Ok(response);
         }

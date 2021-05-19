@@ -16,5 +16,7 @@ namespace Mantasflowers.Services.Services.Order
         Task<Domain.Entities.Order> CreateOrderAsync(PostCreateOrderRequest request);
 
         Task<Domain.Entities.UserOrder> LinkUserToOrderAsync(Guid userId, Domain.Entities.Order order);
+
+        Task<GetOrdersResponse> GetPaginatedOrdersAsync(GetOrdersRequest request);
     }
 }
