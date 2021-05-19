@@ -11,6 +11,8 @@ namespace Mantasflowers.Services.DataAccess
         IUserRepository UserRepository { get; }
         ICouponRepository CouponRepository { get; }
         IOrderRepository OrderRepository { get; }
+        IShipmentRepository ShipmentRepository { get; }
+        IPaymentRepository PaymentRepository { get; }
         IHashMapRepository HashMapRepository { get; }
         IUserOrderRepository UserOrderRepository { get; }
 

@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using Mantasflowers.Contracts.User.Request;
 using Mantasflowers.Contracts.User.Response;
 using Mantasflowers.Domain.Entities;
 
@@ -19,6 +21,18 @@ namespace Mantasflowers.WebApi.Setup.Mapping
                 .ForMember(d => d.ContactDetails, opt => opt.MapFrom(s => s.UserContactInfo));
 
             CreateMap<User, PostCreateUserResponse>();
+
+            CreateMap<UpdateUserAddressRequest, UserAddress>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<UpdateUserContactInfoRequest, UserContactInfo>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<UpdateUserRequest, User>()
+                .ForMember(d => d.RowVersion, opt => opt.Ignore())
+                .ForAllOtherMembers(ops => ops.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<UserAddress, UpdateUserAddressResponse>();
+            CreateMap<UserContactInfo, UpdateUserContactInfoResponse>();
+            CreateMap<User, UpdateUserResponse>();
         }
     }
 }

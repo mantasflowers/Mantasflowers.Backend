@@ -44,8 +44,20 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<ShipmentRepository>()
+                .As<IShipmentRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<HashMapRepository>()
                 .As<IHashMapRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<PaymentRepository>()
+                .As<IPaymentRepository>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();

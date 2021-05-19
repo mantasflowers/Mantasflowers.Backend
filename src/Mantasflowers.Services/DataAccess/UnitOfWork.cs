@@ -13,6 +13,8 @@ namespace Mantasflowers.Services.DataAccess
         private readonly IUserRepository _userReviewRepository;
         private readonly ICouponRepository _couponRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly IShipmentRepository _shipmentRepository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IHashMapRepository _hashMapRepository;
         private readonly IUserOrderRepository _userOrderRepository;
 
@@ -23,6 +25,8 @@ namespace Mantasflowers.Services.DataAccess
             IUserRepository userReviewRepository,
             ICouponRepository couponRepository,
             IOrderRepository orderRepository,
+            IShipmentRepository shipmentRepository,
+            IPaymentRepository paymentRepository,
             IHashMapRepository hashMapRepository,
             IUserOrderRepository userOrderRepository
             )
@@ -33,6 +37,8 @@ namespace Mantasflowers.Services.DataAccess
             _userReviewRepository = userReviewRepository;
             _couponRepository = couponRepository;
             _orderRepository = orderRepository;
+            _shipmentRepository = shipmentRepository;
+            _paymentRepository = paymentRepository;
             _hashMapRepository = hashMapRepository;
             _userOrderRepository = userOrderRepository;
         }
@@ -52,6 +58,12 @@ namespace Mantasflowers.Services.DataAccess
 
         public IOrderRepository OrderRepository
             => _orderRepository;
+
+        public IShipmentRepository ShipmentRepository
+            => _shipmentRepository;
+
+        public IPaymentRepository PaymentRepository
+            => _paymentRepository;
 
         public IHashMapRepository HashMapRepository
             => _hashMapRepository;

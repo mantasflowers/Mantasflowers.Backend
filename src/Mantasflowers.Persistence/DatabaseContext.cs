@@ -189,6 +189,7 @@ namespace Mantasflowers.Persistence
                         .HasColumnType("decimal(18,4)");
                     e.Property(p => p.Message)
                         .HasMaxLength(500);
+
                     e.HasOne(p => p.OrderAddress)
                         .WithOne(p => p.Order)
                         .OnDelete(DeleteBehavior.Cascade);
@@ -198,8 +199,10 @@ namespace Mantasflowers.Persistence
                     e.HasMany(p => p.OrderItems)
                         .WithOne(p => p.Order)
                         .OnDelete(DeleteBehavior.Cascade);
+
                     e.Property(p => p.OrderNumber)
                         .HasDefaultValueSql("NEXT VALUE FOR OrderNumbers");
+
                 }
             );
 
@@ -285,7 +288,7 @@ namespace Mantasflowers.Persistence
 
 
             // TODO: remove data seed when no longer needed
-            //Seed(modelBuilder);
+            // Seed(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -650,7 +653,8 @@ namespace Mantasflowers.Persistence
                     PaymentId = paymentId1,
                     OrderNumber = 123,
                     DiscountPrice = null,
-                    Message = "i feel like a flower"
+                    Message = "i feel like a flower",
+                    UniquePassword = "pepe hands"
                 }
             );
             modelBuilder.Entity<OrderItem>().HasData(
