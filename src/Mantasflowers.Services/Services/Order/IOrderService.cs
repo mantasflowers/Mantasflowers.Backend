@@ -19,6 +19,8 @@ namespace Mantasflowers.Services.Services.Order
 
         Task<GetOrdersResponse> GetPaginatedOrdersAsync(GetOrdersRequest request);
 
+        Task<GetUserOrdersResponse> GetUserOrdersAsync(Guid userId);
+
         Task<GetDetailedOrderResponse> UpdateOrderStatusAsync(Guid id, UpdateOrderStatusRequest request);
     }
 }

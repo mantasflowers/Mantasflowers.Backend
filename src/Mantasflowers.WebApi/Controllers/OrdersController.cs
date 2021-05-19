@@ -2,6 +2,7 @@
 using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.Services.Order;
+using Mantasflowers.Services.Services.User;
 using Mantasflowers.WebApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,10 +19,15 @@ namespace Mantasflowers.WebApi.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IUserService _userService;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(
+            IOrderService orderService,
+            IUserService userService
+            )
         {
             _orderService = orderService;
+            _userService = userService;
         }
 
         [Authorize(Roles = "admin")]
@@ -57,9 +63,23 @@ namespace Mantasflowers.WebApi.Controllers
         [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(typeof(GetOrdersResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPaginatedOrders([FromQuery] GetOrdersRequest request)
+        public async Task<IActionResult> GetPaginatedOrdersAsync([FromQuery] GetOrdersRequest request)
         {
             var response = await _orderService.GetPaginatedOrdersAsync(request);
+
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("get-user-orders")]
+        [ProducesResponseType(typeof(GetUserOrdersResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetUserOrdersAsync()
+        {
+            string uid = User.GetUid();
+
+            var user = await _userService.GetUserByUidAsync(uid);
+
+            var response = await _orderService.GetUserOrdersAsync(user.Id);
 
             return Ok(response);
         }

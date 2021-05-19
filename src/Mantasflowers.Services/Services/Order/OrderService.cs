@@ -9,6 +9,7 @@ using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.HashMap;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static Mantasflowers.Services.Mapping.OrderMappings;
@@ -125,6 +126,22 @@ namespace Mantasflowers.Services.Services.Order
                 }));
 
             return paginatedProductsResponse;
+        }
+
+        public async Task<GetUserOrdersResponse> GetUserOrdersAsync(Guid userId)
+        {
+            var userOrders = await _unitOfWork.UserOrderRepository.GetUserOrdersByUserId(userId);
+
+            IList<Domain.Entities.Order> orders = new List<Domain.Entities.Order>();
+            foreach (var userOrder in userOrders)
+            {
+                orders.Add(userOrder.Order);
+            }
+
+            var response = new GetUserOrdersResponse();
+            response.UserOrders = _mapper.Map(orders, response.UserOrders);
+
+            return response;
         }
 
         public async Task<GetDetailedOrderResponse> UpdateOrderStatusAsync(Guid id, UpdateOrderStatusRequest request)

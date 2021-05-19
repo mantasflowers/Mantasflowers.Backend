@@ -19,7 +19,7 @@ namespace Mantasflowers.Contracts.Order.Request
         [FromQuery(Name = "orderDescending")]
         public bool OrderDescending { get; set; } = false;
 
-        [FromQuery(Name = "categories")]
+        [FromQuery(Name = "statuses")]
         public IList<OrderStatus> Statuses { get; set; } = new List<OrderStatus>();
     }
 }

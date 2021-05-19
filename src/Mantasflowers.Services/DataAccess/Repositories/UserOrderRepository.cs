@@ -1,6 +1,9 @@
 ﻿using Mantasflowers.Domain.Entities;
 using Mantasflowers.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.DataAccess.Repositories
@@ -20,6 +23,16 @@ namespace Mantasflowers.Services.DataAccess.Repositories
             entity = await base.CreateAsync(entity);
 
             return entity;
+        }
+
+        public async Task<IList<UserOrder>> GetUserOrdersByUserId(Guid userId)
+        {
+            return await _dbContext.UserOrders
+                .AsNoTracking()
+                .Where(x => x.UserId == userId)
+                .Include(x => x.Order)
+                .OrderBy(x => x.Order.CreatedOn)
+                .ToListAsync();
         }
     }
 }
