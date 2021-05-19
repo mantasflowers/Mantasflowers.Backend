@@ -16,7 +16,7 @@ pool:
 # trigger:
 
 # Run on pull requests to master
-pr: [ "master" ]
+pr: [ "M3-66_email_service" ]
 
 stages:
   - stage: CI
