@@ -5,7 +5,7 @@
 
 variables:
   buildDockerfile: './Dockerfile'
-  isMasterBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  isMasterBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/M3-66_email_service')]
   publishArtifactName: 'mantasflowers-backend'
   __Githash: $(Build.SourceVersion)
 
@@ -16,7 +16,7 @@ pool:
 # trigger:
 
 # Run on pull requests to master
-pr: [ "M3-66_email_service" ]
+pr: [ "master" ]
 
 stages:
   - stage: CI
