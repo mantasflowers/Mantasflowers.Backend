@@ -1,9 +1,8 @@
-using System;
 using Mantasflowers.Domain.Enums;
 
 namespace Mantasflowers.Contracts.Common.Templates
 {
-    public class ProductTemplate : VersionableDtoTemplate
+    public abstract class ProductTemplate : VersionableDtoTemplate
     {
         public string Name { get; set; }
 

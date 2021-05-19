@@ -1,6 +1,6 @@
 namespace Mantasflowers.Contracts.Product.Request
 {
-    public class CreateProductInfoRequest
+    public class UpdateProductInfoRequest
     {
         public string Description { get; set; }
 

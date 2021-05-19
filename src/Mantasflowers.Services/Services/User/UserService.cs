@@ -162,6 +162,10 @@ namespace Mantasflowers.Services.Services.User
             {
                 throw new ConcurrentEntityUpdateException($"Concurrent update on user {user.Id} was detected");
             }
+            catch (DbUpdateException)
+            {
+                throw new FailedToAddDatabaseResourceException($"Failed to update user {user.Id}");
+            }
 
             var response = _mapper.Map<UpdateUserResponse>(user);
 

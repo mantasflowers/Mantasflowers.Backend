@@ -92,15 +92,8 @@ namespace Mantasflowers.WebApi.Controllers
 
             request.RowVersion = etag;
 
-            try
-            {
-                var response = await _userService.UpdateUserAsync(uid, request);
-                return Ok(response);
-            }
-            catch (ConcurrentEntityUpdateException e)
-            {
-                return Conflict(e.Message);
-            }
+            var response = await _userService.UpdateUserAsync(uid, request);
+            return Ok(response);
         }
     }
 }

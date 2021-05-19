@@ -28,7 +28,7 @@ namespace Mantasflowers.WebApi.Setup.Mapping
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<UpdateUserRequest, User>()
                 .ForMember(d => d.RowVersion, opt => opt.Ignore())
-                .ForAllOtherMembers(ops => ops.Condition((src, dest, srcMember) => srcMember != null));
+                .ForAllOtherMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<UserAddress, UpdateUserAddressResponse>();
             CreateMap<UserContactInfo, UpdateUserContactInfoResponse>();

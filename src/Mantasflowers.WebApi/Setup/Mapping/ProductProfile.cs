@@ -19,6 +19,10 @@ namespace Mantasflowers.WebApi.Setup.Mapping
 
             CreateMap<CreateProductInfoRequest, ProductInfo>();
             CreateMap<CreateProductRequest, Product>();
+
+            CreateMap<UpdateProductInfoRequest, ProductInfo>();
+            CreateMap<UpdateProductRequest, Product>()
+                .ForMember(d => d.RowVersion, opt => opt.Ignore());
         }
     }
 }
