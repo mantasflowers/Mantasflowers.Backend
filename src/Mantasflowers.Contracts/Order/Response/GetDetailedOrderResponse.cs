@@ -1,10 +1,11 @@
-﻿using Mantasflowers.Domain.Enums;
+﻿using Mantasflowers.Contracts.Common;
+using Mantasflowers.Domain.Enums;
 using System;
 using System.Collections.Generic;
 
 namespace Mantasflowers.Contracts.Order.Response
 {
-    public class GetDetailedOrderResponse
+    public class GetDetailedOrderResponse : VersionableDtoTemplate
     {
         public Guid Id { get; set; }
 

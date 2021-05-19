@@ -12,5 +12,7 @@ namespace Mantasflowers.Services.DataAccess.Repositories
 
         Task<PagedModel<Order>> GetPaginatedFilteredOrderedListAsync(int page, int limit,
             Expression<Func<Order, bool>> filter, string orderByPropertyName, bool orderDescending);
+        
+        void UpdateOriginalInternalRowVersion(Order order, byte[] rowVersion);
     }
 }

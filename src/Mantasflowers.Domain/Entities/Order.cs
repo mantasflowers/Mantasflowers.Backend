@@ -26,6 +26,8 @@ namespace Mantasflowers.Domain.Entities
 
         public string Message { get; set; }
 
+        public byte[] RowVersion { get; set; }
+
         public virtual IEnumerable<OrderItem> OrderItems { get; set; }
     }
 }

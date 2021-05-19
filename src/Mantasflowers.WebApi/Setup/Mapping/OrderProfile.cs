@@ -32,6 +32,9 @@ namespace Mantasflowers.WebApi.Setup.Mapping
 
             CreateMap<Order, GetOrderResponse>();
             CreateMap<PagedModel<Order>, GetOrdersResponse>();
+
+            CreateMap<UpdateOrderStatusRequest, Order>()
+                .ForMember(d => d.RowVersion, opt => opt.Ignore());
         }
     }
 }

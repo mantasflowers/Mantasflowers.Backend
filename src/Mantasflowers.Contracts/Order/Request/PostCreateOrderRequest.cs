@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Mantasflowers.Contracts.Common;
+using System.Collections.Generic;
 
 namespace Mantasflowers.Contracts.Order.Request
 {
-    public class PostCreateOrderRequest
+    public class PostCreateOrderRequest : VersionableDtoTemplate
     {
         public PostOrderAddressRequest Address { get; set; }
 

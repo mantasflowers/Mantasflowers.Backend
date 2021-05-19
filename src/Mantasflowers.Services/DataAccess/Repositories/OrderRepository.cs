@@ -53,5 +53,10 @@ namespace Mantasflowers.Services.DataAccess.Repositories
 
             return orders;
         }
+
+        public void UpdateOriginalInternalRowVersion(Order order, byte[] rowVersion)
+        {
+            _dbContext.Entry(order).OriginalValues[nameof(order.RowVersion)] = rowVersion;
+        }
     }
 }

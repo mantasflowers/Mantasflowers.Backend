@@ -20,6 +20,6 @@ namespace Mantasflowers.Contracts.Order.Request
         public bool OrderDescending { get; set; } = false;
 
         [FromQuery(Name = "categories")]
-        public IList<OrderStatus> Statuses { get; set; }
+        public IList<OrderStatus> Statuses { get; set; } = new List<OrderStatus>();
     }
 }

@@ -4,6 +4,7 @@ using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Generators;
 using Mantasflowers.Services.Mapping;
+using Mantasflowers.Services.ServiceAgents.Exceptions;
 using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.HashMap;
 using Microsoft.EntityFrameworkCore;
@@ -102,7 +103,7 @@ namespace Mantasflowers.Services.Services.Order
 
         public async Task<GetOrdersResponse> GetPaginatedOrdersAsync(GetOrdersRequest request)
         {
-            Expression<Func<Domain.Entities.Order, bool>> categoryFilter =
+            Expression<Func<Domain.Entities.Order, bool>> statusFilter =
                 (x => request.Statuses.Contains(x.Status));
 
             if (!OrderSortingMapping.TryGetValue(request.OrderBy, out var orderByPropertyName))
@@ -112,7 +113,7 @@ namespace Mantasflowers.Services.Services.Order
 
             var paginatedOrders = await _unitOfWork.OrderRepository.GetPaginatedFilteredOrderedListAsync(request.Page,
                 request.PageSize,
-                categoryFilter,
+                statusFilter,
                 orderByPropertyName,
                 request.OrderDescending);
 
@@ -124,6 +125,42 @@ namespace Mantasflowers.Services.Services.Order
                 }));
 
             return paginatedProductsResponse;
+        }
+
+        public async Task<GetDetailedOrderResponse> UpdateOrderStatusAsync(Guid id, UpdateOrderStatusRequest request)
+        {
+            var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(id);
+
+            if (order == null)
+            {
+                throw new OrderNotFoundException($"Order {id} not found");
+            }
+
+            _mapper.Map(request, order);
+
+            if (request.RowVersion != null)
+            {
+                _unitOfWork.OrderRepository.UpdateOriginalInternalRowVersion(order, request.RowVersion);
+            }
+
+            _unitOfWork.OrderRepository.Update(order);
+
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new ConcurrentEntityUpdateException($"Concurrent update on order {order.Id} was detected");
+            }
+            catch (DbUpdateException)
+            {
+                throw new FailedToAddDatabaseResourceException($"Failed to update order {order.Id}");
+            }
+
+            var response = _mapper.Map<GetDetailedOrderResponse>(order);
+
+            return response;
         }
     }
 }
