@@ -40,5 +40,12 @@ namespace Mantasflowers.Services.DataAccess.Repositories
         {
             _dbContext.Entry(product).OriginalValues[nameof(product.RowVersion)] = rowVersion;
         }
+
+        public override void Delete(Product entity)
+        {
+            _dbContext.ProductInfo.Remove(entity.ProductInfo);
+
+            base.Delete(entity);
+        }
     }
 }

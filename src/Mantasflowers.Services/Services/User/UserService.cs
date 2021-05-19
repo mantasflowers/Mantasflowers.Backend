@@ -5,7 +5,6 @@ using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.Services.User

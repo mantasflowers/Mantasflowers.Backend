@@ -77,5 +77,16 @@ namespace Mantasflowers.WebApi.Controllers
             var response = await _productService.UpdateProductAsync(id, request);
             return Ok(response);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            await _productService.DeleteProductAsync(id);
+
+            return NoContent();
+        }
     }
 }

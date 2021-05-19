@@ -106,5 +106,19 @@ namespace Mantasflowers.Services.Services.Product
 
             return response;
         }
+
+        public async Task DeleteProductAsync(Guid id)
+        {
+            var product = await _unitOfWork.ProductRepository.GetDetailedProductAsync(id);
+
+            if (product == null)
+            {
+                throw new ProductNotFoundException($"Product {id} not found");
+            }
+
+            _unitOfWork.ProductRepository.Delete(product);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }
