@@ -14,7 +14,8 @@ namespace Mantasflowers.WebApi.Setup.Mapping
             CreateMap<OrderContactInfo, GetOrderContactDetailsResponse>();
             CreateMap<OrderItem, GetOrderItemResponse>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.ProductId))
-                .ForMember(d => d.Name, opt => opt.MapFrom(s => s.Product.Name));
+                .ForMember(d => d.Name, opt => opt.MapFrom(s => s.Product.Name))
+                .ForMember(d => d.ThumbnailPictureUrl, opt => opt.MapFrom(s => s.Product.ThumbnailPictureUrl));
 
             CreateMap<PostOrderAddressRequest, OrderAddress>();
             CreateMap<PostOrderContactDetailsRequest, OrderContactInfo>();
