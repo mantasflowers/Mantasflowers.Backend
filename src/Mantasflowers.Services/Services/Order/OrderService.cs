@@ -4,7 +4,6 @@ using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Generators;
 using Mantasflowers.Services.Mapping;
-using Mantasflowers.Services.ServiceAgents.Exceptions;
 using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.HashMap;
 using Microsoft.EntityFrameworkCore;

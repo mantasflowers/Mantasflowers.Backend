@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mantasflowers.Contracts.Order.Request
 {
-    public class PostCreateOrderRequest : VersionableDtoTemplate
+    public class PostCreateOrderRequest
     {
         public PostOrderAddressRequest Address { get; set; }
 

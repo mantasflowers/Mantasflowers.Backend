@@ -1,4 +1,4 @@
-﻿namespace Mantasflowers.Services.ServiceAgents.Exceptions
+﻿namespace Mantasflowers.Services.Services.Exceptions
 {
     [System.Serializable]
     public class OrderNotFoundException : System.Exception
