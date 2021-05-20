@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mantasflowers.Contracts.Common;
+using System.Collections.Generic;
 
 namespace Mantasflowers.Contracts.Order.Request
 {
