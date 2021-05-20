@@ -4,6 +4,8 @@ using Mantasflowers.Contracts.Errors;
 using Mantasflowers.Contracts.Product.Request;
 using Mantasflowers.Contracts.Product.Response;
 using Mantasflowers.Services.Services.Product;
+using Mantasflowers.WebApi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,7 +48,45 @@ namespace Mantasflowers.WebApi.Controllers
                 return NotFound("Product not found");
             }
 
+            Response.Headers.AddETagHeader(response.RowVersion);
+
             return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        [ProducesResponseType(typeof(GetDetailedProductResponse), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateProduct(CreateProductRequest request)
+        {
+            var response = await _productService.CreateProductAsync(request);
+
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(GetDetailedProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> UpdateProduct(Guid id,
+            UpdateProductRequest request,
+            [FromHeader] byte[] etag)
+        {
+            request.RowVersion = etag;
+
+            var response = await _productService.UpdateProductAsync(id, request);
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            await _productService.DeleteProductAsync(id);
+
+            return NoContent();
         }
     }
 }

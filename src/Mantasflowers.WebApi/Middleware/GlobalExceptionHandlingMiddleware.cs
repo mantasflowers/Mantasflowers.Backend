@@ -73,7 +73,11 @@ namespace Mantasflowers.WebApi.Middleware
                 case UserNotFoundException _:
                 case HashMapOrderNotFoundException _:
                 case OrderNotFoundException _:
+                case ProductNotFoundException _:
                     statusCode = HttpStatusCode.NotFound;
+                    break;
+                case ConcurrentEntityUpdateException _:
+                    statusCode = HttpStatusCode.Conflict;
                     break;
                 default:
                     break;

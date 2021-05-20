@@ -12,5 +12,7 @@ namespace Mantasflowers.Services.DataAccess.Repositories
             Expression<Func<Product, bool>> filter, string orderByPropertyName, bool orderDescending);
 
         Task<Product> GetDetailedProductAsync(Guid id);
+
+        public void UpdateOriginalInternalRowVersion(Product product, byte[] rowVersion);
     }
 }
