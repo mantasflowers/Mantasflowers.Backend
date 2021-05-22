@@ -1,6 +1,6 @@
 using Autofac;
 using Autofac.Extras.DynamicProxy;
-using Mantasflowers.Services.ServiceAgents;
+using Mantasflowers.Services.ServiceAgents.Firebase;
 using Mantasflowers.WebApi.Setup.DI.Interceptors;
 
 namespace Mantasflowers.WebApi.Setup.DI
