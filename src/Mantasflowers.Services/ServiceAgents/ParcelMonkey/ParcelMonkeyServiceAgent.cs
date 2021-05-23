@@ -69,5 +69,24 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
                 throw new ParcelMonkeyException(ex.Message);
             }
         }
+
+        public async Task<GetTrackingEventsResponse> GetTrackingEvents(GetTrackingEventsRequest request)
+        {
+            try
+            {
+                using var client = _clientFactory.CreateClient("ParcelMonkey");
+
+                var agentResponse = new GetTrackingEventsResponse
+                {
+                    TrackingEvents = await client.PostAsync<IList<GetTrackingEventResponse>>("GetTrackingEvents", request)
+                };
+
+                return agentResponse;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ParcelMonkeyException(ex.Message);
+            }
+        }
     }
 }

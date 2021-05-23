@@ -11,5 +11,7 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
         Task<CreateShipmentResponse> CreateShipment(CreateShipmentRequest request);
 
         Task<CancelShipmentResponse> CancelShipment(CancelShipmentRequest request);
+
+        Task<GetTrackingEventsResponse> GetTrackingEvents(GetTrackingEventsRequest request);
     }
 }
