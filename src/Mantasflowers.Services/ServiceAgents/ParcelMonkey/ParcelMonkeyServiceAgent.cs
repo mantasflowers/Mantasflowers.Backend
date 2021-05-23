@@ -53,5 +53,21 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
                 throw new ParcelMonkeyException(ex.Message);
             }
         }
+
+        public async Task<CancelShipmentResponse> CancelShipment(CancelShipmentRequest request)
+        {
+            try
+            {
+                using var client = _clientFactory.CreateClient("ParcelMonkey");
+
+                var agentResponse = await client.PostAsync<CancelShipmentResponse>("CancelShipment", request);
+
+                return agentResponse;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ParcelMonkeyException(ex.Message);
+            }
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
         Task<GetQuotesResponse> GetQuotes(GetQuotesRequest request);
 
         Task<CreateShipmentResponse> CreateShipment(CreateShipmentRequest request);
+
+        Task<CancelShipmentResponse> CancelShipment(CancelShipmentRequest request);
     }
 }

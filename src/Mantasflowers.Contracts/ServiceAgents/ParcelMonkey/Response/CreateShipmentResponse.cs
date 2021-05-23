@@ -5,7 +5,7 @@ namespace Mantasflowers.Contracts.ServiceAgents.ParcelMonkey.Response
     public class CreateShipmentResponse
     {
         [JsonProperty("ShipmentId")]
-        public int ShipmentId { get; set; }
+        public string ShipmentId { get; set; }
 
         [JsonProperty("label_url")]
         public string LabelUrl { get; set; }
