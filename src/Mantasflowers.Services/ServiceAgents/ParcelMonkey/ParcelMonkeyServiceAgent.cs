@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Mantasflowers.Services.ServiceAgents.Exceptions;
-using Newtonsoft.Json;
 
 namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
 {
@@ -35,7 +34,7 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
             }
             catch (HttpRequestException ex)
             {
-                throw HandleParcelMonkeyError(ex);
+                throw new ParcelMonkeyException(ex.Message);
             }
         }
 
@@ -51,7 +50,7 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
             }
             catch (HttpRequestException ex)
             {
-                throw HandleParcelMonkeyError(ex);
+                throw new ParcelMonkeyException(ex.Message);
             }
         }
 
@@ -67,7 +66,7 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
             }
             catch (HttpRequestException ex)
             {
-                throw HandleParcelMonkeyError(ex);
+                throw new ParcelMonkeyException(ex.Message);
             }
         }
 
@@ -86,7 +85,7 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
             }
             catch (HttpRequestException ex)
             {
-                throw HandleParcelMonkeyError(ex);
+                throw new ParcelMonkeyException(ex.Message);
             }
         }
 
@@ -102,17 +101,8 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
             }
             catch (HttpRequestException ex)
             {
-                throw HandleParcelMonkeyError(ex);
+                throw new ParcelMonkeyException(ex.Message);
             }
-        }
-
-        private ParcelMonkeyException HandleParcelMonkeyError(HttpRequestException ex)
-        {
-            var errorData = new { error = "" };
-            errorData = JsonConvert.DeserializeAnonymousType(ex.Message, errorData);
-
-            var message = errorData?.error ?? ex.Message;
-            return new ParcelMonkeyException(message);
         }
     }
 }
