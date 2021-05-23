@@ -88,5 +88,21 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
                 throw new ParcelMonkeyException(ex.Message);
             }
         }
+
+        public async Task<GetPaymentLinkResponse> GetPaymentLink(GetPaymentLinkRequest request)
+        {
+            try
+            {
+                using var client = _clientFactory.CreateClient("ParcelMonkey");
+
+                var agentResponse = await client.PostAsync<GetPaymentLinkResponse>("GetPaymentLink", request);
+
+                return agentResponse;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ParcelMonkeyException(ex.Message);
+            }
+        }
     }
 }
