@@ -1,6 +1,11 @@
-﻿namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
+﻿using Mantasflowers.Contracts.ServiceAgents.ParcelMonkey.Request;
+using Mantasflowers.Contracts.ServiceAgents.ParcelMonkey.Response;
+using System.Threading.Tasks;
+
+namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
 {
     public interface IParcelMonkeyServiceAgent
     {
+        Task<GetQuotesResponse> GetQuotes(GetQuotesRequest request);
     }
 }
