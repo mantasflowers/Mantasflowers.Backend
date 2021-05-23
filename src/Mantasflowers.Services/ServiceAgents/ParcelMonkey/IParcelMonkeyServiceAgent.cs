@@ -7,5 +7,7 @@ namespace Mantasflowers.Services.ServiceAgents.ParcelMonkey
     public interface IParcelMonkeyServiceAgent
     {
         Task<GetQuotesResponse> GetQuotes(GetQuotesRequest request);
+
+        Task<CreateShipmentResponse> CreateShipment(CreateShipmentRequest request);
     }
 }
