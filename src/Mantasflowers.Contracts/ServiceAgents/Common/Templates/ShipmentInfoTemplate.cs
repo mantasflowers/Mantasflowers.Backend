@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mantasflowers.Contracts.Common.Templates
+namespace Mantasflowers.Contracts.ServiceAgents.Common.Templates
 {
     public abstract class ShipmentInfoTemplate
     {

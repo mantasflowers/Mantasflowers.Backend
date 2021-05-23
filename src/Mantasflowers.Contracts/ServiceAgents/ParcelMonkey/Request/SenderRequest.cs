@@ -1,4 +1,4 @@
-﻿using Mantasflowers.Contracts.Common.Templates;
+﻿using Mantasflowers.Contracts.ServiceAgents.Common.Templates;
 
 namespace Mantasflowers.Contracts.ServiceAgents.ParcelMonkey.Request
 {

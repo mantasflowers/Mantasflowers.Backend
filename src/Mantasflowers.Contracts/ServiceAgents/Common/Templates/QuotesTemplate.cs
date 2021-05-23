@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Mantasflowers.Contracts.Common.Templates
+namespace Mantasflowers.Contracts.ServiceAgents.Common.Templates
 {
     public abstract class QuotesTemplate
     {
