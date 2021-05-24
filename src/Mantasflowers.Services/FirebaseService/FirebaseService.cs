@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mantasflowers.Contracts.Firebase.Response;
 using Mantasflowers.Contracts.Firebase.Request;
-using Mantasflowers.Services.ServiceAgents;
 using AutoMapper;
 using Mantasflowers.Contracts.ServiceAgents.Firebase.Request;
+using Mantasflowers.Services.ServiceAgents.Firebase;
 
 namespace Mantasflowers.Services.FirebaseService
 {
