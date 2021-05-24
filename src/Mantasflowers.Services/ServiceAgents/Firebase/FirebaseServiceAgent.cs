@@ -3,11 +3,12 @@ using Mantasflowers.Contracts.ServiceAgents.Firebase.Request;
 using Mantasflowers.Contracts.ServiceAgents.Firebase.Response;
 using Mantasflowers.Services.FirebaseService;
 using Mantasflowers.Services.ServiceAgents.Exceptions;
+using Mantasflowers.Services.ServiceAgents.Extensions;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Mantasflowers.Services.ServiceAgents
+namespace Mantasflowers.Services.ServiceAgents.Firebase
 {
     public class FirebaseServiceAgent : IFirebaseServiceAgent
     {

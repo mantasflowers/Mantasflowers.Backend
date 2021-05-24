@@ -139,6 +139,9 @@ namespace Mantasflowers.Persistence.Migrations
                     b.Property<Guid?>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<Guid?>("ShipmentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -321,13 +324,18 @@ namespace Mantasflowers.Persistence.Migrations
                     b.Property<Guid>("ProductInfoId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<string>("ShortDescription")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("ThumbnailPictureUrl")
-                        .HasMaxLength(260)
-                        .HasColumnType("nvarchar(260)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -349,12 +357,12 @@ namespace Mantasflowers.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("PictureUrl")
-                        .HasMaxLength(260)
-                        .HasColumnType("nvarchar(260)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");

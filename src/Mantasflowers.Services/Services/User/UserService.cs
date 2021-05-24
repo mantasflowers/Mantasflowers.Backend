@@ -5,7 +5,6 @@ using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.Services.Services.User
@@ -161,6 +160,10 @@ namespace Mantasflowers.Services.Services.User
             catch (DbUpdateConcurrencyException)
             {
                 throw new ConcurrentEntityUpdateException($"Concurrent update on user {user.Id} was detected");
+            }
+            catch (DbUpdateException)
+            {
+                throw new FailedToAddDatabaseResourceException($"Failed to update user {user.Id}");
             }
 
             var response = _mapper.Map<UpdateUserResponse>(user);

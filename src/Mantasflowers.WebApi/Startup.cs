@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Mantasflowers.WebApi.Setup.DI.CustomAutofac;
+using Mantasflowers.WebApi.Setup.Shipment;
 using Mantasflowers.WebApi.Setup.Email;
 
 namespace Mantasflowers.WebApi
@@ -96,6 +97,8 @@ namespace Mantasflowers.WebApi
             services.SetupFirebase(Configuration);
 
             services.SetupStripe(Configuration);
+
+            services.SetupParcelMonkey(Configuration);
 
             services.SetupSendgrid(Configuration);
         }

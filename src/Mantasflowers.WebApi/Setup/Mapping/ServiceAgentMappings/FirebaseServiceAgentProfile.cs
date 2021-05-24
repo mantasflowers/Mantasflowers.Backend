@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FirebaseAdmin.Auth;
 using Mantasflowers.Contracts.Firebase.Request;
 using Mantasflowers.Contracts.Firebase.Response;
 using Mantasflowers.Contracts.ServiceAgents.Firebase.Request;

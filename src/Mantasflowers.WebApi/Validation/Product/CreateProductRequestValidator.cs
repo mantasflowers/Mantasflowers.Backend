@@ -12,7 +12,7 @@ namespace Mantasflowers.WebApi.Validation.Product
                 .NotEmpty();
 
             RuleFor(x => x.Category)
-                .NotEmpty();
+                .NotNull();
 
             RuleFor(x => x.ShortDescription)
                 .MaximumLength(2000);

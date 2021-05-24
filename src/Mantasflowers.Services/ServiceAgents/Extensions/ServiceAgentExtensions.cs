@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mantasflowers.Services.ServiceAgents
+namespace Mantasflowers.Services.ServiceAgents.Extensions
 {
     public static class ServiceAgentExtensions
     {
