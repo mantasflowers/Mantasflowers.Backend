@@ -1,4 +1,5 @@
 ﻿using Mantasflowers.Contracts.Common.Templates;
+using System;
 
 namespace Mantasflowers.Contracts.Shipment.Request
 {
@@ -10,7 +11,7 @@ namespace Mantasflowers.Contracts.Shipment.Request
 
         public string DeliveryNotes { get; set; }
 
-        public string CollectionDate { get; set; }
+        public DateTime CollectionDate { get; set; }
 
         public CustomsRequest Customs { get; set; }
     }
