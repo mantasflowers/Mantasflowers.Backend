@@ -14,9 +14,6 @@ namespace Mantasflowers.Services.Services.Email
         private readonly ISendGridClient _sendGridClient;
         private readonly SendgridConfiguration _sendGridConfig;
 
-        private const string EmailTemplatePath
-            = @"StaticData/EmailTemplate.html";
-
         public EmailService(ISendGridClient sendGridClient, SendgridConfiguration sendGridConfig)
         {
             _sendGridClient = sendGridClient;
@@ -30,7 +27,8 @@ namespace Mantasflowers.Services.Services.Email
             string orderNumber,
             string orderUrl)
         {
-            var emailHtmlTemplate = new StringBuilder(await File.ReadAllTextAsync(EmailTemplatePath));
+            var emailHtmlTemplate = new StringBuilder(
+                await File.ReadAllTextAsync(_sendGridConfig.EmailTemplatePath));
             var emailHtml = emailHtmlTemplate
                 .Replace("[[purchase_timestamp]]", purchaseDate.ToString())
                 .Replace("[[seller]]", "Mantasflowers")

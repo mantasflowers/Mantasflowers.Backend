@@ -7,5 +7,7 @@ namespace Mantasflowers.Services.Services.Email
         public string From { get; set; }
 
         public string FromName { get; set; }
+
+        public string EmailTemplatePath { get; set; }
     }
 }
