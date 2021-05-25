@@ -3,6 +3,7 @@ using Mantasflowers.Contracts.Payment.Request;
 using Mantasflowers.Contracts.Payment.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Coupon;
+using Mantasflowers.Services.Services.Email;
 using Mantasflowers.Services.Services.Order;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
@@ -18,6 +19,7 @@ namespace Mantasflowers.Services.Services.Payment
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderService _orderService;
         private readonly ICouponService _couponService;
+        private readonly IEmailService _emailService;
         private readonly SessionService _stripeSessionService;
         private readonly Stripe.CouponService _stripeCouponService;
         private readonly PromotionCodeService _promotionCodeService;
@@ -27,6 +29,7 @@ namespace Mantasflowers.Services.Services.Payment
             IUnitOfWork unitOfWork,
             IOrderService orderService,
             ICouponService couponService,
+            IEmailService emailService,
             SessionService stripeSessionService,
             Stripe.CouponService stripeCouponService,
             PromotionCodeService promotionCodeService,
@@ -35,6 +38,7 @@ namespace Mantasflowers.Services.Services.Payment
             _unitOfWork = unitOfWork;
             _orderService = orderService;
             _couponService = couponService;
+            _emailService = emailService;
             _stripeSessionService = stripeSessionService;
             _stripeCouponService = stripeCouponService;
             _promotionCodeService = promotionCodeService;
