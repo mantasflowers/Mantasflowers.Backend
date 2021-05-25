@@ -54,6 +54,14 @@ namespace Mantasflowers.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Payment>(
+                e =>
+                {
+                    e.Property(p => p.PaymentIntentId)
+                        .IsRequired();
+                }
+                );
+
             modelBuilder.Entity<HashMap>(
                 e =>
                 {
