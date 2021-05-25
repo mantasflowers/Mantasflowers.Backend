@@ -8,7 +8,7 @@ namespace Mantasflowers.WebApi.Validation.Order
         public PostOrderContactDetailsRequestValidator()
         {
             RuleFor(x => x.Email)
-                .NotNull();
+                .NotEmpty();
 
             RuleFor(x => x.Phone)
                 .NotEmpty();
