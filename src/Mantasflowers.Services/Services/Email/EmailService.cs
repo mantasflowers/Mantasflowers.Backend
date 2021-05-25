@@ -30,12 +30,12 @@ namespace Mantasflowers.Services.Services.Email
                 .Replace("[[customer_fullname]]", request.ClientFullName)
                 .Replace("[[customer_email]]", request.ClientEmail)
                 .Replace("[[order_id]]", request.OrderNumber)
-                .Replace("[[purchase_link]]", request.OrderUrl)
+                .Replace("[[purchase_link]]", _sendGridConfig.OrderUrl + request.OrderPassword)
                 .ToString();
 
             var msg = new SendGridMessage
             {
-                From = new EmailAddress(_sendGridConfig.From, _sendGridConfig.FromName),
+                From = new EmailAddress(_sendGridConfig.SenderEmail, _sendGridConfig.FromName),
                 Subject = $"Order {request.OrderNumber} completion",
                 HtmlContent = emailHtml
             };

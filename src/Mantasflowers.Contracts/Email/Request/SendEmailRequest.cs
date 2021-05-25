@@ -12,6 +12,6 @@ namespace Mantasflowers.Contracts.Email.Request
 
         public string OrderNumber { get; set; }
 
-        public string OrderUrl { get; set; }
+        public string OrderPassword { get; set; }
     }
 }

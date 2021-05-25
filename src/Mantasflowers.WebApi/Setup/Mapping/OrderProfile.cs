@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Mantasflowers.Contracts.Common;
+using Mantasflowers.Contracts.Email.Request;
 using Mantasflowers.Contracts.Order.Request;
 using Mantasflowers.Contracts.Order.Response;
 using Mantasflowers.Domain.Entities;
@@ -35,6 +36,11 @@ namespace Mantasflowers.WebApi.Setup.Mapping
 
             CreateMap<UpdateOrderStatusRequest, Order>()
                 .ForMember(d => d.RowVersion, opt => opt.Ignore());
+
+            CreateMap<Order, SendEmailRequest>()
+                .ForMember(d => d.ClientEmail, opt => opt.MapFrom(s => s.OrderContactInfo.Email))
+                .ForMember(d => d.OrderNumber, opt => opt.MapFrom(s => s.OrderNumber))
+                .ForMember(d => d.OrderPassword, opt => opt.MapFrom(s => s.UniquePassword));
         }
     }
 }

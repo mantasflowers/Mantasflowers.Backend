@@ -60,6 +60,13 @@ namespace Mantasflowers.Services.Services.Order
             return order;
         }
 
+        public async Task<Domain.Entities.Order> GetDetailedOrderAsync(string paymentIntentId)
+        {
+            var order = await _unitOfWork.OrderRepository.GetDetailedOrderAsync(paymentIntentId);
+
+            return order;
+        }
+
         public async Task<GetDetailedOrderResponse> GetDetailedOrderInfoAsync(string uniquePassword)
         {
             var hashMap = await _hashMapService.GetHashMapAsync(uniquePassword);

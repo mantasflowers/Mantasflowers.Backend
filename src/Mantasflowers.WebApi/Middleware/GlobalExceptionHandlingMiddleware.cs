@@ -61,6 +61,7 @@ namespace Mantasflowers.WebApi.Middleware
                 case FailedToAddDatabaseResourceException _ :
                 case StripeException _:
                 case ParcelMonkeyException _:
+                case EmailSendFailedException _:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
                 case FirebaseTokenException _:

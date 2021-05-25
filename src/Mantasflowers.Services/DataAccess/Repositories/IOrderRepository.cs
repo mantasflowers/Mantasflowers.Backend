@@ -10,6 +10,8 @@ namespace Mantasflowers.Services.DataAccess.Repositories
     {
         Task<Order> GetDetailedOrderAsync(Guid id);
 
+        Task<Order> GetDetailedOrderAsync(string paymentIntentId);
+
         Task<PagedModel<Order>> GetPaginatedFilteredOrderedListAsync(int page, int limit,
             Expression<Func<Order, bool>> filter, string orderByPropertyName, bool orderDescending);
         

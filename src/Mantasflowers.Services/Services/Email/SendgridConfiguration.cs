@@ -4,7 +4,9 @@ namespace Mantasflowers.Services.Services.Email
     {
         public string ApiKey { get; set; }
 
-        public string From { get; set; }
+        public string OrderUrl { get; set; }
+
+        public string SenderEmail { get; set; }
 
         public string FromName { get; set; }
 

@@ -66,6 +66,9 @@ namespace Mantasflowers.WebApi.Setup.DI
             builder.RegisterType<Stripe.PromotionCodeService>()
                 .InstancePerDependency();
 
+            builder.RegisterType<Stripe.CustomerService>()
+                .InstancePerDependency();
+
             builder.RegisterType<CouponService>()
                 .As<ICouponService>()
                 .EnableInterfaceInterceptors()
