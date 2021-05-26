@@ -18,6 +18,8 @@ namespace Mantasflowers.Domain.Entities
 
         public virtual OrderContactInfo OrderContactInfo { get; set; }
 
+        public string OrderStatusContext { get; set; }
+
         public string UniquePassword { get; set; }
 
         public ulong OrderNumber { get; set; }

@@ -20,7 +20,7 @@ namespace Mantasflowers.WebApi.Setup.Mapping
 
                 /* Service agent mappings */
                 x.AddProfile<FirebaseServiceAgentProfile>();
-                x.AddProfile<ParcelMonkeyServiceAgentProfile>();
+                x.AddProfile<MultiParcelServiceAgentProfile>();
             });
 
             var mapper = config.CreateMapper();

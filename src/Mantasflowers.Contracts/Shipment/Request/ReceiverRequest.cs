@@ -2,7 +2,7 @@
 
 namespace Mantasflowers.Contracts.Shipment.Request
 {
-    public class SenderRequest : AddressDetailTemplate
+    public class ReceiverRequest : AddressDetailTemplate
     {
     }
 }
