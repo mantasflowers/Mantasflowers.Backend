@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mantasflowers.WebApi.Controllers
 {
+    /*
     [ApiController]
     [Route("/shipment")]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
@@ -72,4 +73,5 @@ namespace Mantasflowers.WebApi.Controllers
             return Ok(response);
         }
     }
+    */
 }

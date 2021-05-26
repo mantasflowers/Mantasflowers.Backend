@@ -103,6 +103,8 @@ namespace Mantasflowers.WebApi
 
             services.SetupParcelMonkey(Configuration);
 
+            services.SetupMultiParcel(Configuration);
+
             services.SetupSendgrid(Configuration);
         }
 
