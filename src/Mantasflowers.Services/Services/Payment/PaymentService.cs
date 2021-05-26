@@ -7,6 +7,7 @@ using Mantasflowers.Services.Services.Coupon;
 using Mantasflowers.Services.Services.Email;
 using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.Order;
+using Mantasflowers.Services.Services.Shipment;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Stripe;
@@ -23,6 +24,7 @@ namespace Mantasflowers.Services.Services.Payment
         private readonly IOrderService _orderService;
         private readonly ICouponService _couponService;
         private readonly IEmailService _emailService;
+        private readonly IShipmentService _shipmentService;
         private readonly SessionService _stripeSessionService;
         private readonly Stripe.CouponService _stripeCouponService;
         private readonly CustomerService _customerService;
@@ -35,6 +37,7 @@ namespace Mantasflowers.Services.Services.Payment
             IOrderService orderService,
             ICouponService couponService,
             IEmailService emailService,
+            IShipmentService shipmentService,
             SessionService stripeSessionService,
             Stripe.CouponService stripeCouponService,
             CustomerService customerService,
@@ -47,6 +50,7 @@ namespace Mantasflowers.Services.Services.Payment
             _couponService = couponService;
             _customerService = customerService;
             _emailService = emailService;
+            _shipmentService = shipmentService;
             _stripeSessionService = stripeSessionService;
             _stripeCouponService = stripeCouponService;
             _promotionCodeService = promotionCodeService;

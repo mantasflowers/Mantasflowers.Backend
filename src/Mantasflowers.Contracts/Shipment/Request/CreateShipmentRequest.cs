@@ -1,18 +1,19 @@
-﻿using Mantasflowers.Contracts.Common.Templates;
-using System;
+﻿using System.Collections.Generic;
 
 namespace Mantasflowers.Contracts.Shipment.Request
 {
-    public class CreateShipmentRequest : QuotesTemplate
+    public class CreateShipmentRequest
     {
-        public string Service { get; set; }
+        public string Identifier { get; set; }
 
-        public string GoodsDescription { get; set; }
+        public SenderRequest Sender { get; set; }
 
-        public string DeliveryNotes { get; set; }
+        public ReceiverRequest Receiver { get; set; }
 
-        public DateTime CollectionDate { get; set; }
+        public PickupRequest Pickup { get; set; }
 
-        public CustomsRequest Customs { get; set; }
+        public DeliveryRequest Delivery { get; set; }
+
+        public IList<ServiceRequest> Services { get; set; }
     }
 }

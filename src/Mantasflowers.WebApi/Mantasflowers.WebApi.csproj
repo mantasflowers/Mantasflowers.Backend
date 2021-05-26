@@ -38,4 +38,8 @@
     <ProjectReference Include="..\Mantasflowers.Services\Mantasflowers.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validation\Shipment\" />
+  </ItemGroup>
+
 </Project>
