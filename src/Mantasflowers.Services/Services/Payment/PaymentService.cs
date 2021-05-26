@@ -81,6 +81,16 @@ namespace Mantasflowers.Services.Services.Payment
                 var order = await _orderService.CreateOrderAsync(request.Order);
                 await _unitOfWork.SaveChangesAsync();
 
+                foreach (var item in order.OrderItems)
+                {
+                    if (item.Product.LeftInStock <= 0)
+                    {
+                        throw new FailedToCreateCheckoutSessionException("Out of stock");
+                    } 
+                    item.Product.LeftInStock--;
+                    _unitOfWork.ProductRepository.Update(item.Product);
+                }
+
                 if (userId.HasValue)
                 {
                     await _orderService.LinkUserToOrderAsync(userId.Value, order);
