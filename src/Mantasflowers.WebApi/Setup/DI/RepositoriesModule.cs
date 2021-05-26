@@ -68,6 +68,12 @@ namespace Mantasflowers.WebApi.Setup.DI
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<FeedbackRepository>()
+                .As<IFeedbackRepository>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }

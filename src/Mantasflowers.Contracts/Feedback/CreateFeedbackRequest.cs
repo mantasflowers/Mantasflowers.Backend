@@ -1,6 +1,6 @@
-﻿namespace Mantasflowers.Domain.Entities
+namespace Mantasflowers.Contracts.Feedback
 {
-    public class Feedback : BaseEntity
+    public class CreateFeedbackRequest
     {
         public string Name { get; set; }
 
