@@ -16,6 +16,10 @@ namespace Mantasflowers.WebApi.Validation.Order
             RuleFor(x => x.Message)
                 .NotNull();
 
+            RuleFor(x => x.Shipment)
+                .NotNull()
+                .SetValidator(new ShipmentRequestValidator());
+
             RuleForEach(x => x.OrderItems)
                 .NotEmpty()
                 .SetValidator(new PostOrderItemRequestValidator());

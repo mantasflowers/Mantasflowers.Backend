@@ -11,6 +11,7 @@ using Mantasflowers.WebApi.Setup.Mapping;
 using Stripe.Checkout;
 using Mantasflowers.Services.Services.HashMap;
 using Mantasflowers.Services.Services.Shipment;
+using Mantasflowers.Services.Services.Email;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -65,6 +66,9 @@ namespace Mantasflowers.WebApi.Setup.DI
             builder.RegisterType<Stripe.PromotionCodeService>()
                 .InstancePerDependency();
 
+            builder.RegisterType<Stripe.CustomerService>()
+                .InstancePerDependency();
+
             builder.RegisterType<CouponService>()
                 .As<ICouponService>()
                 .EnableInterfaceInterceptors()
@@ -79,6 +83,12 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<ShipmentService>()
                 .As<IShipmentService>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<EmailService>()
+                .As<IEmailService>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();

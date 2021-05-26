@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Mantasflowers.Contracts.Email.Request;
 using Mantasflowers.Contracts.Payment.Request;
 using Mantasflowers.Contracts.Payment.Response;
 using Mantasflowers.Services.DataAccess;
 using Mantasflowers.Services.Services.Coupon;
+using Mantasflowers.Services.Services.Email;
+using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.Order;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
@@ -18,8 +21,10 @@ namespace Mantasflowers.Services.Services.Payment
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderService _orderService;
         private readonly ICouponService _couponService;
+        private readonly IEmailService _emailService;
         private readonly SessionService _stripeSessionService;
         private readonly Stripe.CouponService _stripeCouponService;
+        private readonly CustomerService _customerService;
         private readonly PromotionCodeService _promotionCodeService;
         private readonly IMapper _mapper;
 
@@ -27,14 +32,18 @@ namespace Mantasflowers.Services.Services.Payment
             IUnitOfWork unitOfWork,
             IOrderService orderService,
             ICouponService couponService,
+            IEmailService emailService,
             SessionService stripeSessionService,
             Stripe.CouponService stripeCouponService,
+            CustomerService customerService,
             PromotionCodeService promotionCodeService,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _orderService = orderService;
             _couponService = couponService;
+            _customerService = customerService;
+            _emailService = emailService;
             _stripeSessionService = stripeSessionService;
             _stripeCouponService = stripeCouponService;
             _promotionCodeService = promotionCodeService;
@@ -97,15 +106,20 @@ namespace Mantasflowers.Services.Services.Payment
                 var options = new SessionCreateOptions
                 {
                     PaymentMethodTypes = new List<string> { "card" },
+                    CustomerEmail = order.OrderContactInfo.Email,
                     Mode = "payment",
                     LineItems = lineItems,
                     SuccessUrl = request.SuccessUrl + $"password={order.UniquePassword}",
-                    CancelUrl = request.CancelUrl
+                    CancelUrl = request.CancelUrl,
+                    AllowPromotionCodes = true
                 };
 
-                options.AddExtraParam("allow_promotion_codes", "true");
-
                 session = await _stripeSessionService.CreateAsync(options);
+
+                order.Payment = new();
+                order.Payment.PaymentIntentId = session.PaymentIntentId;
+                _unitOfWork.OrderRepository.Update(order);
+                await _unitOfWork.SaveChangesAsync();
 
                 await transaction.CommitAsync();
             }
@@ -178,6 +192,25 @@ namespace Mantasflowers.Services.Services.Payment
 
             var response = _mapper.Map<PostCreateCouponResponse>(promotionCode);
             return response;
+        }
+
+        public async Task SendEmailAsync(Event stripeEvent)
+        {
+            var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+
+            var order = await _orderService.GetDetailedOrderAsync(paymentIntent.Id);
+
+            if (order == null)
+            {
+                throw new OrderNotFoundException("No Order linked to PaymentIntent was found");
+            }
+
+            var emailRequest = _mapper.Map<SendEmailRequest>(order);
+            emailRequest.PurchaseDate = paymentIntent.Created;
+            var customer = await _customerService.GetAsync(paymentIntent.CustomerId);
+            emailRequest.ClientFullName = customer.Name;
+
+            await _emailService.SendEmailAsync(emailRequest);
         }
     }
 }

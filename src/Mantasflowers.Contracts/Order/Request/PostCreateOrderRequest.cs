@@ -1,5 +1,4 @@
-﻿using Mantasflowers.Contracts.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Mantasflowers.Contracts.Order.Request
 {
@@ -10,6 +9,8 @@ namespace Mantasflowers.Contracts.Order.Request
         public PostOrderContactDetailsRequest ContactDetails { get; set; }
 
         public string Message { get; set; }
+
+        public ShipmentRequest Shipment { get; set; }
 
         public IList<PostOrderItemRequest> OrderItems { get; set; }
     }

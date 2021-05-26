@@ -7,7 +7,9 @@ using Mantasflowers.WebApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Mantasflowers.WebApi.Controllers
@@ -58,6 +60,26 @@ namespace Mantasflowers.WebApi.Controllers
             var response = await _paymentService.CreateCouponAsync(request);
 
             return StatusCode(StatusCodes.Status201Created, response);
+        }
+
+        [HttpPost("stripe-hook")]
+        public async Task<IActionResult> StripeHookAsync()
+        {
+            var json = await new StreamReader(HttpContext.Request.Body)
+                .ReadToEndAsync();
+
+            var stripeEvent = EventUtility.ParseEvent(json);
+
+            switch (stripeEvent.Type)
+            {
+                case Events.PaymentIntentSucceeded:
+                    await _paymentService.SendEmailAsync(stripeEvent);
+                    break;
+                default:
+                    return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

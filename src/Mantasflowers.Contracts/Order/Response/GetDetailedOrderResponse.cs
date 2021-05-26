@@ -23,6 +23,8 @@ namespace Mantasflowers.Contracts.Order.Response
 
         public string Message { get; set; }
 
+        public ShipmentResponse Shipment { get; set; }
+
         public IList<GetOrderItemResponse> OrderItems { get; set; }
     }
 }
