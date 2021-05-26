@@ -28,9 +28,10 @@ namespace Mantasflowers.Services.Services.Email
 
         public async Task SendEmailAsync(SendEmailRequest request)
         {
-            if (string.IsNullOrWhiteSpace(_sendGridConfig.ApiKey) && _sendGridConfig.CanSkipIfNoApiKey)
+            if (!_sendGridConfig.IsEnabled)
             {
-                _logger.Warning("Skipping email sending. Api KEY not found...");
+                _logger.Warning(
+                    $"Skipping email sending. OrderNumber: {request.OrderNumber}. ClientEmail: {request.ClientEmail}. Api KEY not found...");
                 return;
             }
 
