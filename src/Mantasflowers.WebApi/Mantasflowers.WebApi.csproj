@@ -38,4 +38,10 @@
     <ProjectReference Include="..\Mantasflowers.Services\Mantasflowers.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="StaticData\EmailTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
