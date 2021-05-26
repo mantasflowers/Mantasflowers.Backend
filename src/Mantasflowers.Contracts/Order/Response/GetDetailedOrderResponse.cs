@@ -11,6 +11,8 @@ namespace Mantasflowers.Contracts.Order.Response
 
         public OrderStatus Status { get; set; }
 
+        public string OrderStatusContext { get; set; }
+
         public GetOrderAddressResponse Address { get; set; }
 
         public GetOrderContactDetailsResponse ContactDetails { get; set; }

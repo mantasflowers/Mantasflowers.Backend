@@ -9,6 +9,8 @@ namespace Mantasflowers.Contracts.Order.Response
 
         public OrderStatus Status { get; set; }
 
+        public string OrderStatusContext { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime UpdatedOn { get; set; }
