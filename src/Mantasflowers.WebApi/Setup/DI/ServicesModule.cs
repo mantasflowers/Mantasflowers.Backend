@@ -12,6 +12,7 @@ using Stripe.Checkout;
 using Mantasflowers.Services.Services.HashMap;
 using Mantasflowers.Services.Services.Shipment;
 using Mantasflowers.Services.Services.Email;
+using Mantasflowers.Services.Services.Feedback;
 
 namespace Mantasflowers.WebApi.Setup.DI
 {
@@ -89,6 +90,12 @@ namespace Mantasflowers.WebApi.Setup.DI
 
             builder.RegisterType<EmailService>()
                 .As<IEmailService>()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<FeedbackService>()
+                .As<IFeedbackService>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(AsyncInterceptorAdapter<MethodCallInterceptorAsync>))
                 .InstancePerLifetimeScope();
