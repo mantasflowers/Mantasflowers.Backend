@@ -24,6 +24,7 @@ using Newtonsoft.Json.Serialization;
 using Mantasflowers.WebApi.Setup.DI.CustomAutofac;
 using Mantasflowers.WebApi.Setup.Shipment;
 using Mantasflowers.WebApi.Setup.Email;
+using Mantasflowers.Services.Services.Payment;
 
 namespace Mantasflowers.WebApi
 {
@@ -57,6 +58,8 @@ namespace Mantasflowers.WebApi
                         ValidateLifetime = true,
                     };
                 });
+
+            services.Configure<ShippingRate>(o => o.Value = Configuration["ShippingRate"]);
 
             services.Configure<WebApiKey>(o => o.Value = Configuration["WebApiKey"]);
 

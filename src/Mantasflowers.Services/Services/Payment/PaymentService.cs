@@ -8,6 +8,7 @@ using Mantasflowers.Services.Services.Email;
 using Mantasflowers.Services.Services.Exceptions;
 using Mantasflowers.Services.Services.Order;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
 using System;
@@ -26,6 +27,7 @@ namespace Mantasflowers.Services.Services.Payment
         private readonly Stripe.CouponService _stripeCouponService;
         private readonly CustomerService _customerService;
         private readonly PromotionCodeService _promotionCodeService;
+        private readonly ShippingRate _shippingRate;
         private readonly IMapper _mapper;
 
         public PaymentService(
@@ -37,6 +39,7 @@ namespace Mantasflowers.Services.Services.Payment
             Stripe.CouponService stripeCouponService,
             CustomerService customerService,
             PromotionCodeService promotionCodeService,
+            IOptions<ShippingRate> optionsAccessor,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -47,6 +50,7 @@ namespace Mantasflowers.Services.Services.Payment
             _stripeSessionService = stripeSessionService;
             _stripeCouponService = stripeCouponService;
             _promotionCodeService = promotionCodeService;
+            _shippingRate = optionsAccessor.Value;
             _mapper = mapper;
         }
 
@@ -83,16 +87,16 @@ namespace Mantasflowers.Services.Services.Payment
                 foreach (var orderItem in order.OrderItems)
                 {
                     lineItems.Add(
-                        new SessionLineItemOptions
+                        new()
                         {
-                            PriceData = new SessionLineItemPriceDataOptions
+                            PriceData = new()
                             {
                                 UnitAmountDecimal = decimal.Round(
                                     orderItem.UnitPrice, 2,
                                     MidpointRounding.AwayFromZero
                                     ) * 100, // why stripe
                                 Currency = "eur",
-                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                ProductData = new()
                                 {
                                     Name = orderItem.Product.Name,
                                     Description = orderItem.Product.ShortDescription,
@@ -111,7 +115,19 @@ namespace Mantasflowers.Services.Services.Payment
                     LineItems = lineItems,
                     SuccessUrl = request.SuccessUrl + $"password={order.UniquePassword}",
                     CancelUrl = request.CancelUrl,
-                    AllowPromotionCodes = true
+                    AllowPromotionCodes = true,
+                    ShippingAddressCollection = new()
+                    {
+                        AllowedCountries = new List<string>
+                        {
+                            "LT"
+                        }
+                    },
+                    Locale = "lt",
+                    ShippingRates = new List<string>()
+                    {
+                        _shippingRate.Value
+                    } // currently only one is supported by stripe
                 };
 
                 session = await _stripeSessionService.CreateAsync(options);
@@ -172,7 +188,7 @@ namespace Mantasflowers.Services.Services.Payment
                 {
                     Coupon = coupon.Id.ToString(),
                     Code = coupon.Name,
-                    Restrictions = new PromotionCodeRestrictionsOptions()
+                    Restrictions = new()
                     {
                         MinimumAmount = (long)(coupon.OrderOverPrice * 100),
                         MinimumAmountCurrency = "eur"
