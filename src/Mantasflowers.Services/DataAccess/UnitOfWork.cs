@@ -17,6 +17,7 @@ namespace Mantasflowers.Services.DataAccess
         private readonly IPaymentRepository _paymentRepository;
         private readonly IHashMapRepository _hashMapRepository;
         private readonly IUserOrderRepository _userOrderRepository;
+        private readonly IFeedbackRepository _feedbackRepository;
 
         public UnitOfWork(
             DatabaseContext dbContext,
@@ -28,8 +29,8 @@ namespace Mantasflowers.Services.DataAccess
             IShipmentRepository shipmentRepository,
             IPaymentRepository paymentRepository,
             IHashMapRepository hashMapRepository,
-            IUserOrderRepository userOrderRepository
-            )
+            IUserOrderRepository userOrderRepository,
+            IFeedbackRepository feedbackRepository)
         {
             _dbContext = dbContext;
             _productRepository = productRepository;
@@ -41,6 +42,7 @@ namespace Mantasflowers.Services.DataAccess
             _paymentRepository = paymentRepository;
             _hashMapRepository = hashMapRepository;
             _userOrderRepository = userOrderRepository;
+            _feedbackRepository = feedbackRepository;
         }
 
 
@@ -71,6 +73,8 @@ namespace Mantasflowers.Services.DataAccess
         public IUserOrderRepository UserOrderRepository
             => _userOrderRepository;
 
+        public IFeedbackRepository FeedbackRepository
+            => _feedbackRepository;
 
         public async Task<int> SaveChangesAsync()
         {

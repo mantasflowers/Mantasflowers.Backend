@@ -60,7 +60,7 @@ namespace Mantasflowers.WebApi.Controllers
         {
             var response = await _productService.CreateProductAsync(request);
 
-            return Ok(response);
+            return StatusCode(StatusCodes.Status201Created, response);
         }
 
         [Authorize(Roles = "admin")]
