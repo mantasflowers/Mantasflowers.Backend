@@ -83,11 +83,11 @@ namespace Mantasflowers.Services.Services.Payment
 
                 foreach (var item in order.OrderItems)
                 {
-                    if (item.Product.LeftInStock <= 0)
+                    if (item.Product.LeftInStock - item.Quantity <= 0)
                     {
                         throw new FailedToCreateCheckoutSessionException("Out of stock");
-                    } 
-                    item.Product.LeftInStock--;
+                    }
+                    item.Product.LeftInStock -= item.Quantity;
                     _unitOfWork.ProductRepository.Update(item.Product);
                 }
 
