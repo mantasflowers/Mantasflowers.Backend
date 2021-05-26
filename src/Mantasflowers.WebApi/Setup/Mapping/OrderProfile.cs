@@ -20,6 +20,8 @@ namespace Mantasflowers.WebApi.Setup.Mapping
 
             CreateMap<PostOrderAddressRequest, OrderAddress>();
             CreateMap<PostOrderContactDetailsRequest, OrderContactInfo>();
+            CreateMap<ShipmentRequest, Domain.Entities.Shipment>();
+            CreateMap<Domain.Entities.Shipment, ShipmentResponse>();
             CreateMap<Order, GetDetailedOrderResponse>()
                 .ForMember(d => d.Address, opt => opt.MapFrom(s => s.OrderAddress))
                 .ForMember(d => d.ContactDetails, opt => opt.MapFrom(s => s.OrderContactInfo));

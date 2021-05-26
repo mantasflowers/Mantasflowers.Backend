@@ -54,6 +54,14 @@ namespace Mantasflowers.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Shipment>(
+                e =>
+                {
+                    e.Property(p => p.Uid)
+                        .IsRequired();
+                }
+                );
+
             modelBuilder.Entity<Payment>(
                 e =>
                 {

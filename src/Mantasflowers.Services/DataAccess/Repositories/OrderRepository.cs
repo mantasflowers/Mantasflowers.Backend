@@ -37,6 +37,7 @@ namespace Mantasflowers.Services.DataAccess.Repositories
                 .Include(x => x.OrderItems)
                 .ThenInclude(x => x.Product)
                 .Include(x => x.Payment)
+                .Include(x => x.Shipment)
                 .SingleOrDefaultAsync(predicate);
 
             return order;
