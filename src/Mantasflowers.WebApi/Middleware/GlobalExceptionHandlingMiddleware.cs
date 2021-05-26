@@ -77,6 +77,7 @@ namespace Mantasflowers.WebApi.Middleware
                 case HashMapOrderNotFoundException _:
                 case OrderNotFoundException _:
                 case ProductNotFoundException _:
+                case FailedToCreateCheckoutSessionException _:
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 case ConcurrentEntityUpdateException _:
